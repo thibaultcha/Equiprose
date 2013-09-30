@@ -86,7 +86,7 @@ function parseMetadata (mdFile) {
 
     // get assets path
     var buildDir = path.dirname(mdFile.replace(config.content_dir, config.build_dir))
-    assetsPath = path.relative(buildDir, 'assets/')
+    assetsPath = path.relative(buildDir, path.join(config.build_dir, 'assets'))
 
     // get layout css file
     var layoutStylusFile = path.join(config.template, 'styl', parsedMeta.layout + '.styl')
@@ -148,7 +148,7 @@ function parseMetadata (mdFile) {
 
 ;(function () {
     exec('rm -rf ' + path.join(config.build_dir, '*'))
-    exec('cp -r ' + path.join(config.template, 'assets') + ' config.build_dir')
+    exec('cp -r ' + path.join(config.template, 'assets') + ' ' + config.build_dir)
 
     walk(path.join(config.template, 'styl'), new RegExp(/\.styl$/), function (err, stylusFiles) {
         if (err) throw err
@@ -159,7 +159,7 @@ function parseMetadata (mdFile) {
             .render(function (err, css) {
                 if (err) throw err
                 // Write CSS
-                var buildFilePath = stylFile.replace(config.template, 'assets').replace(/styl/, 'css').replace(/\.styl/, '.css')
+                var buildFilePath = path.join(config.build_dir, stylFile.replace(config.template, 'assets').replace(/styl/, 'css').replace(/\.styl/, '.css'))
                 if (!fs.existsSync(path.dirname(buildFilePath))) fs.mkdirSync(path.dirname(buildFilePath)) 
                 fs.writeFileSync(buildFilePath, css)
             })

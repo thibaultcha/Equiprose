@@ -122,9 +122,10 @@ function parseMetadata (mdFile) {
                 var postParsedContent = parseMeta(postContentStr)
                 // the end of the ugly thing
                 blogMetadata.posts.push({
-                    link  : match[4].replace('.md', '.html'),
-                    title : postParsedContent[0].title || match[4].replace('.md', ''),
-                    date  : moment(match[1], "YYYY-MM-DD").format(config.date_format)
+                    link   : match[4].replace('.md', '.html'),
+                    title  : postParsedContent[0].title || match[4].replace('.md', ''),
+                    author : postParsedContent[0].author || config.owner.name,
+                    date   : moment(match[1], "YYYY-MM-DD").format(config.date_format)
                 })
             }
         })
@@ -148,7 +149,7 @@ function parseMetadata (mdFile) {
 
 ;(function () {
     exec('rm -rf ' + path.join(config.build_dir, '*'))
-    exec('cp -r ' + path.join(config.template, 'assets') + ' ' + config.build_dir)
+    exec('cp -r assets' + ' ' + config.build_dir)
 
     walk(path.join(config.template, 'styl'), new RegExp(/\.styl$/), function (err, stylusFiles) {
         if (err) throw err

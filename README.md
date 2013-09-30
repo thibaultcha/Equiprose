@@ -57,13 +57,13 @@ Done!
 
 ## Create content for your website 
 
-Miranda takes your content arborescence, and creates the exact same one with `.html` files. So create your content as if it was your real webpages. Each content file **must** contain some metadatas in a ```json``` tag.Example:
+Miranda takes your content arborescence, and creates the exact same one with `.html` files. So create your content as if it was your real webpages. Each content file **must** contain some metadatas in a ```json``` tag. Example:
 ```
-```json
+\`\`\`json
 {
 	"layout": "page"
 }
-```
+\`\`\`
 
 Content goes here...
 ```
@@ -131,20 +131,20 @@ div.content
 The available variables are :
 
 ```jade
-{owner.name}
-{owner.description}
+#{owner.name}
+#{owner.description}
 
-{blog.posts}
-{blog.posts[n].link}
-{blog.posts[n].title}
-{blog.posts[n].author}
-{blog.posts[n].date}
+#{blog.posts}
+#{blog.posts[n].link}
+#{blog.posts[n].title}
+#{blog.posts[n].author}
+#{blog.posts[n].date}
 
-{post.title}
-{post.author}
-{post.date}
+#{post.title}
+#{post.author}
+#{post.date}
 
-{content}
+#{content}
 ```
 
 To see a template example, see the one I created for my website: `tempaltes/thibaultcha`.

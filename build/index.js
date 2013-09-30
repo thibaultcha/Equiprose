@@ -148,7 +148,7 @@ function parseMetadata (mdFile) {
 
 ;(function () {
     exec('rm -rf ' + path.join(config.build_dir, '*'))
-    exec('rm -rf ' + path.join('css', '*'))
+    exec('cp -r ' + path.join(config.template, 'assets') + ' config.build_dir')
 
     walk(path.join(config.template, 'styl'), new RegExp(/\.styl$/), function (err, stylusFiles) {
         if (err) throw err

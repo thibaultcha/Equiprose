@@ -1,6 +1,7 @@
 # Miranda
 
-Miranda is a static website and/or blog generator. I built it because I love Markdown and wanted [my website](http://thibaultcha.me) to support it. Miranda is inspired from [snap](https://github.com/mlbli/snap), but I was not satisfied with it because I wanted more than a blog. 
+Miranda is a static website and/or blog generator.
+I built it because I love Markdown and wanted [my website](http://thibaultcha.me) to support it. Miranda is inspired from [snap](https://github.com/mlbli/snap), but I was not satisfied with it because I wanted more than a blog. 
 Miranda was first built as a Node.js app ([CrydeeEngine](https://github.com/thibaultCha/CrydeeEngine), until I realized static content was much more appropriated to my needs and.. maybe yours?
 
 #### TL:DR 
@@ -12,6 +13,9 @@ Write your content in Markdown, create your Jade+Stylus template, build: you're 
 - Write your content in Markdown
 - Emojis support :+1:
 - Custom templates
+
+![Markdown](http://f.cl.ly/items/3o0O1q0A2r0O3k0b3x3X/Capture%20d%E2%80%99%C3%A9cran%202013-09-30%20%C3%A0%2019.57.13.png)
+![Render](http://f.cl.ly/items/3x2Q38460o1W2p1u3o0U/Capture%20d%E2%80%99%C3%A9cran%202013-09-30%20%C3%A0%2019.55.47.png)
 
 #### Summary
 
@@ -58,15 +62,18 @@ dist/
 
 ## Use it
 
+### Install
+
 Miranda requires [Node.js](http://nodejs.org) and [npm](https://npmjs.org) to be installed.
 
 1. Download or clone, run `npm install` for dependencies.
 2. Configure it `config.js`
 3. Create content for your website
 4. Create a template or use an existing one
-5. Build
 
-Done!
+### Commands
+
+For now, you'll need to run `node build` to build your website. There is currently no logs but you will be notified if an error occurs. I plan to add a Makefile.
 
 ## Create your content
 
@@ -194,6 +201,7 @@ First, I wanted this project to be very easy to use. If you have any suggestions
 
 Other features shoud come:
 - A Makefile
+- Logs
 - Create pages from console
 - Create blog posts from console
 

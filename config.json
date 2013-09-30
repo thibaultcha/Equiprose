@@ -1,0 +1,11 @@
+{
+	"owner" : {
+		"name"        : "thibaultCha",
+		"description" : "I think it's me..."
+	},
+	"template"    : "templates/thibaultcha",
+	"date_format" : "MMM DD YYYY",
+	"content_dir" : "content",
+	"build_dir"   : "dist",
+	"log_level"   : 1
+}

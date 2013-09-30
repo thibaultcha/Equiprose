@@ -1,0 +1,40 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-weight:inherit;font-style:inherit;font-family:inherit;font-size:100%;vertical-align:baseline}
+body{line-height:1;color:#000;background:#fff}
+ol,ul{list-style:none}
+table{border-collapse:separate;border-spacing:0;vertical-align:middle}
+caption,th,td{text-align:left;font-weight:normal;vertical-align:middle}
+a img{border:none}
+@font-face{font-family:'Quicksand';src:url("../Quicksand_Book.otf")}
+@font-face{font-family:'ProximaNova';src:url("../ProximaNova-Light.otf")}
+@font-face{font-family:'ProximaNova';font-style:italic;src:url("../ProximaNova-LightIt.otf")}
+@font-face{font-family:'ProximaNova';font-weight:bold;src:url("../ProximaNova-Bold.otf")}
+@font-face{font-family:'ProximaNova';font-weight:bold;font-style:italic;src:url("../ProximaNova-BoldIt.otf")}
+body{font-family:'Georgia';background-color:#faf9f0;color:#444}
+a{text-decoration:none;color:#607eef}
+.circled-img-wrap{position:relative;overflow:hidden;float:left;}
+.circled-img-wrap img{position:relative;z-index:998}
+.circled-img-wrap .img-overlay{z-index:999;background-color:transparent;width:70px;height:70px;position:absolute;top:-20px;left:-20px;-webkit-border-radius:70px;-moz-border-radius:70px;border-radius:70px;-moz-border-radius:70px;-webkit-border-radius:70px;border:20px solid #4d926f}
+header{height:6em;background-color:#4d926f;border-bottom:1px solid #36664e;}
+header #avatar{float:left;margin:-1.5em 0 0 -6em}
+header nav{width:555px;margin:0 auto;padding-top:2.3em;font-family:'Quicksand';color:#fff;text-shadow:0 -1px 0 #458364;}
+header nav a{color:inherit}
+header nav #title{float:left;font-size:18pt}
+header nav #links{float:right;margin:.2em 0 0 0;}
+header nav #links li{display:inline;margin-left:2em}
+header nav a:hover{color:#fbcf55}
+#content-container{width:550px;margin:50px auto;}
+#content-container p{margin:1em 0}
+#content-container li{padding:5px 0}
+#content-container h1{font-size:20pt}
+#content-container h2{font-size:12pt}
+#content-container p{line-height:1.8}
+#content-container hr{border:0;margin:25pt 0;height:1px;background-color:#c7c7c7}
+#content-container strong{background-color:#4d926f;color:#faf9f0;padding:0 3px;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
+#content-container ul{list-style:circle}
+#content-container ol{list-style-type:decimal}
+footer{font-family:'Georgia';width:550px;margin:0 auto;padding:1em 0 2em 0;border-top:1px dotted #ccc;font-size:9pt}
+.md li,#posts li{list-style-type:none;padding:1em .2em}
+.md .post-title,#posts .post-title{color:#4d926f}
+.md .post-date,#posts .post-date{color:#444;margin-top:1em}
+.md hr,#posts hr{margin:0 0}
+.md li:hover,#posts li:hover{background-color:#eeeacb}

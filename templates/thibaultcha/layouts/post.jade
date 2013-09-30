@@ -1,0 +1,7 @@
+extend layout
+
+block content
+  h1#post-title #{title}
+  h2#post-date #{post.date}
+  hr
+  .md#post-content!= content

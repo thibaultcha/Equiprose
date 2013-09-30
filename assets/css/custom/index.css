@@ -1,0 +1,4 @@
+#tastes-table{width:container-width;}
+#tastes-table th{border-bottom:1px solid #ccc;text-align:center;padding:20px 20px}
+#tastes-table td{padding:20px 20px;}
+#tastes-table td li{padding:10px 20px}

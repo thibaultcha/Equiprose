@@ -1,0 +1,31 @@
+!!!5
+html(lang="en")
+  head
+    meta(charset='utf-8')
+    meta(name='description', content='thibaultcha, Thibault Charbonnier')
+    title #{owner.name} - #{title}
+    link(rel='stylesheet', href='#{layoutCss}')
+    if customCss
+      link(rel='stylesheet', href='#{customCss}')
+    link(rel="icon", type="image/png", href="#")
+    script(src='#{assetsPath}/js/main.js')
+  body
+    header 
+      nav
+        .circled-img-wrap#avatar
+          img(src='#{assetsPath}/img/thibaultcha.jpeg' width='70' alt='#{owner}') 
+          .img-overlay
+        a(href='/')#title
+          h1 #{owner.name}
+        ul#links
+          li: a(href='/blog') Blog
+          li: a(href='https://github.com/thibaultCha') GitHub
+          //li: a(href='http://linkedin.com/profile/view?id=173360965') LinkedIn
+          li: a(href='#{assetsPath}/files/Thibault_Charbonnier-2014-en.pdf') CV
+          li: a(href='mailto:thibaultcha@me.com') Email me
+
+    section#content-container
+      block content
+
+    footer
+      p Built with <a href='#'>Miranda</a>.

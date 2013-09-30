@@ -149,19 +149,24 @@ div.content
 The available variables are :
 
 ```jade
+// assets stuff
+#{layoutCss}
+#{customCss}
+#{assetsPath}
+// page stuff
+#{title}
 #{owner.name}
 #{owner.description}
-
-#{blog.posts}
+// blog index stuff
 #{blog.posts[n].link}
 #{blog.posts[n].title}
 #{blog.posts[n].author}
 #{blog.posts[n].date}
-
+// blog psot stuff
 #{post.title}
 #{post.author}
 #{post.date}
-
+// any page or blog post stuff
 #{content}
 ```
 

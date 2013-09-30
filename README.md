@@ -14,9 +14,7 @@ Write your content in Markdown, create your Jade+Stylus template, build: you're 
 - Emojis support :+1:
 - Custom templates
 
-![Markdown](http://f.cl.ly/items/232d3w3g140K313J0m3M/markdown.png)
-    ↓ 
-![Render](http://f.cl.ly/items/0l3I3h0m2J1G0a0C0O3f/render.png)
+![Miranda](http://f.cl.ly/items/263R13320x1j3u2S301I/Miranda.png)
 
 #### Summary
 

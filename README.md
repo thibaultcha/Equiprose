@@ -59,7 +59,7 @@ Done!
 
 Miranda takes your content arborescence, and creates the exact same one with `.html` files. So create your content as if it was your real webpages. Each content file **must** contain some metadatas in a ```json``` tag. Example:
 ```
-````json
+```json
 {
 	"layout": "page"
 }
@@ -68,6 +68,8 @@ Miranda takes your content arborescence, and creates the exact same one with `.h
 Content goes here...
 ```
 
+(The backslash is only for GitHub to escape the json tag, do not include it in your content's files)
+
 ### Metadatas
 
 The only required Metadata is the layout (we'll see why), but you can specify some more:
@@ -75,15 +77,18 @@ The only required Metadata is the layout (we'll see why), but you can specify so
 ```json
 ```json
 {
-	"layout"    : "page",  // required
-	"customCss" : "home",  // optional, if you want a custom css file for this page of type "page"
-	"title"     : "Home",  // optional, the page title
-	"author"    : "Dustin" // optional, the author of a blog post
+	"layout"    : "page",
+	"customCss" : "home",
+	"title"     : "Home",
+	"author"    : "Dustin"
 }
-```
+\```
 ```
 
-The layout attribute is **required** because Miranda will look for a `.jade` and a `.styl` files with the same name in your `config.template` directory.
+* __Layout__: required because Miranda will look for a `.jade` and a `.styl` files with the same name in your `config.template` directory.
+* __customCss__: optional, if you want a custom css file for, let's say, this page of type "page".
+* __title__: optional, the page title.
+* __author__: optional, the author of a blog post, if different from `config.author.name`.
 
 ### Emojis
 

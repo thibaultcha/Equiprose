@@ -1,20 +1,33 @@
 # Miranda
 
-Miranda is a static website and/or blog generator. I built it because I love Markdown and wanted [my website](http://thibaultcha.me) and blog to support it. Miranda is inspired from [snap](https://github.com/mlbli/snap) but I was not satisfied because I wanted more than a blog. Miranda was first built as a Node.js app, until I realised static content was much more appropriated to my needs and maybe yours?
+Miranda is a static website and/or blog generator. I built it because I love Markdown and wanted [my website](http://thibaultcha.me) to support it. Miranda is inspired from [snap](https://github.com/mlbli/snap), but I was not satisfied with it because I wanted more than a blog. 
+Miranda was first built as a Node.js app ([CrydeeEngine](https://github.com/thibaultCha/CrydeeEngine), until I realized static content was much more appropriated to my needs and.. maybe yours?
 
-### TL:DR 
-Write your content in Markdown, create a template for your style, build: you're done!
+#### TL:DR 
+Write your content in Markdown, create your Jade+Stylus template, build: you're done!
 
-## Features
+#### Features
 
 - Generates static webpages (cool for GitHub hosting)
 - Write your content in Markdown
 - Emojis support :+1:
 - Custom templates
 
+#### Summary
+
+- **[How it works](#how-it-works)**
+- **[Use it](#use-it)**
+- **[Create your content](#create-content-for-your-website)**
+- **[Create your template](#create-a-template)**
+- **[How to blog with it](#the-blog-part)**
+- **[Roadmap](#roadmap)**
+- **[Licence](#licence)**
+
+======
+
 ## How it works
 
-Miranda takes an arborescence of Markdown files and render them as html files:
+Miranda takes an arborescence of Markdown files and render them as HTML files:
 
 ```
 content/
@@ -47,7 +60,7 @@ dist/
 
 Miranda requires [Node.js](http://nodejs.org) and [npm](https://npmjs.org) to be installed.
 
-1. Download or clone, then run `npm install` for dependencies.
+1. Download or clone, run `npm install` for dependencies.
 2. Configure it `config.js`
 3. Create content for your website
 4. Create a template or use an existing one
@@ -55,7 +68,7 @@ Miranda requires [Node.js](http://nodejs.org) and [npm](https://npmjs.org) to be
 
 Done!
 
-## Create content for your website 
+## Create your content
 
 Miranda takes your content arborescence, and creates the exact same one with `.html` files. So create your content as if it was your real webpages. Each content file **must** contain some metadatas in a ```json``` tag. Example:
 ```
@@ -68,13 +81,13 @@ Miranda takes your content arborescence, and creates the exact same one with `.h
 Content goes here...
 ```
 
-(The backslash is only for GitHub to escape the json tag, do not include it in your content's files)
+The backslash is only for GitHub to escape the json tag, **do not** include it in your content's files.
 
 ### Metadatas
 
 The only required Metadata is the layout (we'll see why), but you can specify some more:
 
-```json
+```
 ```json
 {
 	"layout"    : "page",
@@ -92,9 +105,9 @@ The only required Metadata is the layout (we'll see why), but you can specify so
 
 ### Emojis
 
-To write an emoji, simply use the GitHub way, put its name between two `:`. ([Use this](http://www.emoji-cheat-sheet.com))
+To write an emoji, simply use the GitHub way, put its name between two ":". Use [this cheatsheet](http://www.emoji-cheat-sheet.com) :)
 
-## Create a template
+## Create your template
 
 ### Jade and Stylus
 
@@ -168,7 +181,7 @@ To create a blog in your website, you just need the right arborescence:
 
 - Your blog directory should contain an index or a landing page, containing a Jade loop (see Jade [docs](http://jade-lang.com/reference)) looping over the `{blog.posts}` array.
 
-- Each blog post **must** be named as `YYYY-MM-DD`_`article-slug`.md and have the `blog` layout. You can then specify an author or a title in the metadatas.
+- Each blog post **must** be named as `YYYY-MM-DD`_`article-slug.md` and have the `blog` layout. You can then specify an author or a title in the metadatas.
 
 ## Roadmap
 

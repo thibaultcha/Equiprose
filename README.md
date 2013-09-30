@@ -59,11 +59,11 @@ Done!
 
 Miranda takes your content arborescence, and creates the exact same one with `.html` files. So create your content as if it was your real webpages. Each content file **must** contain some metadatas in a ```json``` tag. Example:
 ```
-\`\`\`json
+````json
 {
 	"layout": "page"
 }
-\`\`\`
+\```
 
 Content goes here...
 ```

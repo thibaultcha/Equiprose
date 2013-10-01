@@ -140,7 +140,7 @@ function parseMetadata (mdFile) {
             customCss  : customCssFile || null,
             title      : pageTitle,
             owner      : config.owner,
-            content    : emoji(marked(parsedContent), path.join(assetsPath, 'img/emojis'), 20),
+            content    : marked(parsedContent),
             post       : postMetadata || null,
             blog       : blogMetadata || null
         }
@@ -173,7 +173,7 @@ function parseMetadata (mdFile) {
             var metadata = parseMetadata(mdFile)
             , layout     = path.join(config.template, 'layouts', metadata.layout)
             , fn         = jade.compile(fs.readFileSync(layout + '.jade'), { filename: layout })
-            , html       = fn(metadata.toJade)
+            , html       = emoji(fn(metadata.toJade), path.join(metadata.toJade.assetsPath, 'img/emojis'), 20)
             // Write HTML
             var buildFilePath = mdFile.replace(config.content_dir, config.build_dir).replace(path.basename(mdFile), metadata.slug)
             if (!fs.existsSync(path.dirname(buildFilePath))) fs.mkdirSync(path.dirname(buildFilePath))

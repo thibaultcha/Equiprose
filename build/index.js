@@ -1,3 +1,4 @@
+;(function () {
 var jade = require('jade') 
 , stylus = require('stylus')
 , nib    = require('nib')
@@ -147,37 +148,37 @@ function parseMetadata (mdFile) {
     }
 }
 
-;(function () {
-    exec('rm -rf ' + path.join(config.build_dir, '*'))
-    exec('cp -r assets' + ' ' + config.build_dir)
+exec('rm -rf ' + path.join(config.build_dir, '*'))
+exec('cp -r assets' + ' ' + config.build_dir)
 
-    walk(path.join(config.template, 'styl'), new RegExp(/\.styl$/), function (err, stylusFiles) {
-        if (err) throw err
-        stylusFiles.forEach(function (stylFile) {
-            stylus(fs.readFileSync(stylFile, utf8))
-            .use(nib())
-            .set('compress', true)
-            .render(function (err, css) {
-                if (err) throw err
-                // Write CSS
-                var buildFilePath = path.join(config.build_dir, stylFile.replace(config.template, 'assets').replace(/styl/, 'css').replace(/\.styl/, '.css'))
-                if (!fs.existsSync(path.dirname(buildFilePath))) fs.mkdirSync(path.dirname(buildFilePath)) 
-                fs.writeFileSync(buildFilePath, css)
-            })
+walk(path.join(config.template, 'styl'), new RegExp(/\.styl$/), function (err, stylusFiles) {
+    if (err) throw err
+    stylusFiles.forEach(function (stylFile) {
+        stylus(fs.readFileSync(stylFile, utf8))
+        .use(nib())
+        .set('compress', true)
+        .render(function (err, css) {
+            if (err) throw err
+            // Write CSS
+            var buildFilePath = path.join(config.build_dir, stylFile.replace(config.template, 'assets').replace(/styl/, 'css').replace(/\.styl/, '.css'))
+            if (!fs.existsSync(path.dirname(buildFilePath))) fs.mkdirSync(path.dirname(buildFilePath)) 
+            fs.writeFileSync(buildFilePath, css)
         })
     })
+})
 
-    walk(config.content_dir, new RegExp(/\.md$/), function (err, results) {
-        if (err) throw err
-        results.forEach(function (mdFile) {
-            var metadata = parseMetadata(mdFile)
-            , layout     = path.join(config.template, 'layouts', metadata.layout)
-            , fn         = jade.compile(fs.readFileSync(layout + '.jade'), { filename: layout })
-            , html       = emoji(fn(metadata.toJade), path.join(metadata.toJade.assetsPath, 'img/emojis'), 20)
-            // Write HTML
-            var buildFilePath = mdFile.replace(config.content_dir, config.build_dir).replace(path.basename(mdFile), metadata.slug)
-            if (!fs.existsSync(path.dirname(buildFilePath))) fs.mkdirSync(path.dirname(buildFilePath))
-            fs.writeFile(buildFilePath, html)
-        })
+walk(config.content_dir, new RegExp(/\.md$/), function (err, results) {
+    if (err) throw err
+    results.forEach(function (mdFile) {
+        var metadata = parseMetadata(mdFile)
+        , layout     = path.join(config.template, 'layouts', metadata.layout)
+        , fn         = jade.compile(fs.readFileSync(layout + '.jade'), { filename: layout })
+        , html       = emoji(fn(metadata.toJade), path.join(metadata.toJade.assetsPath, 'img/emojis'), 20)
+        // Write HTML
+        var buildFilePath = mdFile.replace(config.content_dir, config.build_dir).replace(path.basename(mdFile), metadata.slug)
+        if (!fs.existsSync(path.dirname(buildFilePath))) fs.mkdirSync(path.dirname(buildFilePath))
+        fs.writeFile(buildFilePath, html)
     })
+})
+
 })()

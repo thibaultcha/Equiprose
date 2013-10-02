@@ -1,18 +1,26 @@
 {
-  "name": "CrydeeEngine",
+  "name": "Miranda",
   "author": "thibaultCha",
   "version": "0.1.0",
-  "description": "A personnal customizable website and blog engine",
+  "description": "A static website and blog generator",
   "private": true,
-  "dependencies": {
-    "jade": "x",
-    "stylus": "x",
-    "nib": "x",
-    "uslug": "x",
-    "marked": "x",
-    "moment": "x",
-    "emoji-images": "x",
-    "custom-logger": "x"
+  "scripts": {
+    "test": "make test"
   },
-  "engine": "node 0.10.x"
+  "dependencies": {
+    "jade": "*",
+    "stylus": "*",
+    "nib": "*",
+    "uslug": "*",
+    "marked": "*",
+    "moment": "*",
+    "emoji-images": "*",
+    "custom-logger": "*"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "engines": { 
+    "node": "0.10.x"
+  }
 }

@@ -34,7 +34,7 @@ header nav a:hover{color:#fbcf55}
 #content-container ol{list-style-type:decimal}
 footer{font-family:'Georgia';width:550px;margin:0 auto;padding:1em 0 2em 0;border-top:1px dotted #ccc;font-size:9pt}
 #post-date{padding:10pt 0 0 0}
-#post-content{font-family:'ProximaNova';}
+#post-content{font-family:'ProximaNova';font-size:14pt;}
 #post-content h1{font-size:15pt;font-weight:bold;padding:5pt 0 10pt 0}
 #post-content strong{background-color:#faf9f0;color:#444;padding:0 0;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;font-weight:bold}
 #post-content em{font-style:italic}

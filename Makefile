@@ -1,5 +1,5 @@
 BIN = ./node_modules/.bin
-BUILD = lib/
+BUILD = src/
 
 install:
 	@npm install

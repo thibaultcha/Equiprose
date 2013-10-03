@@ -10,14 +10,8 @@ var jade = require('jade')
 , emoji  = require('emoji-images')
 , exec   = require('child_process').exec
 , config = require('../config.json')
-, log    = require('custom-logger').config({ level: config.log_level })
+, lib    = require('./lib.js')
 , utf8   = { encoding:'utf-8' }
-
-log.new({
-    info     : { color: 'blue', level: 0, event: 'info' },
-    notice   : { color: 'yellow', level: 0, event: 'notice' },
-    progress : { color: 'green', level: 1, event: 'build' }
-})
 
 marked.setOptions({
     gfm: true,
@@ -32,38 +26,6 @@ marked.setOptions({
     smartypants: false,
     langPrefix: 'lang-'
 })
-
-var walk = function (dir, fileExt, done) {
-    var results = []
-    fs.readdir(dir, function (err, list) {
-        if (err) return done(err)
-        var i = 0
-        ;(function next () {
-            var file = list[i++]
-            if (!file) return done(null, results)
-            file = dir + '/' + file
-            fs.stat(file, function (err, stat) {
-            if (stat && stat.isDirectory()) {
-                walk(file, fileExt, function (err, res) {
-                    results = results.concat(res)
-                    next()
-                })
-            } else { 
-                if (fileExt.test(file)) results.push(file)
-                next()
-            }
-            })
-        })()
-    })
-}
-
-String.prototype.capitalize = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
-}
-
-function parsePostFile (postFile) {
-    return postFile.match(/^([0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]))_([\s\S]*)/)
-}
 
 function parseMeta (contentStr) {
     var metaStr = contentStr.match(/^```json([\s\S]+?)```([\s\S]*)/)
@@ -100,13 +62,12 @@ function parseMetadata (mdFile) {
         var customCssFile = path.join(assetsPath, 'css', 'custom', parsedMeta.customCss + '.css')
     }
 
-    pageTitle = parsedMeta.title || contentFileName.capitalize()
+    pageTitle = parsedMeta.title || lib.capitalize(contentFileName)
     pageSlug  = uslug(contentFileName, { lower: true })
 
     if (parsedMeta.layout == 'post') {
-        var parsedPostMeta = parsePostFile(contentFileName)
-        pageSlug  = uslug(parsedPostMeta[4], { lower: true })
-        pageTitle = parsedMeta.title || contentFileName.capitalize()
+        var parsedPostMeta = lib.parsePostFilename(contentFileName)
+        pageSlug = uslug(parsedPostMeta[4], { lower: true })
         
         var postMetadata = {
             date   : moment(parsedPostMeta[1], "YYYY-MM-DD").format(config.date_format),
@@ -116,17 +77,18 @@ function parseMetadata (mdFile) {
     else if (parsedMeta.layout == 'blog') {
         var blogMetadata = { posts: [] }
         fs.readdirSync(path.dirname(mdFile)).reverse().filter(function (item) {
-            var match = parsePostFile(item)
+            var match = lib.parsePostFilename(item)
+            // do this properly
             if (match) {
-                // the ugly thing to get the post title
+                // the ugly thing to get the post titles
                 var postContentStr = fs.readFileSync(path.join(path.dirname(mdFile), item), utf8)
                 var postParsedContent = parseMeta(postContentStr)
                 // the end of the ugly thing
                 blogMetadata.posts.push({
-                    link   : match[4].replace('.md', '.html'),
-                    title  : postParsedContent[0].title || match[4].replace('.md', ''),
+                    link   : match[2].replace('.md', '.html'),
+                    title  : postParsedContent[0].title || match[2].replace('.md', ''),
                     author : postParsedContent[0].author || config.owner.name,
-                    date   : moment(match[1], "YYYY-MM-DD").format(config.date_format)
+                    date   : moment(match[1]).format(config.date_format)
                 })
             }
         })
@@ -151,7 +113,7 @@ function parseMetadata (mdFile) {
 exec('rm -rf ' + path.join(config.build_dir, '*'))
 exec('cp -r assets' + ' ' + config.build_dir)
 
-walk(path.join(config.template, 'styl'), new RegExp(/\.styl$/), function (err, stylusFiles) {
+lib.walk(path.join(config.template, 'styl'), new RegExp(/\.styl$/), function (err, stylusFiles) {
     if (err) throw err
     stylusFiles.forEach(function (stylFile) {
         stylus(fs.readFileSync(stylFile, utf8))
@@ -167,7 +129,7 @@ walk(path.join(config.template, 'styl'), new RegExp(/\.styl$/), function (err, s
     })
 })
 
-walk(config.content_dir, new RegExp(/\.md$/), function (err, results) {
+lib.walk(config.content_dir, new RegExp(/\.md$/), function (err, results) {
     if (err) throw err
     results.forEach(function (mdFile) {
         var metadata = parseMetadata(mdFile)

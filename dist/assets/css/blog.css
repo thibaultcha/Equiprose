@@ -33,8 +33,8 @@ header nav a:hover{color:#fbcf55}
 #content-container ul{list-style:circle}
 #content-container ol{list-style-type:decimal}
 footer{font-family:'Georgia';width:550px;margin:0 auto;padding:1em 0 2em 0;border-top:1px dotted #ccc;font-size:9pt}
-.md li,#posts li{list-style-type:none;padding:1em .2em}
-.md .post-title,#posts .post-title{color:#4d926f}
-.md .post-date,#posts .post-date{color:#444;margin-top:1em}
-.md hr,#posts hr{margin:0 0}
-.md li:hover,#posts li:hover{background-color:#dadada}
+#posts li{list-style-type:none;padding:1em .2em}
+#posts .post-title{color:#4d926f}
+#posts .post-date{color:#444;margin-top:1em}
+#posts hr{margin:0 0}
+#posts li:hover{background-color:#dadada}

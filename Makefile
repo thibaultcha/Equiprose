@@ -1,5 +1,5 @@
 BIN = ./node_modules/.bin
-BUILD = build/
+BUILD = lib/
 
 install:
 	@npm install
@@ -7,11 +7,11 @@ install:
 dev:
 	@npm install --dev
 
+test: dev
+	$(BIN)/mocha --reporter list
+
 site:
 	@node $(BUILD)
-
-test: build
-	$(BIN)/mocha --reporter list
 
 clean:
 	@$(call cleanup)

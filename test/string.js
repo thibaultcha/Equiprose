@@ -1,10 +1,5 @@
 var assert = require("assert")
 
-
-beforeEach(function () {
-
-})
-
 describe('String', function () {
   
   describe('#charAt()', function () {

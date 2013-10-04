@@ -1,7 +1,7 @@
 ```meta
 {
   "layout"   : "page",
-  "title"    : "Home",
+  "title"    : "",
   "slug"     : "index.html"
 }
 ```

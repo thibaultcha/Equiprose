@@ -1,9 +1,8 @@
 var assert = require('assert')
 , config   = require('../config.json')
+, lib      = require('../engine/lib/lib.js')
 
 describe('Lib', function () {
-    var lib = require('../engine/lib/lib.js')
-
     describe('#walk()', function () {
         var regex = new RegExp(/\.md$/)
         var res

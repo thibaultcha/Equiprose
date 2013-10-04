@@ -17,10 +17,18 @@
 	"layout": "blog",
 	"title" : "Blog",
 	"slug"  : "index.html",
+}
+
+
+
+// to jade
+{
+	"content": "bla bla bla",
 	"posts" : [{
-		"link"  : "my-post.html",
-		"title" : "My Post",
-		"date"  : "Thu Sep 26 2013 02:00:00 GMT+0200 (CEST)",
-		"author": "thibault"
-		}]
+			"link"  : "my-post.html",
+			"title" : "My Post",
+			"date"  : "Thu Sep 26 2013 02:00:00 GMT+0200 (CEST)",
+			"author": "thibault"
+		}
+	]
 }

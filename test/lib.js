@@ -32,7 +32,7 @@ describe('Lib', function () {
 		})
 	})
 
-	describe('#parsePostFilename()', function () {
+	describe.skip('#parsePostFilename()', function () {
 		var result = lib.parsePostFilename('2013-09-13_blog-post.md')
 		it('should return an Array', function () {
 			assert(result instanceof Array)
@@ -43,6 +43,22 @@ describe('Lib', function () {
 		it.skip('should return a slugified filename in second element of returned Array', function () {
 			
 		})
-		// handle errors
+	})
+
+	describe('#parseFileStr()', function () {
+		var parsedFileMetadatas = lib.parseFile('test/test.md')
+		it('should return an Object', function () {
+			assert(parsedFileMetadatas instanceof Object)
+		})
+		it('should contain an Object with the required properties', function () {
+			assert(parsedFileMetadatas.layout)
+			assert(parsedFileMetadatas.title)
+			assert(parsedFileMetadatas.slug)
+			assert(parsedFileMetadatas.content)
+		})
+	})
+
+	describe('#parseMetadatas()', function () {
+		
 	})
 })

@@ -31,7 +31,7 @@ function parseMeta (contentStr) {
     var metaStr = contentStr.match(/^```json([\s\S]+?)```([\s\S]*)/)
     if (!metaStr || !metaStr[1] || !metaStr[2]) throw new Error('No metadata or content for file ' + mdFile)
 
-    return [JSON.parse(metaStr[1]), metaStr[2]] 
+    return [JSON.parse(metaStr[1]), metaStr[2]]
 }
 
 function parseMetadata (mdFile) {

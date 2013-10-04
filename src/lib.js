@@ -1,3 +1,5 @@
+var fs    = require('fs')
+
 var walk = function (dir, fileExt, done) {
     var fs    = require('fs')
     , results = []
@@ -36,6 +38,20 @@ var parsePostFilename = function (filename) {
     return matches
 }
 
-module.exports.walk = walk
-module.exports.capitalize = capitalize
+var parseFile = function (file) {
+    var metaStr      = fs.readFileSync(file, { encoding: 'utf-8' }).match(/^```meta([\s\S]+?)```([\s\S]*)/)
+    , metadata       = JSON.parse(metaStr[1])
+    metadata.content = metaStr[2]
+
+    return metadata
+}
+
+var parseMetadatas = function (metadatas) {
+
+}
+
+module.exports.walk              = walk
+module.exports.capitalize        = capitalize
 module.exports.parsePostFilename = parsePostFilename
+module.exports.parseFile         = parseFile
+module.exports.parseMetadatas    = parseMetadatas

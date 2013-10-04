@@ -85,10 +85,10 @@ function parseMetadata (mdFile) {
                 var postParsedContent = parseMeta(postContentStr)
                 // the end of the ugly thing
                 blogMetadata.posts.push({
-                    link   : match[2].replace('.md', '.html'),
-                    title  : postParsedContent[0].title || match[2].replace('.md', ''),
+                    link   : match[1].replace('.md', '.html'),
+                    title  : postParsedContent[0].title || match[1].replace('.md', ''),
                     author : postParsedContent[0].author || config.owner.name,
-                    date   : moment(match[1]).format(config.date_format)
+                    date   : moment(match[0]).format(config.date_format)
                 })
             }
         })

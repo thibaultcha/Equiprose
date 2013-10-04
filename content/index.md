@@ -1,7 +1,7 @@
 ```json
 {
     "layout"    : "page",
-    "customCss" : "index",
+    "customCss" : "home",
     "title"     : "Home"
 }
 ```

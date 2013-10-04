@@ -33,6 +33,8 @@ header nav a:hover{color:#fbcf55}
 #content-container ul{list-style:circle}
 #content-container ol{list-style-type:decimal}
 footer{font-family:'Georgia';width:550px;margin:0 auto;padding:1em 0 2em 0;border-top:1px dotted #ccc;font-size:9pt}
+header nav{width:655px}
+#content-container{width:650px}
 #post-date{padding:10pt 0 0 0}
 #post-content{font-family:'ProximaNova';font-size:14pt;}
 #post-content h1{font-size:15pt;font-weight:bold;padding:5pt 0 10pt 0}

@@ -5,7 +5,7 @@
 	},
 	"template"    : "templates/thibaultcha",
 	"date_format" : "MMM DD YYYY",
-	"content_dir" : "../thibaultcha.me/content",
-	"build_dir"   : "../thibaultcha.me/dist",
+	"content_dir" : "content",
+	"build_dir"   : "dist",
 	"log_level"   : 1
 }

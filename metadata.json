@@ -1,0 +1,26 @@
+// Post
+{
+	"layout": "post", 
+	"title" : "My Post",
+	"slug"  : "my-post.html",
+	"date"  : "Thu Sep 26 2013 02:00:00 GMT+0200 (CEST)"
+}
+// Page
+{
+	"layout"   : "page",
+	"title"    : "Home",
+	"slug"     : "index.html",
+	"customCss": "home.styl"
+}
+// Page blog index
+{
+	"layout": "blog",
+	"title" : "Blog",
+	"slug"  : "index.html",
+	"posts" : [{
+		"link"  : "my-post.html",
+		"title" : "My Post",
+		"date"  : "Thu Sep 26 2013 02:00:00 GMT+0200 (CEST)",
+		"author": "thibault"
+		}]
+}

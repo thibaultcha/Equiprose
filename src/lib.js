@@ -29,10 +29,10 @@ var capitalize = function (str) {
 
 var parsePostFilename = function (filename) {
     var matches = filename.match(/^([0-9]{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1]))_([\s\S]*)/)
-    if (matches) matches[1] = new Date(matches[1])
-    
-    matches.shift()
-    
+    if (matches) {
+        matches[1] = new Date(matches[1])
+        matches.shift()
+    }
     return matches
 }
 

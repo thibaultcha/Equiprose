@@ -15,7 +15,7 @@
     "marked": "*",
     "moment": "*",
     "emoji-images": "*",
-    "custom-logger": "*"
+    "colors": "*"
   },
   "devDependencies": {
     "mocha": "*"

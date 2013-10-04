@@ -1,5 +1,5 @@
 BIN = ./node_modules/.bin
-BUILD = src/
+BUILD = engine/
 
 install:
 	@npm install
@@ -8,7 +8,7 @@ dev:
 	@npm install --dev
 
 test: dev
-	$(BIN)/mocha --reporter list
+	$(BIN)/mocha --reporter spec
 
 site:
 	@node $(BUILD)

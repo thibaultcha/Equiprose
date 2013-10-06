@@ -1,7 +1,6 @@
 ```meta
 {
   "layout"   : "page",
-  "title"    : "Home",
   "slug"     : "index"
 }
 ```

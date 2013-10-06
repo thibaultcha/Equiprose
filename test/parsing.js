@@ -4,10 +4,13 @@ var assert = require('assert')
 
 describe('Parsing', function () {
     var rightFormatFile  = 'test/test_files/test_right_format.md'
+    , testNoTitleFile    = 'test/test_files/test_no_title.md'
     , wrongFormatFile    = 'test/test_files/test_wrong_format.md'
     , wrongMetadatasFile = 'test/test_files/test_wrong_metas.md'
+    , wrongSlugFile      = 'test/test_files/test_wrong_slug.md'
     , noContentFile      = 'test/test_files/test_no_content.md'
-    , blogIndexFile      = 'test/test_files/test_blog_index.md'
+    , blogPath           = 'test/test_files/blog/'
+    , blogIndexFile      =  blogPath + '/test_blog_index.md'
 
     describe('#getMetadatas()', function () {
         it('should return an Object', function () {
@@ -21,9 +24,10 @@ describe('Parsing', function () {
             assert(metas.slug)
             assert(metas.content)
             assert(metas.filename)
+            assert(metas.dirpath)
         })
         it('should throw an error when passing a bad formatted file', function () {
-            assert.throws(function(){ parse.getMetadatas(wrongFormatFile) }, Error)
+            assert.throws(function (){ parse.getMetadatas(wrongFormatFile) }, Error)
         })
     })
 
@@ -39,67 +43,53 @@ describe('Parsing', function () {
             assert(metas.toJade.title)
             assert(metas.toJade.layoutCss)
             assert(metas.toJade.content)
-            /*
-            {
-                layout : parsedMeta.layout,
-                slug   : pageSlug + '.html',
-                toJade : {
-                    assetsPath : assetsPath,
-                    layoutCss  : path.join(assetsPath, 'css', parsedMeta.layout + '.css'),
-                    customCss  : customCssFile || null,
-                    title      : pageTitle,
-                    owner      : config.owner,
-                    content    : marked(parsedContent),
-                    
-                    post       : postMetadata || null,
-                    blog       : blogMetadata || null
-                }
-            }
-            */
+        })
+        it('should return an Array of blog posts if property \`shouldFecthPosts\` is true', function () {
+            var metas = parse.parseMetadatas(parse.getMetadatas(blogIndexFile))
+            assert(metas.posts instanceof Array)
         })
         it('should capitalize the filename if no title is provided', function () {
-            var metas = parse.parseMetadatas(parse.getMetadatas(rightFormatFile))
+            var metas = parse.parseMetadatas(parse.getMetadatas(testNoTitleFile))
             assert(metas.toJade.title != '')
         })
         it('should not throw an error if no content is provided', function () {
             var metas = parse.getMetadatas(noContentFile)
-            assert.doesNotThrow(
-                function () {
-                    parse.parseMetadatas(metas)
-                }
-            )
+            assert.doesNotThrow(function (){ parse.parseMetadatas(metas) })
         })
         it('should throw an error if slug is not valid', function () {
-            var metas = parse.getMetadatas('test/test_files/2013-10-06_hello-world.md')
-            assert.throws(
-                function () {
-                    parse.parseMetadatas(metas)
-                },
-                /slug/
-            )
+            var metas = parse.getMetadatas(wrongSlugFile)
+            assert.throws(function (){ parse.parseMetadatas(metas) }, /slug/)
         })
-        it('should throw an error if layout file does not exists', function () {
+        it('should throw an error if layout file does not exist', function () {
             var metas = parse.getMetadatas(wrongMetadatasFile)
-            assert.throws(
-                function () {
-                    parse.parseMetadatas(metas)
-                },
-                /jade/
-            )
+            assert.throws(function (){ parse.parseMetadatas(metas) }, /jade/)
         })
-        it.skip('should throw an error if stylus file does not exists', function () {
+        it.skip('should throw an error if stylus file does not exist', function () {
             // TODO: pass as parameter the dir where we should verify for .styl and .jade files
             var metas = parse.getMetadatas(wrongMetadatasFile)
-            assert.throws(
-                function () {
-                    parse.parseMetadatas(metas)
-                }, 
-                /stylus/
-            )
+            assert.throws(function (){ parse.parseMetadatas(metas) }, /stylus/)
         })
-        it('should return an array of posts in metadatas if page is blog index', function () {
-            var metas = parse.parseMetadatas(parse.getMetadatas(blogIndexFile))
-            assert(metas.toJade.posts instanceof Array)
+    })
+
+    describe('#fetchBlogPosts()', function () {
+        it('should return an Array', function () {
+            var posts = parse.fetchBlogPosts(blogPath)
+            assert(posts instanceof Array)
         })
+        it('should fetch all files in given directory with the \'isBlogPost\' property in metadatas', function () {
+            var posts = parse.fetchBlogPosts(blogPath)
+            assert.equal(2, posts.length)
+            for (var i = posts.length - 1; i >= 0; i--)
+                assert(posts[i].isBlogPost)
+        })
+        it('should return required properties for a blog post', function () {
+            var posts = parse.fetchBlogPosts(blogPath)
+            for (var i = posts.length - 1; i >= 0; i--) {
+                assert(posts[i].toJade.title)
+                assert(posts[i].toJade.link)
+                assert(posts[i].toJade.date)
+            }
+        })
+        // post date format?
     })
 })

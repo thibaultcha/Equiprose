@@ -1,10 +1,10 @@
 ```meta
 {
   "layout"     : "page",
-  "title"      : "",
+  "title"      : "Hello World",
   "slug"       : "hello world",
   "isBlogPost" : true
 }
 ```
 
-Hello, I am Miranda.
+My first blog post

@@ -21,13 +21,23 @@ describe('Lib', function () {
     })
 
     describe('#capitalize()', function () {
-        var str = 'index'
         it('should return a string', function () {
             str = lib.capitalize('index')
-            assert(typeof str == 'string' || str instanceof String)
+            assert(typeof str === 'string')
         })
         it('should capitalize the first letter', function () {
-            assert.equal('I', lib.capitalize(str).charAt(0))
+            assert.equal('I', lib.capitalize('index').charAt(0))
+        })
+    })
+
+    describe('#slugify()', function () {
+        it('should return a string', function () {
+            str = lib.slugify('hello world')
+            assert(typeof str === 'string')
+        })
+        it('should return a slugified string for any input', function () {
+            assert.equal(true, /^[a-z0-9-]+$/.test(lib.slugify('%Test_#.Slug"!\'è§')))
+            assert.equal('hello-world', lib.slugify('-hello #world--'))
         })
     })
 })

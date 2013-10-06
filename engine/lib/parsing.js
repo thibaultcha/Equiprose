@@ -28,6 +28,9 @@ var parseMetadatas = function (metadatas) {
 
     if (!fs.existsSync(parsedMetas.layoutPath)) throw new Error('No jade file for layout: \''.white + metadatas.layout.red + '\' for file: ' + metadatas.filename.red)
     if (!fs.existsSync(path.join(config.template, 'styl', metadatas.layout) + '.styl')) throw new Error('No stylus file for layout: \''.white + metadatas.layout.red + '\' for file: ' + metadatas.filename.red)
+    if (!/^[a-z0-9-]+$/.test(parsedMetas.slug)) throw new Error('Provided slug is not valid in: \''.white + metadatas.filename.red + '\''.white)
+
+    if (metadatas.isBlogIndex) 
 
     return parsedMetas
 }

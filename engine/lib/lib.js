@@ -27,5 +27,10 @@ var capitalize = function (str) {
     return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
+var slugify = function (str) {
+    return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+}
+
 module.exports.walk       = walk
 module.exports.capitalize = capitalize
+module.exports.slugify    = slugify

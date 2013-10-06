@@ -6,6 +6,8 @@ describe('Parsing', function () {
     var rightFormatFile  = 'test/test_files/test_right_format.md'
     , wrongFormatFile    = 'test/test_files/test_wrong_format.md'
     , wrongMetadatasFile = 'test/test_files/test_wrong_metas.md'
+    , noContentFile      = 'test/test_files/test_no_content.md'
+    , blogIndexFile      = 'test/test_files/test_blog_index.md'
 
     describe('#getMetadatas()', function () {
         it('should return an Object', function () {
@@ -55,15 +57,26 @@ describe('Parsing', function () {
             }
             */
         })
-        it.skip('should return the required properties for a blog post', function () {
-
-        })
-        it.skip('should return an Array containing blog posts for a blog index', function () {
-            
-        })
         it('should capitalize the filename if no title is provided', function () {
             var metas = parse.parseMetadatas(parse.getMetadatas(rightFormatFile))
             assert(metas.toJade.title != '')
+        })
+        it('should not throw an error if no content is provided', function () {
+            var metas = parse.getMetadatas(noContentFile)
+            assert.doesNotThrow(
+                function () {
+                    parse.parseMetadatas(metas)
+                }
+            )
+        })
+        it('should throw an error if slug is not valid', function () {
+            var metas = parse.getMetadatas('test/test_files/2013-10-06_hello-world.md')
+            assert.throws(
+                function () {
+                    parse.parseMetadatas(metas)
+                },
+                /slug/
+            )
         })
         it('should throw an error if layout file does not exists', function () {
             var metas = parse.getMetadatas(wrongMetadatasFile)
@@ -74,7 +87,8 @@ describe('Parsing', function () {
                 /jade/
             )
         })
-        it('should throw an error if stylus file does not exists', function () {
+        it.skip('should throw an error if stylus file does not exists', function () {
+            // TODO: pass as parameter the dir where we should verify for .styl and .jade files
             var metas = parse.getMetadatas(wrongMetadatasFile)
             assert.throws(
                 function () {
@@ -82,6 +96,10 @@ describe('Parsing', function () {
                 }, 
                 /stylus/
             )
+        })
+        it('should return an array of posts in metadatas if page is blog index', function () {
+            var metas = parse.parseMetadatas(parse.getMetadatas(blogIndexFile))
+            assert(metas.toJade.posts instanceof Array)
         })
     })
 })

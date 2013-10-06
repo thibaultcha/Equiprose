@@ -2,6 +2,6 @@
 {
 	"layout": "wrong",
 	"title" : "",
-	"slug"  : "test-wrong-metas.html"
+	"slug"  : "test-wrong-metas"
 }
 ```

@@ -2,7 +2,7 @@
 {
   "layout"   : "page",
   "title"    : "",
-  "slug"     : "index.html"
+  "slug"     : "index"
 }
 ```
 

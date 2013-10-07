@@ -50,8 +50,10 @@ var fetchBlogPosts = function (filepath) {
 
 var parsePostMetadatas = function (metadatas) {
     if (metadatas.isBlogPost) {
-        if (!metadatas.date) throw new Error('No date provided in metadatas for post: '.white + metadatas.filename.red)
-        // test is valid date
+        if (!lib.isValidDate(new Date(metadatas.date))) throw new Error('Invalid or no date provided in metadatas for post: '.white + metadatas.filename.red)
+        if (!metadatas.title) throw new Error('No title provided in metadatas for post: '.white + metadatas.filename.red)
+        if (!metadatas.content) throw new Error('No content for post in file: '.white + metadatas.filename.red)
+
         var postmetas = {
             isBlogPost : true,
             author     : metadatas.author || config.owner.name,
@@ -64,7 +66,7 @@ var parsePostMetadatas = function (metadatas) {
     return postmetas
 }
 
-module.exports.getMetadatas       = getMetadatas
-module.exports.parseMetadatas     = parseMetadatas
-module.exports.fetchBlogPosts     = fetchBlogPosts
+module.exports.getMetadatas   = getMetadatas
+module.exports.parseMetadatas = parseMetadatas
+module.exports.fetchBlogPosts = fetchBlogPosts
 module.exports.parsePostMetadatas = parsePostMetadatas

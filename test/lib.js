@@ -65,15 +65,18 @@ describe('Lib', function () {
         })
     })
 
-    describe.skip('#isValidDate()', function () {
+    describe('#isValidDate()', function () {
         it('should return a boolean', function () {
-
+            var date = new Date('Mon Oct 07 2013 18:26:47 GMT+0200 (CEST)')
+            assert(typeof(lib.isValidDate(date)) === 'boolean')
         })
         it('should return true for a correct date', function () {
-
+            var date = new Date('Mon Oct 07 2013 18:26:47 GMT+0200 (CEST)')
+            assert.equal(true, lib.isValidDate(date))
         })
         it('should return false for an incorrect date', function () {
-
+            var date = new Date('wrong format')
+            assert.equal(false, lib.isValidDate(date))
         })
     })
 })

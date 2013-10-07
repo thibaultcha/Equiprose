@@ -2,10 +2,10 @@ BIN = ./node_modules/.bin
 BUILD = engine/
 
 install:
-	@npm install
+	@npm install --production
 
 dev:
-	@npm install --dev
+	@npm install
 
 test: dev
 	$(BIN)/mocha --reporter spec

@@ -11,6 +11,8 @@ describe('Parsing', function () {
     , wrongSlugFile     = testFiles + 'test_page_wrong_slug.md'
     , noContentFile     = testFiles + 'test_page_no_content.md'
     , wrongDatePostFile = testFiles + 'test_post_wrong_date.md'
+    , noTitlePostFile   = testFiles + 'test_post_no_title.md'
+    , noContentPostFile = testFiles + 'test_post_no_content.md'
     , blogPath          = testFiles + 'blog/'
     , blogIndexFile     = blogPath + 'test_blog_index.md'
     , rightBlogPostFile = blogPath + '2013-12-01_its-snowing-today.md'
@@ -38,6 +40,8 @@ describe('Parsing', function () {
         it('should return an Array', function () {
             var posts = parse.fetchBlogPosts(blogPath)
             assert(posts instanceof Array)
+            posts = parse.fetchBlogPosts(__dirname)
+            assert(posts instanceof Array)
         })
         it('should fetch all files in given directory with the \'isBlogPost\' property in metadatas', function () {
             var posts = parse.fetchBlogPosts(blogPath)
@@ -63,7 +67,7 @@ describe('Parsing', function () {
             assert(postmetas.content)
             assert(postmetas.link)
         })
-        it('should not contain line breaks at beginning or end of \`content\` property', function () {
+        it('using [#cutHeadTailLinebreaks()] should not contain line breaks at beginning or end of \`content\` property', function () {
             var postmetas = parse.parsePostMetadatas(parse.getMetadatas(rightBlogPostFile))
             assert.equal(false, /^[\n]+|[\n]+$/.test(postmetas.content))
         })
@@ -74,14 +78,13 @@ describe('Parsing', function () {
         it('should throw an error if blog post is missing or has invalid date value', function () {
             var postmetas = parse.getMetadatas(wrongDatePostFile)
             assert.throws(function () { parse.parsePostMetadatas(postmetas) }, /date/)
-            // TODO: check invalid date
         })
-        it.skip('should throw an error if blog post is missing title value', function () {
-            var postmetas = parse.getMetadatas(wrongTitlePostFile)
+        it('should throw an error if blog post is missing title value', function () {
+            var postmetas = parse.getMetadatas(noTitlePostFile)
             assert.throws(function () { parse.parsePostMetadatas(postmetas) }, /title/)
         })
-        it.skip('should throw an error if blog post is missing content value', function () {
-            var postmetas = parse.getMetadatas(wrongContentPostFile)
+        it('should throw an error if blog post is missing content value', function () {
+            var postmetas = parse.getMetadatas(noContentPostFile)
             assert.throws(function () { parse.parsePostMetadatas(postmetas) }, /content/)
         })
     })
@@ -100,11 +103,11 @@ describe('Parsing', function () {
             assert(metas.toJade.content)
             // TOTO: handle incorrect metadatas as parameter
         })
-        it('should normalize the filename if no title is provided', function () {
+        it('using [#normalizeFilenameAsTitle()] should normalize the filename if no title is provided', function () {
             var metas = parse.parseMetadatas(parse.getMetadatas(noTitleFile))
             assert.equal('Test Page No Title',  metas.toJade.title)
         })
-        it('should not contain line breaks at beginning or end of \`content\` property', function () {
+        it('using [#cutHeadTailLinebreaks()] should not contain line breaks at beginning or end of \`content\` property', function () {
             var metas = parse.parseMetadatas(parse.getMetadatas(rightFormatFile))
             assert.equal(false, /^[\n]+|[\n]+$/.test(metas.toJade.content))
         })
@@ -116,7 +119,7 @@ describe('Parsing', function () {
             var metas = parse.parseMetadatas(parse.getMetadatas(blogIndexFile))
             assert(metas.toJade.posts instanceof Array)
         })
-        it('should return required properties for blog post if \'isBlogPost\' is true', function () {
+        it('using [#parsePostMetadatas()] should return required properties for blog post if \'isBlogPost\' is true', function () {
             var postmetas = parse.parseMetadatas(parse.getMetadatas(rightBlogPostFile))
             assert(postmetas.slug)
             assert(postmetas.layoutPath)

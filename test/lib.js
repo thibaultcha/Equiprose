@@ -22,7 +22,7 @@ describe('Lib', function () {
 
     describe('#capitalize()', function () {
         it('should return a string', function () {
-            str = lib.capitalize('index')
+            var str = lib.capitalize('index')
             assert(typeof str === 'string')
         })
         it('should capitalize the first letter', function () {
@@ -32,12 +32,36 @@ describe('Lib', function () {
 
     describe('#slugify()', function () {
         it('should return a string', function () {
-            str = lib.slugify('hello world')
+            var str = lib.slugify('hello world')
             assert(typeof str === 'string')
         })
         it('should return a slugified string for any input', function () {
             assert.equal(true, /^[a-z0-9-]+$/.test(lib.slugify('%Test_#.Slug"!\'è§')))
             assert.equal('hello-world', lib.slugify('-hello #world--'))
+        })
+    })
+
+    describe('#cutHeadTailLinebreaks()', function () {
+        it('should return a string', function () {
+            var str = lib.cutHeadTailLinebreaks('\n\n\nHello World')
+            assert(typeof(str) === 'string')
+        })
+        it('should remove all line breaks at the beginning of a string', function () {
+            var str = lib.cutHeadTailLinebreaks('\n\n\nHello World')
+            assert.equal('Hello World', str)
+            str = lib.cutHeadTailLinebreaks('\n\n\nHello\nWorld\n')
+            assert.equal('Hello\nWorld', str)
+        })
+    })
+
+    describe('#normalizeFilenameAsTitle()', function () {
+        it('should return a string', function () {
+            var str = lib.normalizeFilenameAsTitle('hello_world.md')
+            assert(typeof(str) === 'string')
+        })
+        it('should normalize a file name to be a title', function () {
+            var str = lib.normalizeFilenameAsTitle('hello_world.md')
+            assert.equal('Hello World', str)
         })
     })
 })

@@ -31,6 +31,20 @@ var slugify = function (str) {
     return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 }
 
-module.exports.walk       = walk
-module.exports.capitalize = capitalize
-module.exports.slugify    = slugify
+var cutHeadTailLinebreaks = function (str) {
+    return str.replace(/^[\n]+/, '').replace(/[\n]+$/, '')
+}
+
+var normalizeFilenameAsTitle = function (str) {
+    var strArray = require('path').basename(str, '.md').replace(/[-_]/g, ' ').split(' ')
+    , str = ''
+    for (var i = 0; i < strArray.length; i++)
+        str += capitalize(strArray[i]) + ' '
+    return str.slice(0, -1)
+}
+
+module.exports.walk                     = walk
+module.exports.capitalize               = capitalize
+module.exports.slugify                  = slugify
+module.exports.cutHeadTailLinebreaks    = cutHeadTailLinebreaks
+module.exports.normalizeFilenameAsTitle = normalizeFilenameAsTitle

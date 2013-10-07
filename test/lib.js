@@ -46,7 +46,7 @@ describe('Lib', function () {
             var str = lib.cutHeadTailLinebreaks('\n\n\nHello World')
             assert(typeof(str) === 'string')
         })
-        it('should remove all line breaks at the beginning of a string', function () {
+        it('should remove all line breaks at the beginning and end of a string', function () {
             var str = lib.cutHeadTailLinebreaks('\n\n\nHello World')
             assert.equal('Hello World', str)
             str = lib.cutHeadTailLinebreaks('\n\n\nHello\nWorld\n')
@@ -62,6 +62,18 @@ describe('Lib', function () {
         it('should normalize a file name to be a title', function () {
             var str = lib.normalizeFilenameAsTitle('hello_world.md')
             assert.equal('Hello World', str)
+        })
+    })
+
+    describe.skip('#isValidDate()', function () {
+        it('should return a boolean', function () {
+
+        })
+        it('should return true for a correct date', function () {
+
+        })
+        it('should return false for an incorrect date', function () {
+
         })
     })
 })

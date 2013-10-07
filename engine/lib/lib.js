@@ -43,8 +43,15 @@ var normalizeFilenameAsTitle = function (str) {
     return str.slice(0, -1)
 }
 
+var isValidDate = function (d) {
+  if (Object.prototype.toString.call(d) !== "[object Date]")
+    return false
+  return !isNaN(d.getTime())
+}
+
 module.exports.walk                     = walk
 module.exports.capitalize               = capitalize
 module.exports.slugify                  = slugify
 module.exports.cutHeadTailLinebreaks    = cutHeadTailLinebreaks
 module.exports.normalizeFilenameAsTitle = normalizeFilenameAsTitle
+module.exports.isValidDate              = isValidDate

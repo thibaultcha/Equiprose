@@ -61,25 +61,27 @@ describe('Parsing', function () {
             assert(postmetas.author)
             assert(postmetas.title)
             assert(postmetas.content)
+            assert(postmetas.link)
         })
-        it('should remove all line breaks at the beginning/end of content', function () {
+        it('should not contain line breaks at beginning or end of \`content\` property', function () {
             var postmetas = parse.parsePostMetadatas(parse.getMetadatas(rightBlogPostFile))
             assert.equal(false, /^[\n]+|[\n]+$/.test(postmetas.content))
         })
-        it.skip('should throw an error if blog post is missing date value', function () {
+        it('should return owner name if no author is specified in metadatas', function () {
+            var postmetas = parse.parsePostMetadatas(parse.getMetadatas(rightBlogPostFile))
+            assert.equal(config.owner.name, postmetas.author)
+        })
+        it('should throw an error if blog post is missing or has invalid date value', function () {
             var postmetas = parse.getMetadatas(wrongDatePostFile)
             assert.throws(function () { parse.parsePostMetadatas(postmetas) }, /date/)
-        })
-        it.skip('should throw an error if blog post is missing author value', function () {
-            var postmetas = parse.getMetadatas(wrongDatePostFile)
-            assert.throws(function () { parse.parsePostMetadatas(postmetas) }, /author/)
+            // TODO: check invalid date
         })
         it.skip('should throw an error if blog post is missing title value', function () {
-            var postmetas = parse.getMetadatas(wrongDatePostFile)
+            var postmetas = parse.getMetadatas(wrongTitlePostFile)
             assert.throws(function () { parse.parsePostMetadatas(postmetas) }, /title/)
         })
         it.skip('should throw an error if blog post is missing content value', function () {
-            var postmetas = parse.getMetadatas(wrongDatePostFile)
+            var postmetas = parse.getMetadatas(wrongContentPostFile)
             assert.throws(function () { parse.parsePostMetadatas(postmetas) }, /content/)
         })
     })

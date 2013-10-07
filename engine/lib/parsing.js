@@ -50,18 +50,21 @@ var fetchBlogPosts = function (filepath) {
 
 var parsePostMetadatas = function (metadatas) {
     if (metadatas.isBlogPost) {
-        var postmetas = {}
-        postmetas.isBlogPost = true
-        postmetas.author     = metadatas.author || config.owner.name
-        postmetas.date       = moment(metadatas.date).format(config.date_format)
-        postmetas.title      = metadatas.title || lib.normalizeFilenameAsTitle(metadatas.filename)
-        postmetas.content    = lib.cutHeadTailLinebreaks(metadatas.content)
-        postmetas.link       = metadatas.slug + '.html'
+        if (!metadatas.date) throw new Error('No date provided in metadatas for post: '.white + metadatas.filename.red)
+        // test is valid date
+        var postmetas = {
+            isBlogPost : true,
+            author     : metadatas.author || config.owner.name,
+            date       : moment(metadatas.date).format(config.date_format),
+            title      : metadatas.title || lib.normalizeFilenameAsTitle(metadatas.filename),
+            content    : lib.cutHeadTailLinebreaks(metadatas.content),
+            link       : metadatas.slug + '.html'
+        }
     }
     return postmetas
 }
 
-module.exports.getMetadatas   = getMetadatas
-module.exports.parseMetadatas = parseMetadatas
-module.exports.fetchBlogPosts = fetchBlogPosts
+module.exports.getMetadatas       = getMetadatas
+module.exports.parseMetadatas     = parseMetadatas
+module.exports.fetchBlogPosts     = fetchBlogPosts
 module.exports.parsePostMetadatas = parsePostMetadatas

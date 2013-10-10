@@ -1,5 +1,7 @@
 # Miranda
 
+[![Build Status](http://travis-ci.org/thibaultCha/Miranda.png)](http://travis-ci.org/thibaultCha/Miranda)
+
 Miranda is a static website and/or blog generator.
 I built it because I love Markdown and wanted [my website](http://thibaultcha.me) to support it. Miranda is inspired from [snap](https://github.com/mlbli/snap), but I was not satisfied with it because I wanted more than a blog. 
 Miranda was first built as a Node.js app ([CrydeeEngine](https://github.com/thibaultCha/CrydeeEngine), until I realized static content was much more appropriated to my needs and.. maybe yours?

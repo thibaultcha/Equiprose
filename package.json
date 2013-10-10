@@ -5,7 +5,14 @@
   "description": "A static website and blog generator",
   "private": true,
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "blanket": {
+      "pattern": "engine/"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/thibaultCha/Miranda.git"
   },
   "dependencies": {
     "jade": "*",
@@ -15,12 +22,15 @@
     "moment": "*",
     "emoji-images": "*",
     "colors": "*",
-    "yamljs": "*"
+    "yamljs": "*",
+    "coveralls": "~2.3.0"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "*",
+    "coveralls": "*",
+    "mocha-lcov-reporter": "*"
   },
-  "engines": { 
-    "node": "0.10.x"
+  "engines": {
+    "node": "0.10.7"
   }
 }

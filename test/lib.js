@@ -2,6 +2,10 @@ var assert = require('assert')
 , config   = require('../config.json')
 , lib      = require('../engine/lib/lib.js')
 
+/*var blanket = require("blanket")({  
+   "pattern": "/../engine/"  
+});*/
+
 describe('Lib', function () {
     describe('#walk()', function () {
         var regex = new RegExp(/\.md$/)

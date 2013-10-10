@@ -1,10 +1,8 @@
-```meta
-{
-  "layout"   : "page",
-  "title"    : "Home",
-  "slug"     : "index"
-}
-```
+=
+layout: page
+title: Home
+slug: index
+=
 
 
 

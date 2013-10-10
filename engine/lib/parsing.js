@@ -4,13 +4,14 @@ var fs   = require('fs')
 , config = require('../../config.json')
 , colors = require('colors')
 , moment = require('moment')
+, yaml   = require('yamljs')
 
 var getMetadatas = function (file) {
     var data = fs.readFileSync(file, { encoding: 'utf-8' })
-    var metaStr = data.match(/^```meta([\s\S]+?)```([\s\S]*)/)
+    var metaStr = data.match(/^=([\s\S]+?)=([\s\S]*)/)
     if (!metaStr) throw new Error('Could not find metadatas for file: '.white + file.red)
     else {
-        var metadata      = JSON.parse(metaStr[1])
+        var metadata      = yaml.parse(metaStr[1])
         metadata.content  = metaStr[2]
         metadata.filename = path.basename(file)
         metadata.dirpath  = path.dirname(file)
@@ -66,7 +67,7 @@ var parsePostMetadatas = function (metadatas) {
     return postmetas
 }
 
-module.exports.getMetadatas   = getMetadatas
-module.exports.parseMetadatas = parseMetadatas
-module.exports.fetchBlogPosts = fetchBlogPosts
+module.exports.getMetadatas       = getMetadatas
+module.exports.parseMetadatas     = parseMetadatas
+module.exports.fetchBlogPosts     = fetchBlogPosts
 module.exports.parsePostMetadatas = parsePostMetadatas

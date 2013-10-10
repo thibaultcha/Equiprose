@@ -1,7 +1,4 @@
-```meta
-{
-	"layout": "wrong",
-	"title" : "",
-	"slug"  : "test-wrong-metas"
-}
-```
+=
+layout: wrong
+slug: test-wrong-metas
+=

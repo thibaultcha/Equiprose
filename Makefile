@@ -11,11 +11,11 @@ dev:
 test: dev
 	@NODE_ENV=test $(BIN)/mocha --require blanket --reporter $(REPORTER)
 
-test-cov:
+test-cov: dev
 	$(MAKE) test REPORTER=html-cov 1> coverage.html
 
 test-coveralls: dev
-	$(MAKE) test REPORTER=mocha-lcov-reporter | ./bin/coveralls.js --verbose
+	$(MAKE) test REPORTER=mocha-lcov-reporter | $(BIN)/coveralls
 
 site:
 	@node $(BUILD)

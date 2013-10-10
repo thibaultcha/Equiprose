@@ -14,7 +14,8 @@
     "marked": "*",
     "moment": "*",
     "emoji-images": "*",
-    "colors": "*"
+    "colors": "*",
+    "yamljs": "*"
   },
   "devDependencies": {
     "mocha": "*"

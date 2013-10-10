@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "mocha": "*",
+    "blanket": "*",
     "coveralls": "*",
     "mocha-lcov-reporter": "*"
   },

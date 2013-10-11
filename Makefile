@@ -1,6 +1,6 @@
 BIN = ./node_modules/.bin
-BUILD = engine/
-REPORTER = list
+BUILD = bin/
+REPORTER = spec
 
 install:
 	@npm install --production

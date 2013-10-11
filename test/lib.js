@@ -1,17 +1,28 @@
 var assert = require('assert')
-, config   = require('../config.json')
-, lib      = require('../engine/lib/lib.js')
-
-/*var blanket = require("blanket")({  
-   "pattern": "/../engine/"  
-});*/
+, lib      = require('../bin/lib/lib.js')
 
 describe('Lib', function () {
+
+    describe('#parseConfig()', function () {
+        it('should return an object', function () {
+            var config = lib.parseConfig('test/test_site')
+            assert(config instanceof Object)
+        })
+        it('should contain the site path', function () {
+            var config = lib.parseConfig('test/test_site')
+            assert(config.sitePath)
+        })
+        it('should throw an error when no config.yml file is found', function () {
+            assert.throws(function () { lib.parseConfig('falsepath') }, Error)
+        })
+    })
+
     describe('#walk()', function () {
-        var regex = new RegExp(/\.md$/)
-        var res
+        var config = lib.parseConfig('test/test_site')
+        , regex    = new RegExp(/\.md$/)
+        , res
         it('should return an Array', function (done) {
-            lib.walk(config.content_dir, regex, function (err, results) {
+            lib.walk(config.sitePath + '/pages', regex, function (err, results) {
                 assert.ifError(err)
                 assert(results instanceof Array)
                 res = results

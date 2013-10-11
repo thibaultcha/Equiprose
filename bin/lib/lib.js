@@ -1,6 +1,14 @@
+var fs = require('fs')
+
+var parseConfig = function (sitePath) {
+    var configStr = fs.readFileSync(sitePath + '/config.yml', { encoding: 'utf-8' })
+    , config      = require('yamljs').parse(configStr)
+    config.sitePath = sitePath
+    return config
+}
+
 var walk = function (dir, fileExt, done) {
-    var fs    = require('fs')
-    , results = []
+    var results = []
     fs.readdir(dir, function (err, list) {
         if (err) return done(err)
         var i = 0
@@ -49,6 +57,7 @@ var isValidDate = function (d) {
   return !isNaN(d.getTime())
 }
 
+module.exports.parseConfig              = parseConfig
 module.exports.walk                     = walk
 module.exports.capitalize               = capitalize
 module.exports.slugify                  = slugify

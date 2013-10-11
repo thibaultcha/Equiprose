@@ -1,0 +1,6 @@
+owner:
+    name: thibaultCha
+    description: I think it's me...
+template: thibaultCha
+date_format: DD MMM YYYY
+buildDir: ./dist

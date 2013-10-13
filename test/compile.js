@@ -6,17 +6,18 @@ var assert = require('assert')
 , compile  = require('../bin/lib/compile.js')
 
 describe('Compile', function () {
-	var config, outputDir
+	var config, outputDir, stylDir
 
 	before(function () {
 		config    = lib.parseConfig('test/test_site')
+		stylDir   = 'template/styl'
 		outputDir = path.join(config.sitePath, config.buildDir)
 	})
 
 	describe('#prepareOutputDir()', function () {
 		it('should initialize an empty buildDir directory', function (done) {
 			compile.prepareOutputDir(outputDir, function (err) {
-				if (err) throw err
+				assert.ifError(err)
 				assert(fs.existsSync(outputDir))
 				done()
 			})
@@ -30,7 +31,10 @@ describe('Compile', function () {
 	})
 
 	describe('#compileStylusFile()', function () {
+		var stylusfile
+
 		before(function (done) {
+			stylusfile = path.join(config.sitePath, stylDir, 'page.styl')
 			compile.prepareOutputDir(outputDir, function (err) {
 				if (err) throw err
 				done()
@@ -46,16 +50,15 @@ describe('Compile', function () {
 				}
 			})
 
-			var stylusfile = path.join(config.sitePath, 'template/styl/page.styl')
 			compile.compileStylusFile(stylusfile, outputDir, function (err) {
 				assert(fs.existsSync(path.join(outputDir, 'assets/css')))
 				done()
 			})
 		})
 
-		it('should compile a valid .styl file to buildDir/assets/css/', function (done) {
-			var stylusfile = path.join(config.sitePath, 'template/styl/page.styl')
+		it('should compile a valid Stylus file to buildDir/assets/css/', function (done) {
 			compile.compileStylusFile(stylusfile, outputDir, function (err) {
+				assert.ifError(err)
 				assert(fs.existsSync(path.join(outputDir, 'assets/css/page.css')))
 				done()
 			})
@@ -68,8 +71,15 @@ describe('Compile', function () {
 		})
 	})
 
-	describe.skip('#compileStylesheets()', function () {
-
+	describe('#compileStylesheets()', function () {
+		it.skip('should compile all Stylus files from templates/styl to buildDir/assets/css', function (done) {
+			console.log(path.join(config.sitePath, stylDir))
+			lib.walk(path.join(config.sitePath, stylDir), new RegExp(/\.styl$/), function (err, results) {
+				assert.ifError(err)
+				console.log(results)
+				done()
+			})
+		})
 	})
 
 })

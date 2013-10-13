@@ -1,13 +1,14 @@
 var fs = require('fs')
 
 var parseConfig = function (sitePath) {
+    if (!fs.existsSync(sitePath + '/config.yml')) throw new Error('No config.yml file at path: ' + sitePath)
     var configStr = fs.readFileSync(sitePath + '/config.yml', { encoding: 'utf-8' })
     , config      = require('yamljs').parse(configStr)
     config.sitePath = sitePath
     return config
 }
 
-var walk = function (dir, fileExt, done) {
+var getFiles = function (dir, fileExt, done) {
     var results = []
     fs.readdir(dir, function (err, list) {
         if (err) return done(err)
@@ -18,11 +19,12 @@ var walk = function (dir, fileExt, done) {
             file = dir + '/' + file
             fs.stat(file, function (err, stat) {
                 if (stat && stat.isDirectory()) {
-                    walk(file, fileExt, function (err, res) {
+                    getFiles(file, fileExt, function (err, res) {
                         results = results.concat(res)
                         next()
                     })
-                } else { 
+                }
+                else {
                     if (fileExt.test(file)) results.push(file)
                     next()
                 }
@@ -30,6 +32,33 @@ var walk = function (dir, fileExt, done) {
         })()
     })
 } 
+
+var walk = function (dir, fileExt, callback, idx) {
+    idx = idx || -1
+    fs.readdir(dir, function (err, list) {
+        if (err) throw err 
+        var i = 0
+        ;(function next () {
+            var file = list[i++]
+            file = dir + '/' + file
+            fs.stat(file, function (err, stat) {
+                if (err) throw err
+                if (stat && stat.isDirectory()) {
+                    walk(file, fileExt, function (err, res) {
+                        next()
+                    }, idx)
+                }
+                else {
+                    if (fileExt.test(file)) {
+                        idx++
+                        callback(file, idx)
+                    }
+                    next()
+                }
+            })
+        })()
+    })
+}
 
 var capitalize = function (str) {
     return str.charAt(0).toUpperCase() + str.slice(1)
@@ -106,6 +135,7 @@ var mkdirp = function(path, mode, callback, position) {
 
 module.exports.parseConfig              = parseConfig
 module.exports.walk                     = walk
+module.exports.getFiles                 = getFiles
 module.exports.capitalize               = capitalize
 module.exports.slugify                  = slugify
 module.exports.cutHeadTailLinebreaks    = cutHeadTailLinebreaks

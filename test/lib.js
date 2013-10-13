@@ -2,6 +2,11 @@ var assert = require('assert')
 , lib      = require('../bin/lib/lib.js')
 
 describe('Lib', function () {
+    var config
+
+    before(function () {
+        config = lib.parseConfig('test/test_site')
+    })
 
     describe('#parseConfig()', function () {
         it('should return an object', function () {
@@ -13,20 +18,20 @@ describe('Lib', function () {
             assert(config.sitePath)
         })
         it('should throw an error when no config.yml file is found', function () {
-            assert.throws(function () { lib.parseConfig('falsepath') }, Error)
+            assert.throws(function () { lib.parseConfig('falsepath') }, /No config.yml file/)
         })
     })
 
-    describe('#walk()', function () {
-        var config, regex, res
+    describe('#getFiles()', function () {
+        var regex, res
 
         before(function () {
-            config = lib.parseConfig('test/test_site')
-            regex  = new RegExp(/\.md$/)
+            regex = new RegExp(/\.md$/)
+            res   = []
         })
 
         it('should return an Array', function (done) {
-            lib.walk(config.sitePath + '/pages', regex, function (err, results) {
+            lib.getFiles(config.sitePath + '/pages', regex, function (err, results) {
                 assert.ifError(err)
                 assert(results instanceof Array)
                 res = results
@@ -36,6 +41,26 @@ describe('Lib', function () {
         it('should only return files matching the specified regex', function () {
             for (var i = res.length - 1; i >= 0; i--)
                 assert(regex.test(res[i]))
+        })
+    })
+
+    describe('#walk()', function () {
+        var files
+
+        before(function (done) {
+            lib.getFiles(config.sitePath + '/pages', new RegExp(/\.md$/), function (err, results) {
+                assert.ifError(err)
+                files = results
+                done()
+            })
+        })
+
+        it('should callback each file matching the specified regex', function (done) {
+            lib.walk(config.sitePath + '/pages', new RegExp(/\.md$/), function (item, idx) {
+                console.log(item + ' ' + idx)
+                assert(/\.md$/.test(item))
+                if (idx == files.length - 1) done()
+            })
         })
     })
 
@@ -147,7 +172,8 @@ describe('Lib', function () {
         , pathBase = pathDir.substring(0, pathDir.lastIndexOf('/'))
 
         before(function (done) {
-            lib.mkdirp(pathDir, 0777, function () {
+            lib.mkdirp(pathDir, 0777, function (err) {
+                assert.ifError(err)
                 done()
             })
         })

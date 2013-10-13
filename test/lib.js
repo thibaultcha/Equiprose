@@ -18,9 +18,13 @@ describe('Lib', function () {
     })
 
     describe('#walk()', function () {
-        var config = lib.parseConfig('test/test_site')
-        , regex    = new RegExp(/\.md$/)
-        , res
+        var config, regex, res
+
+        before(function () {
+            config = lib.parseConfig('test/test_site')
+            regex  = new RegExp(/\.md$/)
+        })
+
         it('should return an Array', function (done) {
             lib.walk(config.sitePath + '/pages', regex, function (err, results) {
                 assert.ifError(err)
@@ -37,8 +41,7 @@ describe('Lib', function () {
 
     describe('#capitalize()', function () {
         it('should return a string', function () {
-            var str = lib.capitalize('index')
-            assert(typeof str === 'string')
+            assert(typeof(lib.capitalize('index')) === 'string')
         })
         it('should capitalize the first letter', function () {
             assert.equal('I', lib.capitalize('index').charAt(0))
@@ -47,8 +50,7 @@ describe('Lib', function () {
 
     describe('#slugify()', function () {
         it('should return a string', function () {
-            var str = lib.slugify('hello world')
-            assert(typeof str === 'string')
+            assert(typeof(lib.slugify('hello world')) === 'string')
         })
         it('should return a slugified string for any input', function () {
             assert.equal(true, /^[a-z0-9-]+$/.test(lib.slugify('%Test_#.Slug"!\'è§')))
@@ -81,17 +83,88 @@ describe('Lib', function () {
     })
 
     describe('#isValidDate()', function () {
+        var date, wrong
+
+        before(function () {
+            date   = new Date('Mon Oct 07 2013 18:26:47 GMT+0200 (CEST)')
+            wrong  = new Date('wrong format')
+            nodate = 'no_date'
+        })
+
         it('should return a boolean', function () {
-            var date = new Date('Mon Oct 07 2013 18:26:47 GMT+0200 (CEST)')
             assert(typeof(lib.isValidDate(date)) === 'boolean')
         })
         it('should return true for a correct date', function () {
-            var date = new Date('Mon Oct 07 2013 18:26:47 GMT+0200 (CEST)')
             assert.equal(true, lib.isValidDate(date))
         })
         it('should return false for an incorrect date', function () {
-            var date = new Date('wrong format')
-            assert.equal(false, lib.isValidDate(date))
+            assert.equal(false, lib.isValidDate(wrong))
+            assert.equal(false, lib.isValidDate(nodate))
+        })
+    })
+
+    describe('#rmdir()', function () {
+        var fs     = require('fs')
+        , path     = require('path')
+        , config   = lib.parseConfig('test/test_site')
+        , pathDir  = path.join(config.sitePath, 'rmdir', 'recur')
+        , pathBase = pathDir.substring(0, pathDir.lastIndexOf("/"))
+
+        before(function (done) {
+            fs.mkdir(path.join(pathBase), function (err) {
+                if (err) throw err
+                fs.mkdir(pathDir, function (err) {
+                    if (err) throw err
+                    done()
+                })
+            })
+        })
+
+        it('should delete a non empty directory recursively', function (done) {
+            lib.rmdir(pathBase, function () {
+                assert.equal(false, fs.existsSync(pathDir))
+                done()
+            })
+        })
+
+        after(function (done) {
+            if (fs.existsSync(pathBase)) {
+                lib.rmdir(pathBase, function () {
+                    done()
+                })
+            }
+            else {
+                done()
+            }
+        })
+    })
+
+    describe('#mkdirp()', function () {
+        var fs     = require('fs')
+        , path     = require('path')
+        , config   = lib.parseConfig('test/test_site')
+        , pathDir  = path.join(config.sitePath, 'mkdirp', 'recur')
+        , pathBase = pathDir.substring(0, pathDir.lastIndexOf('/'))
+
+        before(function (done) {
+            lib.mkdirp(pathDir, 0777, function () {
+                done()
+            })
+        })
+
+        it('should create directories recursively', function () {
+            assert(fs.existsSync(pathDir))
+        })
+
+        after(function (done) {
+            if (fs.existsSync(pathBase)) {
+                lib.rmdir(pathBase, function () {
+                    done()
+                })
+            }
+            else {
+                done()
+            }
         })
     })
 })

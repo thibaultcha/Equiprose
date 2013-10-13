@@ -1,11 +1,3 @@
 .DS_Store
 node_modules/
-dist/assets/ProximaNova-Bold.otf
-dist/assets/ProximaNova-BoldIt.otf
-dist/assets/ProximaNova-Light.otf
-dist/assets/ProximaNova-LightIt.otf
-assets/ProximaNova-Bold.otf
-assets/ProximaNova-BoldIt.otf
-assets/ProximaNova-Light.otf
-assets/ProximaNova-LightIt.otf
 coverage.html

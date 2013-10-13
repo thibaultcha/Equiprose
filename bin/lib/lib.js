@@ -57,6 +57,53 @@ var isValidDate = function (d) {
   return !isNaN(d.getTime())
 }
 
+var rmdir = function (dir, callback) {
+    var files = []
+    if (fs.existsSync(dir)) {
+        files = fs.readdirSync(dir)
+        
+        files.forEach(function (file) {
+            var curPath = dir + '/' + file
+            if (fs.statSync(curPath).isDirectory())
+                rmdir(curPath)
+            else
+                fs.unlinkSync(curPath)
+        })
+        
+        fs.rmdirSync(dir)
+    }
+
+    if (callback && typeof(callback) === 'function')
+        callback()
+}
+
+var mkdirp = function(path, mode, callback, position) {
+    var parts = require('path').normalize(path).split('/')
+    mode      = mode || 0777
+    position  = position || 0
+ 
+    if (position >= parts.length) {
+        if (callback) return callback()
+        else return true
+    }
+ 
+    var directory = parts.slice(0, position + 1).join('/')
+    fs.stat(directory, function (err) {
+        if (err === null)
+            mkdirp(path, mode, callback, position + 1)
+        else {
+            fs.mkdir(directory, mode, function (err) {
+                if (err) {
+                    if (callback) return callback(err)
+                    else throw err
+                } 
+                else
+                    mkdirp(path, mode, callback, position + 1)
+            })
+        }
+    })
+}
+
 module.exports.parseConfig              = parseConfig
 module.exports.walk                     = walk
 module.exports.capitalize               = capitalize
@@ -64,3 +111,5 @@ module.exports.slugify                  = slugify
 module.exports.cutHeadTailLinebreaks    = cutHeadTailLinebreaks
 module.exports.normalizeFilenameAsTitle = normalizeFilenameAsTitle
 module.exports.isValidDate              = isValidDate
+module.exports.rmdir                    = rmdir
+module.exports.mkdirp                   = mkdirp

@@ -8,13 +8,13 @@ install:
 dev:
 	@npm install
 
-test: dev
+test:
 	@NODE_ENV=test $(BIN)/mocha --require blanket --reporter $(REPORTER)
 
-test-cov: dev
+test-cov:
 	$(MAKE) test REPORTER=html-cov 1> coverage.html
 
-test-coveralls: dev
+test-coveralls:
 	$(MAKE) test REPORTER=mocha-lcov-reporter | $(BIN)/coveralls
 
 site:

@@ -1,20 +1,16 @@
 var assert = require('assert')
 , fs       = require('fs')
 , path     = require('path')
-, parse    = require('../bin/lib/parsing.js')
-, lib      = require('../bin/lib/lib.js')
-, compile  = require('../bin/lib/compile.js')
+, parse    = require('../lib/parsing.js')
+, lib      = require('../lib/lib.js')
+, compile  = require('../lib/compile.js')
 
 describe('Compile', function () {
-	var config, outputDir, stylDir
+	var config  = lib.parseConfig('test/test_site')
+	, outputDir = path.join(config.sitePath, config.buildDir)
+	, stylDir   = '_template/styl'
 
-	before(function () {
-		config    = lib.parseConfig('test/test_site')
-		stylDir   = 'template/styl'
-		outputDir = path.join(config.sitePath, config.buildDir)
-	})
-
-	describe('#prepareOutputDir()', function () {
+	describe.skip('#prepareOutputDir()', function () {
 		it('should initialize an empty buildDir directory', function (done) {
 			compile.prepareOutputDir(outputDir, function (err) {
 				assert.ifError(err)
@@ -30,13 +26,12 @@ describe('Compile', function () {
 		})
 	})
 
-	describe('#compileStylusFile()', function () {
-		var stylusfile
+	describe.skip('#compileStylusFile()', function () {
+		var stylusfile = path.join(config.sitePath, stylDir, 'page.styl')
 
-		before(function (done) {
-			stylusfile = path.join(config.sitePath, stylDir, 'page.styl')
+		before(function (done) { 
 			compile.prepareOutputDir(outputDir, function (err) {
-				if (err) throw err
+				assert.ifError(err)
 				done()
 			})
 		})

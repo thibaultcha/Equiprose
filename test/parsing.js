@@ -1,10 +1,10 @@
 var assert = require('assert')
-, parse    = require('../bin/lib/parsing.js')
-, lib      = require('../bin/lib/lib.js')
+, parse    = require('../lib/parsing.js')
+, lib      = require('../lib/lib.js')
 
 describe('Parsing', function () {
     var config          = lib.parseConfig('test/test_site')
-    , testFiles         = config.sitePath + '/pages/'
+    , testFiles         = config.sitePath + '/_pages/'
     , rightFormatFile   = testFiles + 'test_page_right_format.md'
     , noTitleFile       = testFiles + 'test_page_no_title.md'
     , noMetaFile        = testFiles + 'test_page_no_meta.md'
@@ -14,14 +14,10 @@ describe('Parsing', function () {
     , wrongDatePostFile = testFiles + 'test_post_wrong_date.md'
     , noTitlePostFile   = testFiles + 'test_post_no_title.md'
     , noContentPostFile = testFiles + 'test_post_no_content.md'
-    , rightBlogPostFile = config.sitePath + '/posts/2013-12-01_its-snowing-today.md'
+    , rightBlogPostFile = config.sitePath + '/_posts/2013-12-01_its-snowing-today.md'
 
     describe('#getMetadatas()', function () {
-        var metas
-
-        before(function () {
-            metas = parse.getMetadatas(rightFormatFile)
-        })
+        var metas = parse.getMetadatas(rightFormatFile)
 
         it('should return an Object', function () {
             assert(metas instanceof Object)
@@ -40,11 +36,7 @@ describe('Parsing', function () {
     })
 
     describe('#fetchBlogPosts()', function () {
-        var posts
-
-        before(function () {
-            posts = parse.fetchBlogPosts(config)
-        })
+        var posts = parse.fetchBlogPosts(config)
 
         it('should return an Array', function () {
             assert(posts instanceof Array)
@@ -59,11 +51,7 @@ describe('Parsing', function () {
     })
 
     describe('#parsePostMetadatas()', function () {
-        var postmetas
-
-        before(function () {
-            postmetas = parse.parsePostMetadatas(parse.getMetadatas(rightBlogPostFile), config)
-        })
+        var postmetas = parse.parsePostMetadatas(parse.getMetadatas(rightBlogPostFile), config)
 
         it('should return an Object', function () {
             assert(postmetas instanceof Object)
@@ -91,11 +79,7 @@ describe('Parsing', function () {
     })
 
     describe('#parseMetadatas()', function () {
-        var metas
-
-        before(function () {
-            metas = parse.parseMetadatas(parse.getMetadatas(rightFormatFile), config)
-        })
+        var metas = parse.parseMetadatas(parse.getMetadatas(rightFormatFile), config)
 
         it('should return an Object', function () {
             assert(metas instanceof Object)

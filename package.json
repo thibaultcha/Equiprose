@@ -7,7 +7,7 @@
   "scripts": {
     "test": "make test",
     "blanket": {
-      "pattern": "bin/lib"
+      "pattern": "./lib"
     }
   },
   "repository": {

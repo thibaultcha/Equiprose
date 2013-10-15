@@ -24,7 +24,7 @@ describe('files.js', function () {
         })
     })
 
-    describe('#walk()', function () {
+    describe.skip('#walk()', function () {
         var files
 
         before(function (done) {
@@ -40,69 +40,6 @@ describe('files.js', function () {
                 assert(/\.md$/.test(item))
                 if (idx == files.length - 1) done()
             })
-        })
-    })
-
-    describe('#rmrf()', function () {
-        var pathDir, pathBase
-
-        before(function (done) {
-            pathDir  = path.join(config.sitePath, 'rmdir', 'recur')
-            pathBase = pathDir.substring(0, pathDir.lastIndexOf("/"))
-            
-            fs.mkdir(path.join(pathBase), function (err) {
-                assert.ifError(err)
-                fs.mkdir(pathDir, function (err) {
-                    assert.ifError(err)
-                    done()
-                })
-            })
-        })
-
-        it('should delete a non empty directory recursively', function (done) {
-            fs.rmrf(pathBase, function () {
-                assert.equal(false, fs.existsSync(pathDir))
-                done()
-            })
-        })
-
-        after(function (done) {
-            if (fs.existsSync(pathBase)) {
-                fs.rmrf(pathBase, function () {
-                    done()
-                })
-            }
-            else {
-                done()
-            }
-        })
-    })
-
-    describe('#mkdirp()', function () {
-        var pathDir, pathBase
-
-        before(function (done) {
-            pathDir  = path.join(config.sitePath, 'mkdir', 'recur')
-            pathBase = pathDir.substring(0, pathDir.lastIndexOf("/"))
-            fs.mkdirp(pathDir, 0777, function (err) {
-                assert.ifError(err)
-                done()
-            })
-        })
-
-        it('should create directories recursively', function () {
-            assert(fs.existsSync(pathDir))
-        })
-
-        after(function (done) {
-            if (fs.existsSync(pathBase)) {
-                fs.rmrf(pathBase, function () {
-                    done()
-                })
-            }
-            else {
-                done()
-            }
         })
     })
 })

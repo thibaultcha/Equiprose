@@ -7,7 +7,7 @@
   "scripts": {
     "test": "make test",
     "blanket": {
-      "pattern": "./lib"
+      "pattern": "lib"
     }
   },
   "repository": {
@@ -23,12 +23,12 @@
     "emoji-images": "*",
     "colors": "*",
     "yamljs": "*",
-    "coveralls": "~2.3.0"
+    "fs-extra": "0.8.x"
   },
   "devDependencies": {
     "mocha": "*",
     "blanket": "*",
-    "coveralls": "*",
+    "coveralls": "~2.3.0",
     "mocha-lcov-reporter": "*"
   },
   "engines": {

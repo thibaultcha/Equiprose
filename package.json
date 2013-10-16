@@ -7,7 +7,8 @@
   "scripts": {
     "test": "make test",
     "blanket": {
-      "pattern": "lib"
+      "pattern": "lib",
+      "data-cover-never": "node_modules"
     }
   },
   "repository": {

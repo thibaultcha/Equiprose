@@ -1,22 +1,9 @@
 var assert = require('assert')
 , lib      = require('../lib/lib.js')
+, parse    = require('../lib/parsing.js')
 
-describe('Lib', function () {
-    var config = lib.parseConfig('test/test_site')
-
-    describe('#parseConfig()', function () {
-        it('should return an object', function () {
-            var config = lib.parseConfig('test/test_site')
-            assert(config instanceof Object)
-        })
-        it('should contain the site path', function () {
-            var config = lib.parseConfig('test/test_site')
-            assert(config.sitePath)
-        })
-        it('should throw an error when no config.yml file is found', function () {
-            assert.throws(function () { lib.parseConfig('falsepath') }, /No config.yml file/)
-        })
-    })
+describe('lib.js', function () {
+    var config = parse.parseConfig('test/test_site')
 
     describe('#capitalize()', function () {
         it('should return a string', function () {

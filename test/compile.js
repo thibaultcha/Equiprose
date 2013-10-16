@@ -1,12 +1,12 @@
 var assert = require('assert')
 , fs       = require('fs')
+, fse      = require('fs-extra')
 , path     = require('path')
 , parse    = require('../lib/parsing.js')
-, lib      = require('../lib/lib.js')
 , compile  = require('../lib/compile.js')
 
-describe('Compile', function () {
-	var config  = lib.parseConfig('test/test_site')
+describe('compile.js', function () {
+	var config  = parse.parseConfig('test/test_site')
 	, outputDir = path.join(config.sitePath, config.buildDir)
 	, stylDir   = '_template/styl'
 
@@ -44,13 +44,11 @@ describe('Compile', function () {
 					})
 				}
 			})
-
 			compile.compileStylusFile(stylusfile, outputDir, function (err) {
 				assert(fs.existsSync(path.join(outputDir, 'assets/css')))
 				done()
 			})
 		})
-
 		it('should compile a valid Stylus file to buildDir/assets/css/', function (done) {
 			compile.compileStylusFile(stylusfile, outputDir, function (err) {
 				assert.ifError(err)
@@ -66,8 +64,8 @@ describe('Compile', function () {
 		})
 	})
 
-	describe('#compileStylesheets()', function () {
-		it.skip('should compile all Stylus files from templates/styl to buildDir/assets/css', function (done) {
+	describe.skip('#compileStylesheets()', function () {
+		it('should compile all Stylus files from templates/styl to buildDir/assets/css', function (done) {
 			console.log(path.join(config.sitePath, stylDir))
 			lib.walk(path.join(config.sitePath, stylDir), new RegExp(/\.styl$/), function (err, results) {
 				assert.ifError(err)

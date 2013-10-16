@@ -1,10 +1,10 @@
 var assert = require('assert')
 , path     = require('path')
-, lib      = require('../lib/lib.js')
+, parse    = require('../lib/parsing.js')
 , fs       = require('../lib/files.js')
 
 describe('files.js', function () {
-    var config = lib.parseConfig('test/test_site')
+    var config = parse.parseConfig('test/test_site')
 
     describe('#getFiles()', function () {
         var regex = new RegExp(/\.md$/)

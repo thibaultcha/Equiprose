@@ -3,5 +3,5 @@ owner:
     name: thibaultCha
     description: I think it's me...
 template: thibaultcha
-date_format: DD MMM YYYY
+date-format: DD MMM YYYY
 buildDir: ./dist

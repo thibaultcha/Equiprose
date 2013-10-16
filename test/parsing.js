@@ -1,9 +1,8 @@
 var assert = require('assert')
 , parse    = require('../lib/parsing.js')
-, lib      = require('../lib/lib.js')
 
-describe('Parsing', function () {
-    var config          = lib.parseConfig('test/test_site')
+describe('parsing.js', function () {
+    var config          = parse.parseConfig('test/test_site')
     , testFiles         = config.sitePath + '/_pages/'
     , rightFormatFile   = testFiles + 'test_page_right_format.md'
     , noTitleFile       = testFiles + 'test_page_no_title.md'
@@ -15,6 +14,20 @@ describe('Parsing', function () {
     , noTitlePostFile   = testFiles + 'test_post_no_title.md'
     , noContentPostFile = testFiles + 'test_post_no_content.md'
     , rightBlogPostFile = config.sitePath + '/_posts/2013-12-01_its-snowing-today.md'
+
+    describe('#parseConfig()', function () {
+        it('should return an object', function () {
+            var config = parse.parseConfig('test/test_site')
+            assert(config instanceof Object)
+        })
+        it('should contain a `sitePath` property', function () {
+            var config = parse.parseConfig('test/test_site')
+            assert(config.sitePath)
+        })
+        it('should throw an error when no config.yml file is found', function () {
+            assert.throws(function () { parse.parseConfig('falsepath') }, /No config.yml file/)
+        })
+    })
 
     describe('#getMetadatas()', function () {
         var metas = parse.getMetadatas(rightFormatFile)

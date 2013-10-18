@@ -4,21 +4,22 @@ var assert = require('assert')
 
 describe('parsing.js', function () {
     var testFiles       = 'test/test-files'
-    , testSite          = 'test/test-sites/valid-site'
-    , rightFormatFile   = path.join(testFiles, 'page.md')
-    , rightBlogPostFile = path.join(testFiles, 'post.md')
-    , noTitleFile       = path.join(testFiles, 'errors', 'page-no-title.md')
-    , noMetaFile        = path.join(testFiles, 'errors', 'page-no-meta.md')
-    , wrongLayoutFile   = path.join(testFiles, 'errors', 'page-wrong-layout.md')
-    , wrongSlugFile     = path.join(testFiles, 'errors', 'page-wrong-slug.md')
-    , noContentFile     = path.join(testFiles, 'errors', 'page-no-content.md')
-    , wrongDatePostFile = path.join(testFiles, 'errors', 'post-wrong-date.md')
-    , noTitlePostFile   = path.join(testFiles, 'errors', 'post-no-title.md')
-    , noContentPostFile = path.join(testFiles, 'errors', 'post-no-content.md')
+
+    var pageRightFormat = path.join(testFiles, 'page.md')
+    , pageNoTitle       = path.join(testFiles, 'errors', 'page-no-title.md')
+    , pageNoMetas       = path.join(testFiles, 'errors', 'page-no-meta.md')
+  //, wrongLayoutFile   = path.join(testFiles, 'errors', 'page-wrong-layout.md')
+    , pageWrongSlug     = path.join(testFiles, 'errors', 'page-wrong-slug.md')
+    , pageNoContent     = path.join(testFiles, 'errors', 'page-no-content.md')
+    , postWrongDate     = path.join(testFiles, 'errors', 'post-wrong-date.md')
+
+    var postRightFormat = path.join(testFiles, 'post.md')
+    , postNoTitle       = path.join(testFiles, 'errors', 'post-no-title.md')
+    , postNoContent     = path.join(testFiles, 'errors', 'post-no-content.md')
     , postNoAuthor      = path.join(testFiles, 'errors', 'post-no-author.md')
 
     describe('#getMetadatas()', function () {
-        var metas = parse.getMetadatas(rightFormatFile)
+        var metas = parse.getMetadatas(pageRightFormat)
 
         it('should return an Object', function () {
             assert(metas instanceof Object)
@@ -32,7 +33,7 @@ describe('parsing.js', function () {
             assert(metas.dirpath)
         })
         it('should throw an error when passing a bad formatted file', function () {
-            assert.throws(function (){ parse.getMetadatas(noMetaFile) }, Error)
+            assert.throws(function (){ parse.getMetadatas(pageNoMetas) }, Error)
         })
     })
 
@@ -40,7 +41,7 @@ describe('parsing.js', function () {
         var postmetas
 
         beforeEach(function () {
-            postmetas = parse.parsePostMetadatas(rightBlogPostFile, 'Tests', 'DD MMM YYYY')
+            postmetas = parse.parsePostMetadatas(postRightFormat, 'Tests', 'DD MMM YYYY')
         })
         
         it('should return an Object', function () {
@@ -60,18 +61,18 @@ describe('parsing.js', function () {
             assert.equal('Tests', postmetas.toJade.author)
         })
         it('should throw an error if blog post is missing or has invalid date value', function () {
-            assert.throws(function () { parse.parsePostMetadatas(wrongDatePostFile, 'Tests', 'DD MMM YYYY') }, /date/)
+            assert.throws(function () { parse.parsePostMetadatas(postWrongDate, 'Tests', 'DD MMM YYYY') }, /date/)
         })
         it('should throw an error if blog post is missing title value', function () {
-            assert.throws(function () { parse.parsePostMetadatas(noTitlePostFile, 'Tests', 'DD MMM YYYY') }, /title/)
+            assert.throws(function () { parse.parsePostMetadatas(postNoTitle, 'Tests', 'DD MMM YYYY') }, /title/)
         })
         it('should throw an error if blog post is missing content value', function () {
-            assert.throws(function () { parse.parsePostMetadatas(noContentPostFile, 'Tests', 'DD MMM YYYY') }, /content/)
+            assert.throws(function () { parse.parsePostMetadatas(postNoContent, 'Tests', 'DD MMM YYYY') }, /content/)
         })
     })
 
     describe('#parseMetadatas()', function () {
-        var metas = parse.parseMetadatas(rightFormatFile)
+        var metas = parse.parseMetadatas(pageRightFormat)
 
         it('should return an Object', function () {
             assert(metas instanceof Object)
@@ -82,21 +83,21 @@ describe('parsing.js', function () {
             assert(metas.toJade.title)
             assert(metas.toJade.content)
         })
-        it('should not throw an error if no content is provided', function () {
-            assert.doesNotThrow(function (){ parse.parseMetadatas(noContentFile) })
-        })
-        it('should throw an error if slug is not valid', function () {
-            assert.throws(function (){ parse.parseMetadatas(wrongSlugFile) }, /slug/)
-        })
-        it.skip('should throw an error if layout file does not exist', function () {
-            assert.throws(function (){ parse.parseMetadatas(wrongLayoutFile) }, /jade/)
-        })
         it('should normalize the filename if no title is provided', function () {
-            var metas = parse.parseMetadatas(noTitleFile)
+            var metas = parse.parseMetadatas(pageNoTitle)
             assert.equal('Page No Title',  metas.toJade.title)
         })
         it('should not contain line breaks at beginning or end of \`content\` property', function () {
             assert.equal(false, /^[\n]+|[\n]+$/.test(metas.toJade.content))
+        })
+        it('should not throw an error if no content is provided', function () {
+            assert.doesNotThrow(function (){ parse.parseMetadatas(pageNoContent) })
+        })
+        it('should throw an error if slug is not valid', function () {
+            assert.throws(function (){ parse.parseMetadatas(pageWrongSlug) }, /slug/)
+        })
+        it.skip('should throw an error if layout file does not exist', function () {
+            assert.throws(function (){ parse.parseMetadatas(wrongLayoutFile) }, /jade/)
         })
     })
 })

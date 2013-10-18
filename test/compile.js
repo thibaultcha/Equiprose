@@ -6,28 +6,12 @@ var assert = require('assert')
 , compile  = require('../lib/compile.js')
 
 describe('compile.js', function () {
-	var config  = parse.parseConfig('test/test_site')
-	, outputDir = path.join(config.sitePath, config.buildDir)
-	, stylDir   = '_template/styl'
-
-	describe.skip('#prepareOutputDir()', function () {
-		it('should initialize an empty buildDir directory', function (done) {
-			compile.prepareOutputDir(outputDir, function (err) {
-				assert.ifError(err)
-				assert(fs.existsSync(outputDir))
-				done()
-			})
-		})
-
-		after(function (done) {
-			lib.rmdir(outputDir, function () {
-				done()
-			})
-		})
-	})
+	var sitePath = 'test/test-sites/valid-site'
+	, outputDir  = path.join(sitePath, 'www')
+	, stylDir    = '_template/styl'
 
 	describe.skip('#compileStylusFile()', function () {
-		var stylusfile = path.join(config.sitePath, stylDir, 'page.styl')
+		var stylusfile = path.join(sitePath, stylDir, 'page.styl')
 
 		before(function (done) { 
 			compile.prepareOutputDir(outputDir, function (err) {
@@ -36,10 +20,11 @@ describe('compile.js', function () {
 			})
 		})
 
-		it('using lib#mkdirp() should create buildDir/assets/css/ if not existing', function (done) {
+		it('using fse#mkdirs() should create buildDir/assets/css/ if not existing', function (done) {
 			before(function (done) {
 				if (fs.existsSync(path.join(outputDir, 'assets/css'))) {
-					lib.rmdir(path.join(outputDir, 'assets/css'), function () {
+					fse.remove(path.join(outputDir, 'assets/css'), function (err) {
+						assert.ifError(err)
 						done()
 					})
 				}
@@ -58,7 +43,7 @@ describe('compile.js', function () {
 		})
 
 		after(function (done) {
-			lib.rmdir(outputDir, function () {
+			fse.remove(outputDir, function () {
 				done()
 			})
 		})
@@ -66,13 +51,12 @@ describe('compile.js', function () {
 
 	describe.skip('#compileStylesheets()', function () {
 		it('should compile all Stylus files from templates/styl to buildDir/assets/css', function (done) {
-			console.log(path.join(config.sitePath, stylDir))
-			lib.walk(path.join(config.sitePath, stylDir), new RegExp(/\.styl$/), function (err, results) {
+			console.log(path.join(sitePath, stylDir))
+			lib.walk(path.join(sitePath, stylDir), new RegExp(/\.styl$/), function (err, results) {
 				assert.ifError(err)
 				console.log(results)
 				done()
 			})
 		})
 	})
-
 })

@@ -4,14 +4,14 @@ var assert = require('assert')
 , fs       = require('../lib/files.js')
 
 describe('files.js', function () {
-    var config = parse.parseConfig('test/test_site')
+    var sitePath = 'test/test-sites/valid-site'
 
     describe('#getFiles()', function () {
         var regex = new RegExp(/\.md$/)
         , files
 
         it('should return an Array', function (done) {
-            fs.getFiles(config.sitePath + '/_pages', regex, function (err, results) {
+            fs.getFiles(sitePath + '/_pages', regex, function (err, results) {
                 assert.ifError(err)
                 assert(results instanceof Array)
                 files = results
@@ -28,7 +28,7 @@ describe('files.js', function () {
         var files
 
         before(function (done) {
-            fs.getFiles(config.sitePath + '/_pages', new RegExp(/\.md$/), function (err, results) {
+            fs.getFiles(sitePath + '/_pages', new RegExp(/\.md$/), function (err, results) {
                 assert.ifError(err)
                 files = results
                 done()
@@ -36,7 +36,7 @@ describe('files.js', function () {
         })
 
         it('should callback each file matching the specified regex', function (done) {
-            fs.walk(config.sitePath + '/_pages', new RegExp(/\.md$/), function (item, idx) {
+            fs.walk(sitePath + '/_pages', new RegExp(/\.md$/), function (item, idx) {
                 assert(/\.md$/.test(item))
                 if (idx == files.length - 1) done()
             })

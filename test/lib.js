@@ -1,9 +1,7 @@
 var assert = require('assert')
 , lib      = require('../lib/lib.js')
-, parse    = require('../lib/parsing.js')
 
 describe('lib.js', function () {
-    var config = parse.parseConfig('test/test_site')
 
     describe('#capitalize()', function () {
         it('should return a string', function () {

@@ -91,9 +91,9 @@ describe('helpers.js', function () {
         })
     })
 
-    describe.skip('#walk()', function () {
+    describe('#walk()', function () {
         var files
-        var testPath = 'test/test-sites/valid-site/_pages'
+        var testPath = 'test/test-sites/valid-site'
 
         before(function (done) {
             helpers.getFiles(testPath, new RegExp(/\.md$/), function (err, results) {
@@ -104,10 +104,11 @@ describe('helpers.js', function () {
         })
 
         it('should callback each file matching the specified regex', function (done) {
-            helpers.walk('test/test-sites/valid-site', new RegExp(/\.md$/), function (err, item, idx) {
+            helpers.walk(testPath, new RegExp(/\.md$/), function (err, item, idx) {
                 assert.ifError(err)
-                console.log(idx +'___'+ item)
-                //assert(/\.md$/.test(item))
+                assert(/\.md$/.test(item))
+                assert(fs.existsSync(item))
+                
                 if (idx == files.length - 1)
                     done()
             })

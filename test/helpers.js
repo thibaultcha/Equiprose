@@ -23,15 +23,15 @@ describe('helpers.js', function () {
         })
     })
 
-    describe('#cutHeadTailLinebreaks()', function () {
+    describe('#trim()', function () {
         it('should return a string', function () {
-            var str = helpers.cutHeadTailLinebreaks('\n\n\nHello World')
+            var str = helpers.trim('\n\n\nHello World')
             assert(typeof(str) === 'string')
         })
         it('should remove all line breaks at the beginning and end of a string', function () {
-            var str = helpers.cutHeadTailLinebreaks('\n\n\nHello World')
+            var str = helpers.trim('\n\n\nHello World')
             assert.equal('Hello World', str)
-            str = helpers.cutHeadTailLinebreaks('\n\n\nHello\nWorld\n')
+            str = helpers.trim('\n\n\nHello\nWorld\n')
             assert.equal('Hello\nWorld', str)
         })
     })

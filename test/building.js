@@ -5,7 +5,6 @@ var assert = require('assert')
 describe('building.js', function () {
 	var config  = build.parseConfig('test/test-sites/valid-site')
 	, outputDir = path.join(config.sitePath, config.buildDir)
-	, stylDir   = '_template/styl'
 
 	describe('#parseConfig()', function () {
         it('should return an object', function () {
@@ -14,8 +13,8 @@ describe('building.js', function () {
         it('should add a `sitePath` property', function () {
             assert(config.sitePath)
         })
-        it.skip('should throw an error when no config.yml file is found', function () {
-            assert.throws(function () { build.parseConfig('falsepath') }, /No config.yml file/)
+        it('should throw an error when no config.yml file is found', function () {
+            assert.throws(function () { build.parseConfig('test/test-sites/errors/no-config') }, /No config.yml file/)
         })
     })
 
@@ -29,7 +28,8 @@ describe('building.js', function () {
 		})
 
 		after(function (done) {
-			fse.remove(outputDir, function () {
+			fse.remove(outputDir, function (err) {
+                assert.ifError(err)
 				done()
 			})
 		})
@@ -53,6 +53,17 @@ describe('building.js', function () {
                 assert(posts[i].toJade.author)
                 assert(posts[i].toJade.link)
             }  
+        })
+    })
+
+    describe.skip('#compileStylesheets()', function () {
+        it('should compile all Stylus files from templates/styl to buildDir/assets/css', function (done) {
+            console.log(path.join(sitePath, stylDir))
+            lib.walk(path.join(sitePath, stylDir), new RegExp(/\.styl$/), function (err, results) {
+                assert.ifError(err)
+                console.log(results)
+                done()
+            })
         })
     })
 })

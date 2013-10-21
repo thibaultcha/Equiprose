@@ -4,4 +4,4 @@ owner:
     description: I think it's me...
 template: thibaultcha
 date-format: DD MMM YYYY
-buildDir: ./dist
+buildDir: dist

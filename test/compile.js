@@ -12,20 +12,14 @@ describe('compile.js', function () {
 		var stylusfile = path.join(testFiles, 'styl', 'test.styl')
 
 		before(function (done) {
-			fse.remove(outputDir, function (err) {
+			fse.mkdirs(outputDir, function (err) {
 				assert.ifError(err)
 				done()
 			})
 		})
 
-		it('using fse#mkdirs() should create the buildDir if not existing', function (done) {
-			compile.compileStylusFile(stylusfile, outputDir, function (err) {
-				assert.ifError(err)
-				assert(fs.existsSync(outputDir))
-				done()
-			})
-		})
-		it('should render a file to path outputDir/filename.css', function (done) {
+		it('should render a file to path <outputDir>/<filename>.css', function (done) {
+			this.slow(500);
 			compile.compileStylusFile(stylusfile, outputDir, function (err) {
 				assert.ifError(err)
 				assert(fs.existsSync(path.join(outputDir, 'test.css')))
@@ -33,7 +27,7 @@ describe('compile.js', function () {
 			})
 		})
 
-		afterEach(function (done) {
+		after(function (done) {
 			fse.remove(outputDir, function (err) {
 				assert.ifError(err)
 				done()

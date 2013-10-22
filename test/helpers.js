@@ -69,25 +69,25 @@ describe('helpers.js', function () {
     })
 
     describe('#getFiles()', function () {
-        var regex = new RegExp(/\.md$/)
-        var testPath = 'test/test-sites/valid-site/_pages'
+        var regex  = new RegExp(/\.md$/)
+        , testPath = 'test/test-sites/valid-site/_pages'
         , files
 
         it('should return an Array', function (done) {
             helpers.getFiles(testPath, regex, function (err, results) {
                 assert.ifError(err)
-                assert(results instanceof Array)
+                assert(results instanceof Array, 'results is not an Array')
                 files = results
                 done()
             })
         })
         it('should only return files matching the specified regex', function () {
             for (var i = files.length - 1; i >= 0; i--)
-                assert(regex.test(files[i]))
+                assert(regex.test(files[i]), 'Returned file not matching regex')
         })
         it('should only return valid file paths', function () {
             for (var i = files.length - 1; i >= 0; i--)
-                assert(fs.existsSync(files[i]))
+                assert(fs.existsSync(files[i]), 'Returned invalid file')
         })
     })
 

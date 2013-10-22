@@ -1,5 +1,7 @@
 # Miranda
 
+(Yep, named after the awesome work of [Raymond E. Feist](http://en.wikipedia.org/wiki/Raymond_E._Feist) but I'm thinking of "Equiprose"; what do you think?)
+
 :warning: Currently refactoring, please refer to `stable` branch for use.
 
 [![Build Status](https://api.travis-ci.org/thibaultCha/Miranda.png)](https://travis-ci.org/thibaultCha/Miranda)    [![Coverage Status](https://coveralls.io/repos/thibaultCha/Miranda/badge.png?branch=master)](https://coveralls.io/r/thibaultCha/Miranda?branch=refactor-tdd)

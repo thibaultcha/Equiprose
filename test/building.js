@@ -113,11 +113,11 @@ describe('building.js', function () {
             })
         })
 
-        afterEach(function (done) {
+        /*afterEach(function (done) {
             fse.remove(outputCss, function (err) {
                 assert.ifError(err)
                 done()
             })
-        })
+        })*/
     })
 })

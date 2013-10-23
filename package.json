@@ -18,7 +18,6 @@
   "dependencies": {
     "jade": "*",
     "stylus": "*",
-    "nib": "*",
     "marked": "*",
     "moment": "*",
     "emoji-images": "*",

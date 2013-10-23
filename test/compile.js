@@ -8,6 +8,10 @@ describe('compile.js', function () {
 	var testFiles = 'test/test-files/compile'
 	, outputDir   = path.join(testFiles, 'rendering')
 
+	describe.skip('#compileStylus()', function () {
+
+	})
+
 	describe('#compileStylusFile()', function () {
 		var stylusfile = path.join(testFiles, 'styl', 'test.styl')
 

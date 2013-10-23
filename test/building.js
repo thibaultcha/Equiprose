@@ -81,7 +81,8 @@ describe('building.js', function () {
         })
     })
 
-    describe.skip('#compileStylesheets()', function () {
+    describe('#compileStylesheets()', function () {
+        this.slow(500)
         var stylPath = path.join(config.sitePath, '_template/styl')
         , outputCss  = path.join(config.sitePath, 'rendering-css')
 
@@ -92,7 +93,7 @@ describe('building.js', function () {
             })
         })
 
-        it('using fse#mkdirs() should create outputCss folder if not existing', function (done) {
+        it('should create outputCss folder if not existing', function (done) {
             build.compileStylesheets(stylPath, outputCss, function (err) {
                 assert.ifError(err)
                 assert(fs.existsSync(outputCss), 'outputCss folder was not created')
@@ -106,18 +107,18 @@ describe('building.js', function () {
                     assert.ifError(err)
                     items.forEach(function (item, idx) {
                         var cssFile = item.replace(stylPath, outputCss).replace(/\.styl$/, '.css')
-                        assert(fs.existsSync(path.join(stylPath, cssFile)), 'Inexistant css file: ' + cssFile + ' for file: ' + item)
+                        assert(fs.existsSync(cssFile), 'Inexistant css file: ' + cssFile + ' for file: ' + item)
                         if (idx == items.length - 1) done()
                     })
                 })
             })
         })
 
-        /*afterEach(function (done) {
+        afterEach(function (done) {
             fse.remove(outputCss, function (err) {
                 assert.ifError(err)
                 done()
             })
-        })*/
+        })
     })
 })

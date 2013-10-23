@@ -23,7 +23,7 @@ describe('compile.js', function () {
 		})
 
 		it('should render a file to path <outputDir>/<filename>.css', function (done) {
-			this.slow(500);
+			this.slow(200);
 			compile.compileStylusFile(stylusfile, outputDir, function (err) {
 				assert.ifError(err)
 				assert(fs.existsSync(path.join(outputDir, 'test.css')))

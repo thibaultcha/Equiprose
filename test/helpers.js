@@ -5,26 +5,26 @@ var assert = require('assert')
 describe('helpers.js', function () {
 
     describe('#capitalize()', function () {
-        it('should return a string', function () {
+        it('should return a String', function () {
             assert(typeof(helpers.capitalize('index')) === 'string')
         })
-        it('should capitalize the first letter', function () {
+        it('should capitalize the first letter of a String', function () {
             assert.equal('I', helpers.capitalize('index').charAt(0))
         })
     })
 
     describe('#slugify()', function () {
-        it('should return a string', function () {
+        it('should return a String', function () {
             assert(typeof(helpers.slugify('hello world')) === 'string')
         })
-        it('should return a slugified string for any input', function () {
+        it('should return a slugified String for any input', function () {
             assert.equal(true, /^[a-z0-9-]+$/.test(helpers.slugify('%Test_#.Slug"!\'è§')))
             assert.equal('hello-world', helpers.slugify('-hello #world--'))
         })
     })
 
     describe('#trim()', function () {
-        it('should return a string', function () {
+        it('should return a String', function () {
             var str = helpers.trim('\n\n\nHello World')
             assert(typeof(str) === 'string')
         })
@@ -37,7 +37,7 @@ describe('helpers.js', function () {
     })
 
     describe('#normalizeFilenameAsTitle()', function () {
-        it('should return a string', function () {
+        it('should return a String', function () {
             var str = helpers.normalizeFilenameAsTitle('hello_world.md')
             assert(typeof(str) === 'string')
         })

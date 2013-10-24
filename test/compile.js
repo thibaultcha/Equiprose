@@ -35,21 +35,28 @@ describe('compile.js', function () {
 	})
 
 	describe('#compileMarkdownFile()', function () {
-		var mdfile   = path.join(testFiles, 'valid.md')
-		, filemetas  = parse.parseMetadatas(mdfile)
-
 		it('should render a file to path <outputDir/<filename>.html', function (done) {
-			compile.compileMarkdownFile(mdfile, testFiles, outputDir, function (err, outputFile) {
+			var mdFile  = path.join(testFiles, 'valid.md')
+			, filemetas = parse.parseMetadatas(mdFile)
+
+			compile.compileMarkdownFile(mdFile, testFiles, outputDir, function (err, outputFile) {
 				assert.ifError(err)
 				assert(fs.existsSync(outputFile), 'No HTML file at path: ' + outputFile)
 				done()
 			})
 		})
 		it.skip('should pass variables to Jade so they are included in the HTML output file', function (done) {
-			done()
+
 		})
-		it.skip('should throw an error if not layout file', function (done) {
-			done()
+		it('should throw an error if not layout file found', function (done) {
+			var mdFile = path.join('test/test-files/errors', 'page-no-layout.md')
+			var fn = function () {
+				compile.compileMarkdownFile(mdFile, testFiles, outputDir, function (err, outputFile) {
+					done()
+					assert.ifError(err)
+				})
+			}
+			assert.throws(function(){ fn() }, /No jade file/)
 		})
 	})
 

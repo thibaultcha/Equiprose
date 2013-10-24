@@ -97,8 +97,5 @@ describe('parsing.js', function () {
         it('should throw an error if slug is not valid', function () {
             assert.throws(function (){ parse.parseMetadatas(pageWrongSlug) }, /slug/)
         })
-        it.skip('should throw an error if layout file does not exist', function () {
-            assert.throws(function (){ parse.parseMetadatas(wrongLayoutFile) }, /jade/)
-        })
     })
 })

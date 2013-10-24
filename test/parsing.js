@@ -78,6 +78,7 @@ describe('parsing.js', function () {
             assert(metas instanceof Object)
         })
         it('should return the required properties for well formatted standard pages', function () {
+            assert(metas.filename)
             assert(metas.layout)
             assert(metas.slug)
             assert(metas.toJade.title)

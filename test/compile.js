@@ -34,7 +34,7 @@ describe('compile.js', function () {
 		})
 	})
 
-	describe('#compileMarkdownFile()', function () {
+	describe.skip('#compileMarkdownFile()', function () {
 		it('should render a file to path <outputDir/<filename>.html', function (done) {
 			var mdFile  = path.join(testFiles, 'valid.md')
 			, filemetas = parse.parseMetadatas(mdFile)
@@ -45,8 +45,12 @@ describe('compile.js', function () {
 				done()
 			})
 		})
-		it.skip('should pass variables to Jade so they are included in the HTML output file', function (done) {
+	})
 
+	describe.skip('#compileMarkdown()', function () {
+		it('should pass variables to Jade so they are included in the HTML output file', function (done) {
+			var mdFile  = path.join(testFiles, 'valid.md')
+			, filemetas = parse.parseMetadatas(mdFile)
 		})
 		it('should throw an error if not layout file found', function (done) {
 			var mdFile = path.join('test/test-files/errors', 'page-no-layout.md')

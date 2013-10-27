@@ -1,6 +1,6 @@
 # Miranda
 
-(Yep, named after the awesome work of [Raymond E. Feist](http://en.wikipedia.org/wiki/Raymond_E._Feist) but I'm thinking of "Equiprose"; what do you think?)
+(Yep, named after the awesome work of [Raymond E. Feist](http://en.wikipedia.org/wiki/Raymond_E._Feist))
 
 :warning: Currently refactoring, please refer to `stable` branch for usage.
 
@@ -10,15 +10,15 @@ Miranda is a static website and/or blog generator.
 I built it because I love Markdown and wanted [my website](http://thibaultcha.me) to support it. Miranda is inspired from [snap](https://github.com/mlbli/snap), but I was not satisfied with it because I wanted more than a blog. 
 Miranda was first built as a Node.js app ([CrydeeEngine](https://github.com/thibaultCha/CrydeeEngine), until I realized static content was much more appropriated to my needs and.. maybe yours?
 
-#### TL:DR 
-Write your content in Markdown, create your Jade+Stylus template, build: you're done!
+#### TL;DR 
+Write your content in Markdown, create your Jade+Stylus template, build, publish.
 
 #### Features
 
 - Generates static webpages (cool for GitHub hosting)
 - Write your content in Markdown
 - Emojis support :+1:
-- Custom templates
+- Custom templates in Jade + Stylus
 
 ![Miranda](http://f.cl.ly/items/450f47002l141y221C0A/Miranda.png)
 

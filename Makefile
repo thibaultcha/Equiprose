@@ -6,7 +6,7 @@ install:
 	@npm install --production
 
 dev:
-	@npm install
+	@npm install --dev
 
 test:
 	@NODE_ENV=test $(BIN)/mocha --require blanket --reporter $(REPORTER)

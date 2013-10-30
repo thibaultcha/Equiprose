@@ -1,0 +1,9 @@
+templateDir: _template
+assets:
+  input: _assets
+  output: assets
+pages:
+  input: _pages
+posts: 
+  input: _posts
+defaultOutput: www

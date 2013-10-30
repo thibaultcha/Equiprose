@@ -8,15 +8,21 @@ describe('parsing.js', function () {
     var pageRightFormat = path.join(testFiles, 'page.md')
     , pageNoTitle       = path.join(testFiles, 'errors', 'page-no-title.md')
     , pageNoMetas       = path.join(testFiles, 'errors', 'page-no-meta.md')
-  //, wrongLayoutFile   = path.join(testFiles, 'errors', 'page-wrong-layout.md')
     , pageWrongSlug     = path.join(testFiles, 'errors', 'page-wrong-slug.md')
     , pageNoContent     = path.join(testFiles, 'errors', 'page-no-content.md')
-    , postWrongDate     = path.join(testFiles, 'errors', 'post-wrong-date.md')
 
     var postRightFormat = path.join(testFiles, 'post.md')
     , postNoTitle       = path.join(testFiles, 'errors', 'post-no-title.md')
     , postNoContent     = path.join(testFiles, 'errors', 'post-no-content.md')
     , postNoAuthor      = path.join(testFiles, 'errors', 'post-no-author.md')
+    , postWrongDate     = path.join(testFiles, 'errors', 'post-wrong-date.md')
+
+    describe('#parseGlobalConfig()', function () {
+        it('should return the global config', function () {
+            var globalConfig = parse.parseGlobalConfig()
+            assert(globalConfig)
+        })
+    })
 
     describe('#getMetadatas()', function () {
         var metas = parse.getMetadatas(pageRightFormat)

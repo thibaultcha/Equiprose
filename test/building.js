@@ -2,12 +2,15 @@ var assert = require('assert')
 , path     = require('path')
 , fs       = require('fs')
 , fse      = require('fs-extra')
-, build    = require('../lib/building.js')
-, helpers  = require('../lib/helpers.js')
+
+var parse = require('../lib/parsing.js')
+, build   = require('../lib/building.js')
+, helpers = require('../lib/helpers.js')
 
 describe('building.js', function () {
-	var config  = build.parseConfig('test/test-sites/valid-site')
-    , assetsDir = path.join(config.sitePath, '_assets')
+    var globalConfig = parse.parseGlobalConfig()
+    , config         = build.parseConfig('test/test-sites/valid-site')
+    , assetsDir      = path.join(config.sitePath, globalConfig.assets.input)
 
 	describe('#parseConfig()', function () {
         it('should return an object', function () {
@@ -23,7 +26,7 @@ describe('building.js', function () {
 
 	describe('#prepareOutputDir()', function () {
         var outputDir  = path.join(config.sitePath, config.buildDir)
-        , assetsDir    = path.join(config.sitePath, '_assets')
+        , assetsDir    = path.join(config.sitePath, globalConfig.assets.input)
         , assetsOutput = path.join(outputDir, 'assets')
 
         it('should recreate the buildDir if already present', function (done) {
@@ -79,11 +82,18 @@ describe('building.js', function () {
                 assert(posts[i].toJade.link)
             }  
         })
+        it('should return as much blogs posts than there are files', function (done) {
+            helpers.getFiles(path.join(config.sitePath, globalConfig.posts.input), new RegExp(/\.md$/), function (err, items) {
+                assert.ifError(err)
+                assert(posts.length == items.length)
+                done()
+            })
+        })
     })
 
     describe('#compileStylesheets()', function () {
         this.slow(500)
-        var stylPath = path.join(config.sitePath, '_template/styl')
+        var stylPath = path.join(config.sitePath, globalConfig.templateDir)
         , outputCss  = path.join(config.sitePath, 'rendering-css')
 
         beforeEach(function (done) {
@@ -96,7 +106,7 @@ describe('building.js', function () {
         it('should create outputCss folder if not existing', function (done) {
             build.compileStylesheets(stylPath, outputCss, function (err) {
                 assert.ifError(err)
-                assert(fs.existsSync(outputCss), 'outputCss folder was not created')
+                assert(fs.existsSync(outputCss), 'outputCss directory was not created')
                 done()
             })
         })
@@ -106,7 +116,7 @@ describe('building.js', function () {
                 helpers.getFiles(stylPath, new RegExp(/\.styl$/), function (err, items) {
                     assert.ifError(err)
                     items.forEach(function (item, idx) {
-                        var cssFile = item.replace(stylPath, outputCss).replace(/\.styl$/, '.css')
+                        var cssFile = path.join(outputCss, path.basename(item).replace(/\.styl$/, '.css'))
                         assert(fs.existsSync(cssFile), 'Inexistant css file: ' + cssFile + ' for file: ' + item)
                         if (idx == items.length - 1) done()
                     })
@@ -120,5 +130,9 @@ describe('building.js', function () {
                 done()
             })
         })
+    })
+
+    describe('#buildSite()', function () {
+
     })
 })

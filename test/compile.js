@@ -32,6 +32,15 @@ describe('compile.js', function () {
 				done()
 			})
 		})
+		it('should create the outputDir if not existing', function (done) {
+			this.slow(200)
+			var customOutput = path.join(outputDir, 'create')
+			compile.compileStylusFile(stylusfile, customOutput, function (err) {
+				assert.ifError(err)
+				assert(fs.existsSync(customOutput), 'The output directory was not created')
+				done()
+			})
+		})
 	})
 
 	describe('#compileMarkdown()', function () {
@@ -42,7 +51,7 @@ describe('compile.js', function () {
 				done()
 			})
 		})
-		it('should throw an error if not layout file found', function (done) {
+		it('should throw an error if not layout file is found', function (done) {
 			var mdFile = path.join('test/test-files/errors', 'page-no-layout.md')
 			var fn = function () {
 				compile.compileMarkdown(mdFile, testFiles, function (err, outputFile) {
@@ -55,11 +64,20 @@ describe('compile.js', function () {
 	})
 
 	describe('#compileMarkdownToFile()', function () {
+		var mdFile = path.join(testFiles, 'valid.md')
+
 		it('should render a file to path <outputDir/<filename>.html', function (done) {
-			var mdFile = path.join(testFiles, 'valid.md')
 			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, function (err, outputFile) {
 				assert.ifError(err)
 				assert(fs.existsSync(outputFile), 'No HTML file at path: ' + outputFile + 'for file: ' + mdFile)
+				done()
+			})
+		})
+		it('should create the outputDir if not existing', function (done) {
+			var customOutput = path.join(outputDir, 'create')
+			compile.compileMarkdownToFile(mdFile, testFiles, customOutput, function (err, outputFile) {
+				assert.ifError(err)
+				assert(fs.existsSync(customOutput), 'The output directory was not created')
 				done()
 			})
 		})

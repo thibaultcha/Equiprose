@@ -20,7 +20,30 @@ describe('parsing.js', function () {
     describe('#parseGlobalConfig()', function () {
         it('should return the global config', function () {
             var globalConfig = parse.parseGlobalConfig()
-            assert(globalConfig)
+            assert(globalConfig.templateDir)
+            assert(globalConfig.posts.input)
+            assert(globalConfig.pages.input)
+            assert(globalConfig.assets.input)
+            assert(globalConfig.assets.output)
+            assert(globalConfig.defaultOutput)
+        })
+    })
+
+    describe('#parseConfig()', function () {
+        var config
+
+        before(function () {
+            config = parse.parseConfig('test/test-sites/valid-site')
+        })
+
+        it('should return an object', function () {
+            assert(config instanceof Object)
+        })
+        it('should add a `sitePath` property', function () {
+            assert(config.sitePath)
+        })
+        it('should throw an error when no config.yml file is found', function () {
+            assert.throws(function () { parse.parseConfig('test/test-sites/errors/no-config') }, /No config.yml file/)
         })
     })
 

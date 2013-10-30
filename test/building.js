@@ -9,20 +9,8 @@ var parse = require('../lib/parsing.js')
 
 describe('building.js', function () {
     var globalConfig = parse.parseGlobalConfig()
-    , config         = build.parseConfig('test/test-sites/valid-site')
+    , config         = parse.parseConfig('test/test-sites/valid-site')
     , assetsDir      = path.join(config.sitePath, globalConfig.assets.input)
-
-	describe('#parseConfig()', function () {
-        it('should return an object', function () {
-            assert(config instanceof Object)
-        })
-        it('should add a `sitePath` property', function () {
-            assert(config.sitePath)
-        })
-        it('should throw an error when no config.yml file is found', function () {
-            assert.throws(function () { build.parseConfig('test/test-sites/errors/no-config') }, /No config.yml file/)
-        })
-    })
 
 	describe('#prepareOutputDir()', function () {
         var outputDir  = path.join(config.sitePath, config.buildDir)
@@ -85,7 +73,7 @@ describe('building.js', function () {
         it('should return as much blogs posts than there are files', function (done) {
             helpers.getFiles(path.join(config.sitePath, globalConfig.posts.input), new RegExp(/\.md$/), function (err, items) {
                 assert.ifError(err)
-                assert(posts.length == items.length)
+                assert.equal(posts.length, items.length)
                 done()
             })
         })
@@ -133,6 +121,10 @@ describe('building.js', function () {
     })
 
     describe('#buildSite()', function () {
-
+        it('should compile a valid site', function (done) {
+            build.buildSite(config.sitePath, function (err) {
+                done()
+            })
+        })
     })
 })

@@ -34,33 +34,34 @@ describe('compile.js', function () {
 		})
 	})
 
-	describe.skip('#compileMarkdownFile()', function () {
-		it('should render a file to path <outputDir/<filename>.html', function (done) {
-			var mdFile  = path.join(testFiles, 'valid.md')
-			, filemetas = parse.parseMetadatas(mdFile)
-
-			compile.compileMarkdownFile(mdFile, testFiles, outputDir, function (err, outputFile) {
+	describe('#compileMarkdown()', function () {
+		it('should pass variables to Jade so they are included in the HTML output file', function (done) {
+			var mdFile = path.join(testFiles, 'valid.md')
+			compile.compileMarkdown(mdFile, testFiles, function (err, html) {
 				assert.ifError(err)
-				assert(fs.existsSync(outputFile), 'No HTML file at path: ' + outputFile)
 				done()
 			})
-		})
-	})
-
-	describe.skip('#compileMarkdown()', function () {
-		it('should pass variables to Jade so they are included in the HTML output file', function (done) {
-			var mdFile  = path.join(testFiles, 'valid.md')
-			, filemetas = parse.parseMetadatas(mdFile)
 		})
 		it('should throw an error if not layout file found', function (done) {
 			var mdFile = path.join('test/test-files/errors', 'page-no-layout.md')
 			var fn = function () {
-				compile.compileMarkdownFile(mdFile, testFiles, outputDir, function (err, outputFile) {
+				compile.compileMarkdown(mdFile, testFiles, function (err, outputFile) {
 					done()
 					assert.ifError(err)
 				})
 			}
 			assert.throws(function(){ fn() }, /No jade file/)
+		})
+	})
+
+	describe('#compileMarkdownToFile()', function () {
+		it('should render a file to path <outputDir/<filename>.html', function (done) {
+			var mdFile = path.join(testFiles, 'valid.md')
+			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, function (err, outputFile) {
+				assert.ifError(err)
+				assert(fs.existsSync(outputFile), 'No HTML file at path: ' + outputFile + 'for file: ' + mdFile)
+				done()
+			})
 		})
 	})
 

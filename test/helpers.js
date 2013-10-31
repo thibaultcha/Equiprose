@@ -70,7 +70,7 @@ describe('helpers.js', function () {
 
     describe('#getFiles()', function () {
         var regex  = new RegExp(/\.md$/)
-        , testPath = 'test/test-sites/valid-site/_pages'
+        , testPath = 'test/test-sites/build-dir/_pages'
         , files
 
         it('should return an Array', function (done) {
@@ -93,7 +93,7 @@ describe('helpers.js', function () {
 
     describe('#walk()', function () {
         var files
-        var testPath = 'test/test-sites/valid-site'
+        var testPath = 'test/test-sites/build-dir'
 
         before(function (done) {
             helpers.getFiles(testPath, new RegExp(/\.md$/), function (err, results) {

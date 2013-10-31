@@ -9,13 +9,13 @@ var parse = require('../lib/parsing.js')
 
 describe('building.js', function () {
     var globalConfig = parse.parseGlobalConfig()
-    , config         = parse.parseConfig('test/test-sites/valid-site')
+    , config         = parse.parseConfig('test/test-sites/build-dir')
     , assetsDir      = path.join(config.sitePath, globalConfig.assets.input)
 
 	describe('#prepareOutputDir()', function () {
         var outputDir  = path.join(config.sitePath, config.buildDir)
         , assetsDir    = path.join(config.sitePath, globalConfig.assets.input)
-        , assetsOutput = path.join(outputDir, 'assets')
+        , assetsOutput = path.join(outputDir, globalConfig.assets.output)
 
         it('should recreate the buildDir if already present', function (done) {
             before(function (done) {
@@ -120,9 +120,43 @@ describe('building.js', function () {
         })
     })
 
-    describe('#buildSite()', function () {
-        it('should compile a valid site', function (done) {
-            build.buildSite(config.sitePath, function (err) {
+    describe.skip('#buildSite()', function () {
+        var siteNoBuildDir = 'test/test-sites/no-build-dir'
+        , siteNoBuildDirConfig
+        
+        var siteBuildDir = 'test/test-sites/build-dir'
+        , siteBuildDirConfig
+
+        before(function () {
+            siteNoBuildDirConfig = parse.parseConfig(siteNoBuildDir)
+            siteBuildDirConfig   = parse.parseConfig(siteBuildDir)
+        })
+
+        it('should compile website to the default build directory if no buildDir is provided in config.yml', function (done) {
+            build.buildSite(siteNoBuildDir, function (err) {
+                assert(fs.existsSync(path.join(siteNoBuildDirConfig.sitePath, globalConfig.defaultOutput)), 'Website not compiled when compiling a site without a buildDir property')
+                done()
+            })
+        })
+        it('should compile website when a buildDir property is provided in config.yml', function (done) {
+            build.buildSite(siteBuildDir, function (err) {
+                assert(fs.existsSync(path.join(siteBuildDirConfig.sitePath, siteBuildDirConfig.buildDir)), 'Website not compiled when providing a buildDir in config.yml')
+                done()
+            })
+        })
+        it('should properly compile a valid website', function (done) {
+            var buildDirSitePath = path.join(siteBuildDirConfig.sitePath, siteBuildDirConfig.buildDir)
+            
+            build.buildSite(siteBuildDir, function (err) {
+                assert(fs.existsSync(path.join(buildDirSitePath, globalConfig.assets.output)), 'No assets directory in compiled valid website: ' + siteBuildDir)
+
+                var stylesheets = fs.readdirSync(path.join(buildDirSitePath, globalConfig.assets.output))
+                assert.equal(stylesheets.length, 3, 'Missing stylesheets in compiled valid website: ' + siteBuildDir)
+                
+                assert(fs.existsSync(path.join(buildDirSitePath, globalConfig.posts.output)), 'No globalConfig.posts.output directory in compiled valid website: ' + siteBuildDir)
+                
+                assert(fs.existsSync(path.join(buildDirSitePath, globalConfig.posts.output, 'hello-world.html')), 'Missing blog post in compiled valid website: ' + siteBuildDir)
+                
                 done()
             })
         })

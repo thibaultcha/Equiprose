@@ -6,4 +6,5 @@ pages:
   input: _pages
 posts: 
   input: _posts
+  output: blog
 defaultOutput: www

@@ -33,14 +33,18 @@ describe('parsing.js', function () {
         var config
 
         before(function () {
-            config = parse.parseConfig('test/test-sites/valid-site')
+            config = parse.parseConfig('test/test-sites/build-dir')
         })
 
         it('should return an object', function () {
             assert(config instanceof Object)
         })
-        it('should add a `sitePath` property', function () {
+        it('should add a `sitePath` property to the config object', function () {
             assert(config.sitePath)
+        })
+        it.skip('should add a `buildDir` property to the config object', function () {
+            assert(config.buildDir)
+            assert.equal(config.buildDir, 'test/test-sites/build-dir/dist')
         })
         it('should throw an error when no config.yml file is found', function () {
             assert.throws(function () { parse.parseConfig('test/test-sites/errors/no-config') }, /No config.yml file/)

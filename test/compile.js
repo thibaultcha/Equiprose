@@ -34,7 +34,7 @@ describe('compile.js', function () {
 		})
 		it('should create the outputDir if not existing', function (done) {
 			this.slow(200)
-			var customOutput = path.join(outputDir, 'create')
+			var customOutput = path.join(outputDir, 'createdir')
 			compile.compileStylusFile(stylusfile, customOutput, function (err) {
 				assert.ifError(err)
 				assert(fs.existsSync(customOutput), 'The output directory was not created')
@@ -74,7 +74,7 @@ describe('compile.js', function () {
 			})
 		})
 		it('should create the outputDir if not existing', function (done) {
-			var customOutput = path.join(outputDir, 'create')
+			var customOutput = path.join(outputDir, 'createdir')
 			compile.compileMarkdownToFile(mdFile, testFiles, customOutput, function (err, outputFile) {
 				assert.ifError(err)
 				assert(fs.existsSync(customOutput), 'The output directory was not created')

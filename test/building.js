@@ -13,7 +13,7 @@ describe('building.js', function () {
     , assetsDir      = path.join(config.sitePath, globalConfig.assets.input)
 
 	describe('#prepareOutputDir()', function () {
-        var outputDir  = path.join(config.sitePath, config.buildDir)
+        var outputDir  = config.buildDir
         , assetsDir    = path.join(config.sitePath, globalConfig.assets.input)
         , assetsOutput = path.join(outputDir, globalConfig.assets.output)
 

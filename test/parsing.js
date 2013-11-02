@@ -30,21 +30,40 @@ describe('parsing.js', function () {
     })
 
     describe('#parseConfig()', function () {
-        var config
+        var siteNoBuildDir = 'test/test-sites/no-build-dir'
+        , siteNoBuildDirConfig
+        
+        var siteBuildDir = 'test/test-sites/build-dir'
+        , siteBuildDirConfig
+
+        var siteAbsoluteBuildDir = 'test/test-sites/absolute-build-dir'
+        , siteAbsoluteBuildDirConfig
 
         before(function () {
-            config = parse.parseConfig('test/test-sites/build-dir')
+            siteNoBuildDirConfig       = parse.parseConfig(siteNoBuildDir)
+            siteBuildDirConfig         = parse.parseConfig(siteBuildDir)
+            siteAbsoluteBuildDirConfig = parse.parseConfig(siteAbsoluteBuildDir)
         })
 
         it('should return an object', function () {
-            assert(config instanceof Object)
+            assert(siteBuildDirConfig instanceof Object)
+            assert(siteNoBuildDirConfig instanceof Object)
         })
-        it('should add a `sitePath` property to the config object', function () {
-            assert(config.sitePath)
+        it('should contain a `sitePath` property to the config object', function () {
+            assert(siteBuildDirConfig.sitePath)
+            assert(siteNoBuildDirConfig.sitePath)
         })
-        it.skip('should add a `buildDir` property to the config object', function () {
-            assert(config.buildDir)
-            assert.equal(config.buildDir, 'test/test-sites/build-dir/dist')
+        it('should contain a `buildDir` property pointing to the build directory if a relative buildDir property is provided in config.yml', function () {
+            assert(siteBuildDirConfig.buildDir)
+            assert.equal(siteBuildDirConfig.buildDir, 'test/test-sites/build-dir/dist')
+        })
+        it('should contain a `buildDir` property pointing to the build directory if an absolute buildDir property is provided in config.yml', function () {
+            assert(siteAbsoluteBuildDirConfig.buildDir)
+            assert.equal(siteAbsoluteBuildDirConfig.buildDir, '/tmp')
+        })
+        it('should contain a `buildDir` property pointing to the default build directory if no buildDir property is provided in config.yml', function () {
+            assert(siteNoBuildDirConfig.buildDir)
+            assert.equal(siteNoBuildDirConfig.buildDir, 'test/test-sites/no-build-dir/www')
         })
         it('should throw an error when no config.yml file is found', function () {
             assert.throws(function () { parse.parseConfig('test/test-sites/errors/no-config') }, /No config.yml file/)

@@ -134,7 +134,7 @@ describe('building.js', function () {
 
         it('should compile website to the default build directory if no buildDir is provided in config.yml', function (done) {
             build.buildSite(siteNoBuildDir, function (err) {
-                assert(fs.existsSync(path.join(siteNoBuildDirConfig.sitePath, globalConfig.defaultOutput)), 'Website not compiled when compiling a site without a buildDir property')
+                assert(fs.existsSync(path.join(siteNoBuildDirConfig.sitePath, globalConfig.defaultOutput)),'Website not compiled when compiling a site without a buildDir property')
                 done()
             })
         })

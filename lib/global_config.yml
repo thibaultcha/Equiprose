@@ -1,3 +1,4 @@
+configFile: config.yml
 templateDir: _template
 assets:
   input: _assets

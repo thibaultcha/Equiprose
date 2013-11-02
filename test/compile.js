@@ -44,7 +44,14 @@ describe('compile.js', function () {
 	})
 
 	describe('#compileMarkdown()', function () {
-		it.skip('should pass variables to Jade so they are included in the HTML output file', function (done) {
+		it.skip('should import metadatas variables from markdown to Jade', function (done) {
+			var mdFile = path.join(testFiles, 'valid.md')
+			compile.compileMarkdown(mdFile, testFiles, function (err, html) {
+				assert.ifError(err)
+				done()
+			})
+		})
+		it.skip('should import website-specific config.yml variables from markdown to Jade', function (done) {
 			var mdFile = path.join(testFiles, 'valid.md')
 			compile.compileMarkdown(mdFile, testFiles, function (err, html) {
 				assert.ifError(err)

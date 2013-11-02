@@ -20,6 +20,7 @@ describe('parsing.js', function () {
     describe('#parseGlobalConfig()', function () {
         it('should return the global config', function () {
             var globalConfig = parse.parseGlobalConfig()
+            assert(globalConfig.configFile)
             assert(globalConfig.templateDir)
             assert(globalConfig.posts.input)
             assert(globalConfig.pages.input)

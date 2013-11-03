@@ -139,4 +139,19 @@ describe('helpers.js', function () {
             assert.equal('test', helpers.pathToProperty(obj, 'test'))
         })
     })
+
+    describe('#setAtPath()', function () {
+        var obj = { foo: 'foo', bar: 'bar', nested: { foo: 'foo', bar: 'bar' }, test: 'test' }
+        it('should set the given value at the given path', function () {
+            helpers.setAtPath(obj, 'foo', 'set')
+            assert.equal('set', obj.foo)
+
+            helpers.setAtPath(obj, 'nested.bar', 'test')
+            assert.equal('test', obj.nested.bar)
+        })
+        it('should recursively create missing properties', function () {
+            helpers.setAtPath(obj, 'nested.create.test', 'test')
+            assert.equal('test', obj.nested.create.test, 'Missing properties not recursively created')
+        })
+    })
 })

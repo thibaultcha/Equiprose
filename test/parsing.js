@@ -71,7 +71,7 @@ describe('parsing.js', function () {
             assert.equal(siteNoBuildDirConfig.buildDir, 'test/test-sites/no-build-dir/www')
         })
         it('should override any global property if the same property is overriden in config.yml', function () {
-            assert.equal(siteOverrideConfig.dateFormat, 'DD MMM YYYY')
+            assert.equal(siteOverrideConfig.dateFormat, 'MMM DD YYYY')
             assert.equal(siteOverrideConfig.buildDir, '/tmp')
             assert.equal(siteOverrideConfig.templateDir, 'custom_template')
             assert.equal(siteOverrideConfig.assets.input, 'custom_assets')

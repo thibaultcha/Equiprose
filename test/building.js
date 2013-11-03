@@ -8,14 +8,12 @@ var parse = require('../lib/parsing.js')
 , helpers = require('../lib/helpers.js')
 
 describe('building.js', function () {
-    var globalConfig = parse.parseGlobalConfig()
-    , config         = parse.parseConfig('test/test-sites/build-dir')
-    , assetsDir      = path.join(config.sitePath, globalConfig.assets.input)
+    var config = parse.parseConfig('test/test-sites/build-dir')
 
 	describe('#prepareOutputDir()', function () {
         var outputDir  = config.buildDir
-        , assetsDir    = path.join(config.sitePath, globalConfig.assets.input)
-        , assetsOutput = path.join(outputDir, globalConfig.assets.output)
+        , assetsDir    = path.join(config.sitePath, config.assets.input)
+        , assetsOutput = path.join(outputDir, config.assets.output)
 
         it('should recreate the buildDir if already present', function (done) {
             before(function (done) {
@@ -54,8 +52,8 @@ describe('building.js', function () {
 	describe('#fetchBlogPosts()', function () {
         var posts
 
-        beforeEach(function () {
-        	posts = build.fetchBlogPosts(config.sitePath)
+        before(function () {
+        	posts = build.fetchBlogPosts(path.join(config.sitePath, config.posts.input), config)
         })
 
         it('should return an Array', function () {
@@ -63,15 +61,15 @@ describe('building.js', function () {
         })
         it('should return an Array with blog posts containing all required properties', function () {
             for (var i = posts.length - 1; i >= 0; i--) {
-                assert(posts[i].toJade.date)
-                assert(posts[i].toJade.title)
-                assert(posts[i].toJade.content)
-                assert(posts[i].toJade.author)
-                assert(posts[i].toJade.link)
+                assert(posts[i].toJade.date, 'No date property')
+                assert(posts[i].toJade.title, 'No title property')
+                assert(posts[i].toJade.content, 'No content property')
+                assert(posts[i].toJade.author, 'No author property')
+                assert(posts[i].toJade.link, 'No link property')
             }  
         })
         it('should return as much blogs posts than there are files', function (done) {
-            helpers.getFiles(path.join(config.sitePath, globalConfig.posts.input), new RegExp(/\.md$/), function (err, items) {
+            helpers.getFiles(path.join(config.sitePath, config.posts.input), new RegExp(/\.md$/), function (err, items) {
                 assert.ifError(err)
                 assert.equal(posts.length, items.length)
                 done()
@@ -81,7 +79,7 @@ describe('building.js', function () {
 
     describe('#compileStylesheets()', function () {
         this.slow(500)
-        var stylPath = path.join(config.sitePath, globalConfig.templateDir)
+        var stylPath = path.join(config.sitePath, config.templateDir)
         , outputCss  = path.join(config.sitePath, 'rendering-css')
 
         beforeEach(function (done) {
@@ -133,9 +131,10 @@ describe('building.js', function () {
         })
 
         it('should compile website to the default build directory if no buildDir is provided in config.yml', function (done) {
+            var globalConfig = parse.parseGlobalConfig()
             build.buildSite(siteNoBuildDir, function (err) {
                 assert.ifError(err)
-                assert(fs.existsSync(path.join(siteNoBuildDirConfig.sitePath, globalConfig.defaultOutput)),'Website not compiled when no buildDir property in config.yml')
+                assert(fs.existsSync(path.join(siteNoBuildDirConfig.sitePath, globalConfig.buildDir)),'Website not compiled when no buildDir property in config.yml')
                 done()
             })
 
@@ -160,20 +159,18 @@ describe('building.js', function () {
                 })
             })
         })
-        it.skip('should properly compile a valid website', function (done) {
-            var buildDirSitePath = path.join(siteBuildDirConfig.sitePath, siteBuildDirConfig.buildDir)
-            
+        it.skip('should properly compile a valid website', function (done) {            
             build.buildSite(siteBuildDir, function (err) {
                 assert.ifError(err)
 
-                assert(fs.existsSync(path.join(buildDirSitePath, globalConfig.assets.output)), 'No ' + globalConfig.assets.output + ' directory in compiled valid website: ' + siteBuildDir)
+                assert(fs.existsSync(path.join(siteBuildDirConfig.buildDir, siteBuildDirConfig.assets.output)), 'No ' + siteBuildDirConfig.assets.output + ' directory in compiled valid website: ' + siteBuildDir)
 
-                var stylesheets = fs.readdirSync(path.join(buildDirSitePath, globalConfig.assets.output))
+                var stylesheets = fs.readdirSync(path.join(siteBuildDirConfig.buildDir, siteBuildDirConfig.assets.output))
                 assert.equal(stylesheets.length, 3, 'Missing stylesheets in compiled valid website: ' + siteBuildDir)
                 
-                assert(fs.existsSync(path.join(buildDirSitePath, globalConfig.posts.output)), 'No ' + globalConfig.posts.output + ' directory in compiled valid website: ' + siteBuildDir)
+                assert(fs.existsSync(path.join(siteBuildDirConfig.buildDir, siteBuildDirConfig.posts.output)), 'No ' + siteBuildDirConfig.posts.output + ' directory in compiled valid website: ' + siteBuildDir)
                 
-                assert(fs.existsSync(path.join(buildDirSitePath, globalConfig.posts.output, 'hello-world.html')), 'Missing blog post in compiled valid website: ' + siteBuildDir)
+                assert(fs.existsSync(path.join(siteBuildDirConfig.buildDir, siteBuildDirConfig.posts.output, 'hello-world.html')), 'Missing blog post in compiled valid website: ' + siteBuildDir)
                 
                 done()
             })

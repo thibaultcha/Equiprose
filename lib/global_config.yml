@@ -8,4 +8,7 @@ pages:
 posts: 
   input: _posts
   output: blog
-defaultOutput: www
+  lol:
+    allo: test
+buildDir: www
+dateFormat: DD MMM YYYY

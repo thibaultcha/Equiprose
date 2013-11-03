@@ -20,13 +20,13 @@ describe('parsing.js', function () {
     describe('#parseGlobalConfig()', function () {
         it('should return the global config', function () {
             var globalConfig = parse.parseGlobalConfig()
-            assert(globalConfig.configFile)
-            assert(globalConfig.templateDir)
-            assert(globalConfig.posts.input)
-            assert(globalConfig.pages.input)
-            assert(globalConfig.assets.input)
-            assert(globalConfig.assets.output)
-            assert(globalConfig.defaultOutput)
+            assert(globalConfig.configFile, 'No configFile property')
+            assert(globalConfig.templateDir, 'No default templateDir property')
+            assert(globalConfig.posts.input, 'No default posts input property')
+            assert(globalConfig.pages.input, 'No default pages input property')
+            assert(globalConfig.assets.input, 'No default assets input property')
+            assert(globalConfig.assets.output, 'No defaultassets output property')
+            assert(globalConfig.buildDir, 'No default buildDir property')
         })
     })
 
@@ -37,13 +37,17 @@ describe('parsing.js', function () {
         var siteBuildDir = 'test/test-sites/build-dir'
         , siteBuildDirConfig
 
-        var siteAbsoluteBuildDir = 'test/test-sites/absolute-build-dir'
+        var siteAbsoluteBuildDir = 'test/test-files/config-absolute-build-dir'
         , siteAbsoluteBuildDirConfig
+
+        var siteOverride = 'test/test-files/config-override'
+        , siteOverrideConfig
 
         before(function () {
             siteNoBuildDirConfig       = parse.parseConfig(siteNoBuildDir)
             siteBuildDirConfig         = parse.parseConfig(siteBuildDir)
             siteAbsoluteBuildDirConfig = parse.parseConfig(siteAbsoluteBuildDir)
+            siteOverrideConfig         = parse.parseConfig(siteOverride)
         })
 
         it('should return an object', function () {
@@ -54,17 +58,32 @@ describe('parsing.js', function () {
             assert(siteBuildDirConfig.sitePath)
             assert(siteNoBuildDirConfig.sitePath)
         })
-        it('should contain a `buildDir` property pointing to the build directory if a relative buildDir property is provided in config.yml', function () {
+        it('should override global `buildDir` property if a relative buildDir property is provided in config.yml', function () {
             assert(siteBuildDirConfig.buildDir)
             assert.equal(siteBuildDirConfig.buildDir, 'test/test-sites/build-dir/dist')
         })
-        it('should contain a `buildDir` property pointing to the build directory if an absolute buildDir property is provided in config.yml', function () {
+        it('should override global `buildDir` property if an absolute buildDir property is provided in config.yml', function () {
             assert(siteAbsoluteBuildDirConfig.buildDir)
             assert.equal(siteAbsoluteBuildDirConfig.buildDir, '/tmp')
         })
-        it('should contain a `buildDir` property pointing to the default build directory if no buildDir property is provided in config.yml', function () {
+        it('should not override global `buildDir` property if no buildDir property is provided in config.yml', function () {
             assert(siteNoBuildDirConfig.buildDir)
             assert.equal(siteNoBuildDirConfig.buildDir, 'test/test-sites/no-build-dir/www')
+        })
+        it('should override any global property if the same property is overriden in config.yml', function () {
+            assert.equal(siteOverrideConfig.dateFormat, 'DD MMM YYYY')
+            assert.equal(siteOverrideConfig.buildDir, '/tmp')
+            assert.equal(siteOverrideConfig.templateDir, 'custom_template')
+            assert.equal(siteOverrideConfig.assets.input, 'custom_assets')
+            assert.equal(siteOverrideConfig.assets.output, 'myassets')
+            /*  
+            dateFormat: MMM DD YYYY
+            buildDir: /tmp
+            templateDir: custom_template
+            assets:
+              input: custom_assets
+              output: myassets
+            */
         })
         it('should throw an error when no config.yml file is found', function () {
             assert.throws(function () { parse.parseConfig('test/test-sites/errors/no-config') }, /No config.yml file/)

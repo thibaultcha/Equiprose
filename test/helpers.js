@@ -114,4 +114,29 @@ describe('helpers.js', function () {
             })
         })
     })
+
+    describe('#enumerateProperties()', function () {
+        var obj = { foo: 'foo', bar: 'bar', nested: { foo: 'foo', bar: 'bar' }, test: 'test' }
+        it('should callback the path of all properties of a given object', function () {
+            var counter = 0
+            helpers.enumerateProperties(obj, function (path) {
+                assert(typeof(path) === 'string', 'Callback path is not a String')
+                if (counter == 0)
+                    assert.equal(path, 'foo')
+                else if (counter == 2)
+                    assert.equal(path, 'nested.foo')
+                counter++
+            })
+        })
+    })
+
+    describe('#pathToProperty()', function () {
+        var obj = { foo: 'foo', bar: 'bar', nested: { foo: 'foo', bar: 'bar' }, test: 'test' }
+        it('should return the value of an object for a given property path', function () {
+            assert.equal('foo', helpers.pathToProperty(obj, 'foo'))
+            assert.equal('foo', helpers.pathToProperty(obj, 'nested.foo'))
+            assert.equal('bar', helpers.pathToProperty(obj, 'nested.bar'))
+            assert.equal('test', helpers.pathToProperty(obj, 'test'))
+        })
+    })
 })

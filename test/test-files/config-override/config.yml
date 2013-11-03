@@ -1,0 +1,10 @@
+title: Test Site
+owner:
+    name: thibaultCha
+    description: I think it's me...
+dateFormat: MMM DD YYYY
+buildDir: /tmp
+templateDir: custom_template
+assets:
+  input: custom_assets
+  output: myassets

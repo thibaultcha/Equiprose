@@ -8,7 +8,5 @@ pages:
 posts: 
   input: _posts
   output: blog
-  lol:
-    allo: test
 buildDir: www
 dateFormat: DD MMM YYYY

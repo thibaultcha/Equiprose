@@ -118,7 +118,7 @@ describe('building.js', function () {
         })
     })
 
-    describe.skip('#buildSite()', function () {
+    describe('#buildSite()', function () {
         var siteNoBuildDir = 'test/test-sites/no-build-dir'
         , siteNoBuildDirConfig
         
@@ -130,7 +130,7 @@ describe('building.js', function () {
             siteBuildDirConfig   = parse.parseConfig(siteBuildDir)
         })
 
-        it('should compile website to the default build directory if no buildDir is provided in config.yml', function (done) {
+        it('should compile a website to the default build directory if no buildDir is provided in config.yml', function (done) {
             var globalConfig = parse.parseGlobalConfig()
             build.buildSite(siteNoBuildDir, function (err) {
                 assert.ifError(err)
@@ -145,7 +145,7 @@ describe('building.js', function () {
                 })
             })
         })
-        it('should compile website when a buildDir property is provided in config.yml', function (done) {
+        it('should compile a website when a buildDir property is provided in config.yml', function (done) {
             build.buildSite(siteBuildDir, function (err) {
                 assert.ifError(err)
                 assert(fs.existsSync(siteBuildDirConfig.buildDir), 'Website not compiled when providing a buildDir in config.yml')
@@ -159,19 +159,21 @@ describe('building.js', function () {
                 })
             })
         })
-        it.skip('should properly compile a valid website', function (done) {            
+        it('should properly compile a valid website', function (done) {          
             build.buildSite(siteBuildDir, function (err) {
                 assert.ifError(err)
 
                 assert(fs.existsSync(path.join(siteBuildDirConfig.buildDir, siteBuildDirConfig.assets.output)), 'No ' + siteBuildDirConfig.assets.output + ' directory in compiled valid website: ' + siteBuildDir)
 
-                var stylesheets = fs.readdirSync(path.join(siteBuildDirConfig.buildDir, siteBuildDirConfig.assets.output))
+                var stylesheets = fs.readdirSync(path.join(siteBuildDirConfig.buildDir, siteBuildDirConfig.assets.output)).filter(function (item) {return item.match(/\.css$/)})
                 assert.equal(stylesheets.length, 3, 'Missing stylesheets in compiled valid website: ' + siteBuildDir)
                 
                 assert(fs.existsSync(path.join(siteBuildDirConfig.buildDir, siteBuildDirConfig.posts.output)), 'No ' + siteBuildDirConfig.posts.output + ' directory in compiled valid website: ' + siteBuildDir)
                 
                 assert(fs.existsSync(path.join(siteBuildDirConfig.buildDir, siteBuildDirConfig.posts.output, 'hello-world.html')), 'Missing blog post in compiled valid website: ' + siteBuildDir)
                 
+                // check pages
+
                 done()
             })
 

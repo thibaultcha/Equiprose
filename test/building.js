@@ -149,14 +149,14 @@ describe('building.js', function () {
                 done()
             })
 
-            after(function (done) {
+            /*after(function (done) {
                 fse.remove(siteBuildDirConfig.paths.buildDir, function (err) {
                     assert.ifError(err)
                     done()
                 })
-            })
+            })*/
         })
-        it('should properly compile a valid website', function (done) {   
+        it('should properly compile a valid website', function (done) { 
             build.buildSite(siteBuildDir, function (err) {
                 assert.ifError(err)
 
@@ -174,12 +174,12 @@ describe('building.js', function () {
                 done()
             })
 
-            after(function (done) {
+            /*after(function (done) {
                 fse.remove(siteBuildDirConfig.paths.buildDir, function (err) {
                     assert.ifError(err)
                     done()
                 })
-            })
+            })*/
         })
     })
 })

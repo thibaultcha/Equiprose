@@ -3,11 +3,12 @@ html(lang="en")
   head
     meta(charset='utf-8')
     meta(name='description', content='miranda')
-    title - #{title}
+    title #{metas.title}
     link(rel="icon", type="image/png", href="#")
     script(src='/assets/js/main.js')
   body
-    header 
+    header
+      h1 #{config.owner.name}
       nav
         a(href='/') link
 

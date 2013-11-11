@@ -1,6 +1,6 @@
 =
 layout: layout
-title: Valid
+title: A title
 slug: valid
 =
 

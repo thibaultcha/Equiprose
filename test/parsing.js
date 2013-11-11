@@ -66,14 +66,14 @@ describe('parsing.js', function () {
             assert.equal(siteAbsoluteBuildDirConfig.paths.buildDir, '/tmp', 'buildDir property is incorrect when absolute path is given')
             assert.equal(siteAbsoluteBuildDirConfig.paths.assets.output, '/tmp/assets', 'assets output path is incorrect to sitePath for absolute buildDir')
         })
-        it.skip('should override any global property if the same property is overriden in config.yml', function () {
+        it('should override any global property if the same property is overriden in config.yml', function () {
             assert.equal(siteOverrideConfig.dateFormat, 'MMM DD YYYY')
-            assert.equal(siteOverrideConfig.paths.buildDir, path.join(siteOverrideConfig.sitePath, '/tmp'))
+            assert.equal(siteOverrideConfig.paths.buildDir, '/tmp')
             assert.equal(siteOverrideConfig.paths.templateDir, path.join(siteOverrideConfig.sitePath, 'custom_template'))
             assert.equal(siteOverrideConfig.paths.assets.input, path.join(siteOverrideConfig.sitePath, 'custom_assets'))
-            assert.equal(siteOverrideConfig.paths.assets.output, path.join(siteOverrideConfig.sitePath, 'myassets'))
+            assert.equal(siteOverrideConfig.paths.assets.output, path.join(siteOverrideConfig.paths.buildDir, 'myassets'))
         })
-        it.skip('should throw an error when no config.yml file is found', function () {
+        it('should throw an error when no config.yml file is found', function () {
             assert.throws(function () { parse.parseConfig('test/test-sites/errors/no-config') }, /No config.yml file/)
         })
     })

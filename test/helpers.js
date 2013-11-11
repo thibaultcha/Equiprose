@@ -116,8 +116,17 @@ describe('helpers.js', function () {
     })
 
     describe('#enumerateProperties()', function () {
-        var obj = { foo: 'foo', bar: 'bar', nested: { foo: 'foo', bar: 'bar' }, test: 'test' }
-        it('should callback the path of all properties of a given object', function () {
+        var obj = { 
+            foo: 'foo', 
+            bar: 'bar', 
+            nested: { 
+                foo: 'foo', 
+                bar: 'bar', 
+                verynested: { important: 'test' } 
+            }, 
+            last: 'last'
+        }
+        it('should callback the dot path of all properties of a given object', function () {
             var counter = 0
             helpers.enumerateProperties(obj, function (path) {
                 assert(typeof(path) === 'string', 'Callback path is not a String')
@@ -125,6 +134,8 @@ describe('helpers.js', function () {
                     assert.equal(path, 'foo')
                 else if (counter == 2)
                     assert.equal(path, 'nested.foo')
+                else if (counter == 4)
+                    assert.equal(path, 'nested.verynested.important')
                 counter++
             })
         })
@@ -152,6 +163,8 @@ describe('helpers.js', function () {
         it('should recursively create missing properties', function () {
             helpers.setAtPath(obj, 'nested.create.test', 'test')
             assert.equal('test', obj.nested.create.test, 'Missing properties not recursively created')
+            helpers.setAtPath(obj, 'nested.create.very.nested.important.test', 'verynested')
+            assert.equal('verynested', obj.nested.create.very.nested.important.test, 'Missing properties not recursively created')
         })
     })
 })

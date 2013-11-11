@@ -1,5 +1,5 @@
-title: Test Site
-owner:
-    name: thibaultCha
-    description: I think it's me...
-dateFormat: DD MMM YYYY
+toJade:
+  title: No build dir
+  owner:
+      name: thibaultCha
+      description: I think it's me...

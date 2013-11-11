@@ -1,6 +1,4 @@
-title: Test Site
-owner:
-    name: thibaultCha
-    description: I think it's me...
-dateFormat: DD MMM YYYY
-buildDir: /tmp
+paths:
+  buildDir: /tmp
+toJade: 
+  title: Absolute Build Dir

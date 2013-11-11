@@ -1,12 +1,13 @@
 configFile: config.yml
-templateDir: _template
-assets:
-  input: _assets
-  output: assets
-pages:
-  input: _pages
-posts: 
-  input: _posts
-  output: blog
-buildDir: www
 dateFormat: DD MMM YYYY
+paths:
+  templateDir: _template
+  pages:
+    input: _pages
+  posts:
+    input: _posts
+    output: blog
+  assets:
+    input: _assets
+    output: assets
+  buildDir: www

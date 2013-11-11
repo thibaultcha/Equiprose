@@ -1,6 +1,6 @@
-title: Test Site
-owner:
-    name: thibaultCha
-    description: I think it's me...
-dateFormat: DD MMM YYYY
-buildDir: ./dist
+title: Build dir
+paths:
+  buildDir: ./dist
+toJade:
+  owner:
+    name: Joe

@@ -11,38 +11,34 @@ describe('building.js', function () {
     var config = parse.parseConfig('test/test-sites/build-dir')
 
 	describe('#prepareOutputDir()', function () {
-        var outputDir  = config.buildDir
-        , assetsDir    = path.join(config.sitePath, config.assets.input)
-        , assetsOutput = path.join(outputDir, config.assets.output)
-
         it('should recreate the buildDir if already present', function (done) {
             before(function (done) {
-                if (fs.existsSync(outputDir)) {
-                    fse.remove(outputDir, function (err) {
+                if (fs.existsSync(config.paths.buildDir)) {
+                    fse.remove(config.paths.buildDir, function (err) {
                         assert.ifError(err)
                         done()
                     })
                 }
             })
 
-            build.prepareOutputDir(outputDir, assetsDir, assetsOutput, function (err) {
+            build.prepareOutputDir(config.paths.buildDir, config.paths.assets.input, config.paths.assets.output, function (err) {
                 assert.ifError(err)
-                assert(fs.existsSync(outputDir), 'buildDir has not been created')
+                assert(fs.existsSync(config.paths.buildDir), 'buildDir has not been created')
                 done()
             })
         })
 		it('should initialize a buildDir directory containing the required folders', function (done) {
-			build.prepareOutputDir(outputDir, assetsDir, assetsOutput, function (err) {
+			build.prepareOutputDir(config.paths.buildDir, config.paths.assets.input, config.paths.assets.output, function (err) {
 				assert.ifError(err)
-                assert(fs.existsSync(path.join(assetsOutput, 'js')), 'No assets/js folder')
-                assert(fs.existsSync(path.join(assetsOutput, 'img')), 'No assets/img folder')
-                assert(fs.existsSync(path.join(assetsOutput, 'files')), 'No assets/files folder')
+                assert(fs.existsSync(path.join(config.paths.assets.output, 'js')), 'No assets/js folder')
+                assert(fs.existsSync(path.join(config.paths.assets.output, 'img')), 'No assets/img folder')
+                assert(fs.existsSync(path.join(config.paths.assets.output, 'files')), 'No assets/files folder')
 				done()
 			})
 		})
 
 		after(function (done) {
-			fse.remove(outputDir, function (err) {
+			fse.remove(config.paths.buildDir, function (err) {
                 assert.ifError(err)
 				done()
 			})
@@ -53,7 +49,7 @@ describe('building.js', function () {
         var posts
 
         before(function () {
-        	posts = build.fetchBlogPosts(path.join(config.sitePath, config.posts.input), config)
+        	posts = build.fetchBlogPosts(config)
         })
 
         it('should return an Array', function () {
@@ -69,7 +65,7 @@ describe('building.js', function () {
             }  
         })
         it('should return as much blogs posts than there are files', function (done) {
-            helpers.getFiles(path.join(config.sitePath, config.posts.input), new RegExp(/\.md$/), function (err, items) {
+            helpers.getFiles(config.paths.posts.input, new RegExp(/\.md$/), function (err, items) {
                 assert.ifError(err)
                 assert.equal(posts.length, items.length)
                 done()
@@ -78,8 +74,8 @@ describe('building.js', function () {
     })
 
     describe('#compileStylesheets()', function () {
-        this.slow(500)
-        var stylPath = path.join(config.sitePath, config.templateDir)
+        this.slow(300)
+        var stylPath = config.paths.templateDir
         , outputCss  = path.join(config.sitePath, 'rendering-css')
 
         beforeEach(function (done) {
@@ -119,6 +115,7 @@ describe('building.js', function () {
     })
 
     describe('#buildSite()', function () {
+        this.slow(500)
         var siteNoBuildDir = 'test/test-sites/no-build-dir'
         , siteNoBuildDirConfig
         
@@ -134,12 +131,12 @@ describe('building.js', function () {
             var globalConfig = parse.parseGlobalConfig()
             build.buildSite(siteNoBuildDir, function (err) {
                 assert.ifError(err)
-                assert(fs.existsSync(path.join(siteNoBuildDirConfig.sitePath, globalConfig.buildDir)),'Website not compiled when no buildDir property in config.yml')
+                assert(fs.existsSync(path.join(siteNoBuildDirConfig.sitePath, globalConfig.paths.buildDir)),'Website not compiled when no buildDir property in config.yml')
                 done()
             })
 
             after(function (done) {
-                fse.remove(siteNoBuildDirConfig.buildDir, function (err) {
+                fse.remove(siteNoBuildDirConfig.paths.buildDir, function (err) {
                     assert.ifError(err)
                     done()
                 })
@@ -148,29 +145,29 @@ describe('building.js', function () {
         it('should compile a website when a buildDir property is provided in config.yml', function (done) {
             build.buildSite(siteBuildDir, function (err) {
                 assert.ifError(err)
-                assert(fs.existsSync(siteBuildDirConfig.buildDir), 'Website not compiled when providing a buildDir in config.yml')
+                assert(fs.existsSync(siteBuildDirConfig.paths.buildDir), 'Website not compiled when providing a buildDir in config.yml')
                 done()
             })
 
             after(function (done) {
-                fse.remove(siteBuildDirConfig.buildDir, function (err) {
+                fse.remove(siteBuildDirConfig.paths.buildDir, function (err) {
                     assert.ifError(err)
                     done()
                 })
             })
         })
-        it('should properly compile a valid website', function (done) {          
+        it('should properly compile a valid website', function (done) {   
             build.buildSite(siteBuildDir, function (err) {
                 assert.ifError(err)
 
-                assert(fs.existsSync(path.join(siteBuildDirConfig.buildDir, siteBuildDirConfig.assets.output)), 'No ' + siteBuildDirConfig.assets.output + ' directory in compiled valid website: ' + siteBuildDir)
+                assert(fs.existsSync(siteBuildDirConfig.paths.assets.output), 'No ' + siteBuildDirConfig.paths.assets.output + ' directory in compiled valid website: ' + siteBuildDir)
 
-                var stylesheets = fs.readdirSync(path.join(siteBuildDirConfig.buildDir, siteBuildDirConfig.assets.output)).filter(function (item) {return item.match(/\.css$/)})
+                var stylesheets = fs.readdirSync(siteBuildDirConfig.paths.assets.output).filter(function (item) {return item.match(/\.css$/)})
                 assert.equal(stylesheets.length, 3, 'Missing stylesheets in compiled valid website: ' + siteBuildDir)
                 
-                assert(fs.existsSync(path.join(siteBuildDirConfig.buildDir, siteBuildDirConfig.posts.output)), 'No ' + siteBuildDirConfig.posts.output + ' directory in compiled valid website: ' + siteBuildDir)
+                assert(fs.existsSync(siteBuildDirConfig.paths.posts.output), 'No ' + siteBuildDirConfig.paths.posts.output + ' directory in compiled valid website: ' + siteBuildDir)
                 
-                assert(fs.existsSync(path.join(siteBuildDirConfig.buildDir, siteBuildDirConfig.posts.output, 'hello-world.html')), 'Missing blog post in compiled valid website: ' + siteBuildDir)
+                assert(fs.existsSync(path.join(siteBuildDirConfig.paths.posts.output, 'hello-world.html')), 'Missing blog post in compiled valid website: ' + siteBuildDir)
                 
                 // check pages
 
@@ -178,7 +175,7 @@ describe('building.js', function () {
             })
 
             after(function (done) {
-                fse.remove(siteBuildDirConfig.buildDir, function (err) {
+                fse.remove(siteBuildDirConfig.paths.buildDir, function (err) {
                     assert.ifError(err)
                     done()
                 })

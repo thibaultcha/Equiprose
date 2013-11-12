@@ -3,9 +3,9 @@ html(lang="en")
   head
     meta(charset='utf-8')
     meta(name='description', content='miranda')
-    //title #{owner.name} - #{title}
+    title #{metas.title}
     link(rel="icon", type="image/png", href="#")
-    link(rel="stylesheet", type="text/css", href="assets/page.css")
+    link(rel="stylesheet", type="text/css", href="/assets/page.css")
     script(src='/assets/js/main.js')
   body
     header 
@@ -13,7 +13,7 @@ html(lang="en")
         a(href='/') link
 
     section#content-container
-      
+      block content
 
     footer
       p Built with <a href='https://github.com/thibaultCha/Miranda'>Miranda</a>.

@@ -68,9 +68,7 @@ describe('compile.js', function () {
 				done()
 			})
 		})
-		it('should send a `posts` property containing an array of blog posts to each compiled page', function (done) {
-
-
+		it('should send a `posts` property to each compiled page containing an array of blog posts', function (done) {
 			compile.compileMarkdown(mdFile, testFiles, toJadeConfig, posts, function (err, html, filemetas, options) {
 				assert.ifError(err)
 				assert(options.posts === posts, 'No posts array sent to compiled page')

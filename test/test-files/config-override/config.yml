@@ -6,6 +6,5 @@ paths:
     output: myassets
   buildDir: /tmp
 toJade:
-  title: Override config
   owner:
     name: Joe

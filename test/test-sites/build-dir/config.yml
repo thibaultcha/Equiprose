@@ -1,6 +1,7 @@
-title: Build dir
 paths:
   buildDir: ./dist
 toJade:
   owner:
     name: Joe
+  website:
+    title: Build dir

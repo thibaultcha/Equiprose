@@ -73,6 +73,13 @@ describe('parsing.js', function () {
             assert.equal(siteOverrideConfig.paths.assets.input, path.join(siteOverrideConfig.sitePath, 'custom_assets'))
             assert.equal(siteOverrideConfig.paths.assets.output, path.join(siteOverrideConfig.paths.buildDir, 'myassets'))
         })
+        it('should include a custom property if provided in the website config file', function () {
+            assert(siteBuildDirConfig.toJade, 'No custom property found')
+            assert(siteBuildDirConfig.toJade.owner, 'Custom property `owner` has not been attached to the config object')
+            assert(siteBuildDirConfig.toJade.website, 'Custom property `website` has not been attached to the config object')
+            assert.equal('Joe', siteBuildDirConfig.toJade.owner.name, 'Custom property `owner.name` is incorrect')
+            assert.equal('Build dir', siteBuildDirConfig.toJade.website.title, 'Custom property `website.title` is incorrect')
+        })
         it('should throw an error when no config.yml file is found', function () {
             assert.throws(function () { parse.parseConfig('test/test-sites/errors/no-config') }, /No config.yml file/)
         })

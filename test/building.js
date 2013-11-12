@@ -1,11 +1,11 @@
-var assert = require('assert')
-, path     = require('path')
-, fs       = require('fs')
-, fse      = require('fs-extra')
+var assert  = require('assert')
+var path    = require('path')
+var fs      = require('fs')
+var fse     = require('fs-extra')
 
-var parse = require('../lib/parsing.js')
-, build   = require('../lib/building.js')
-, helpers = require('../lib/helpers.js')
+var parse   = require('../lib/parsing.js')
+var build   = require('../lib/building.js')
+var helpers = require('../lib/helpers.js')
 
 describe('building.js', function () {
     var config = parse.parseConfig('test/test-sites/build-dir')
@@ -36,6 +36,25 @@ describe('building.js', function () {
 				done()
 			})
 		})
+        it('should override the existing files before preparing the directory', function (done) {
+            before(function (done) {
+                var dir = path.join(config.paths.assets.output, 'js')
+                fse.mkdirp(dir, function (err) {
+                    assert.ifError(err)
+                    fs.writeFileSync(path.join(dir, 'to-remove.js'), 'test')
+                    done()
+                })
+            })
+
+            build.prepareOutputDir(config.paths.buildDir, config.paths.assets.input, config.paths.assets.output, function (err) {
+                assert.ifError(err)
+                var jsFiles = fs.readdirSync(path.join(config.paths.assets.output, 'js'))
+                jsFiles.forEach(function (item) {
+                    assert(item !== 'to-remove.js', 'Failed to remove assets/js dir before copying new assets')
+                })
+                done()
+            })
+        })
 
 		after(function (done) {
 			fse.remove(config.paths.buildDir, function (err) {
@@ -76,7 +95,7 @@ describe('building.js', function () {
     describe('#compileStylesheets()', function () {
         this.slow(300)
         var stylPath = config.paths.templateDir
-        , outputCss  = path.join(config.sitePath, 'rendering-css')
+        var outputCss  = path.join(config.sitePath, 'rendering-css')
 
         beforeEach(function (done) {
             fse.remove(outputCss, function (err) {
@@ -122,64 +141,76 @@ describe('building.js', function () {
         var siteBuildDir = 'test/test-sites/build-dir'
         , siteBuildDirConfig
 
-        before(function () {
+        before(function (done) {
             siteNoBuildDirConfig = parse.parseConfig(siteNoBuildDir)
             siteBuildDirConfig   = parse.parseConfig(siteBuildDir)
-        })
 
-        it('should compile a website to the default build directory if no buildDir is provided in config.yml', function (done) {
-            var globalConfig = parse.parseGlobalConfig()
             build.buildSite(siteNoBuildDir, function (err) {
                 assert.ifError(err)
-                assert(fs.existsSync(path.join(siteNoBuildDirConfig.sitePath, globalConfig.paths.buildDir)),'Website not compiled when no buildDir property in config.yml')
-                done()
+                build.buildSite(siteBuildDir, function (err) {
+                    assert.ifError(err)
+                    done()
+                })
             })
+        })
 
-            after(function (done) {
+        it('should compile a website to the default build directory if no buildDir is provided in config.yml', function () {
+        
+            var globalConfig = parse.parseGlobalConfig()
+            assert(fs.existsSync(path.join(siteNoBuildDirConfig.sitePath, globalConfig.paths.buildDir)),'Website not compiled when no buildDir property in config.yml')
+        
+        })
+        it('should compile a website when a buildDir property is provided in config.yml', function () {
+        
+            assert(fs.existsSync(siteBuildDirConfig.paths.buildDir), 'Website not compiled when providing a buildDir in config.yml')
+        
+        })
+        it('should compile a valid website with the required folders and same number of files', function () { 
+            
+            assert(fs.existsSync(siteBuildDirConfig.paths.assets.output), 'No ' + siteBuildDirConfig.paths.assets.output + ' directory in compiled valid website: ' + siteBuildDir)
+
+            var stylesheets = fs.readdirSync(siteBuildDirConfig.paths.assets.output).filter(function (item) {return item.match(/\.css$/)})
+            assert.equal(stylesheets.length, 3, 'Missing stylesheets in compiled valid website: ' + siteBuildDir)
+                
+            assert(fs.existsSync(siteBuildDirConfig.paths.posts.output), 'No ' + siteBuildDirConfig.paths.posts.output + ' directory in compiled valid website: ' + siteBuildDir)
+                
+            assert(fs.existsSync(path.join(siteBuildDirConfig.paths.posts.output, 'hello-world.html')), 'Missing blog post in compiled valid website: ' + siteBuildDir)
+                
+            // TO TEST
+            // check pages
+            // correct slug
+            // correct filename?
+        })
+        it('should include variables from a page file metadatas', function (done) {
+            // TO TEST
+            // title
+            // content
+            // custom param from config (owner)
+        })
+        it('should include variables from a post file metadatas (retrieved from fetchBlogPosts())', function (done) {
+            var postFiles = fs.readdirSync(siteBuildDirConfig.paths.posts.output)
+            
+            // test on hello world
+            var contentPost0 = fs.readFileSync(path.join(siteBuildDirConfig.paths.posts.output, postFiles[0]), { encoding: 'utf-8' })
+            assert(contentPost0.match(/<title>Hello World<\/title>/), 'Missing variable title for compiled blog post')
+            done()
+
+            // TO TEST
+            // date
+            // author
+            // title
+            // link
+            // content
+        })
+
+        after(function (done) {
+            fse.remove(siteBuildDirConfig.paths.buildDir, function (err) {
+                assert.ifError(err)
                 fse.remove(siteNoBuildDirConfig.paths.buildDir, function (err) {
                     assert.ifError(err)
                     done()
                 })
             })
-        })
-        it('should compile a website when a buildDir property is provided in config.yml', function (done) {
-            build.buildSite(siteBuildDir, function (err) {
-                assert.ifError(err)
-                assert(fs.existsSync(siteBuildDirConfig.paths.buildDir), 'Website not compiled when providing a buildDir in config.yml')
-                done()
-            })
-
-            /*after(function (done) {
-                fse.remove(siteBuildDirConfig.paths.buildDir, function (err) {
-                    assert.ifError(err)
-                    done()
-                })
-            })*/
-        })
-        it('should properly compile a valid website', function (done) { 
-            build.buildSite(siteBuildDir, function (err) {
-                assert.ifError(err)
-
-                assert(fs.existsSync(siteBuildDirConfig.paths.assets.output), 'No ' + siteBuildDirConfig.paths.assets.output + ' directory in compiled valid website: ' + siteBuildDir)
-
-                var stylesheets = fs.readdirSync(siteBuildDirConfig.paths.assets.output).filter(function (item) {return item.match(/\.css$/)})
-                assert.equal(stylesheets.length, 3, 'Missing stylesheets in compiled valid website: ' + siteBuildDir)
-                
-                assert(fs.existsSync(siteBuildDirConfig.paths.posts.output), 'No ' + siteBuildDirConfig.paths.posts.output + ' directory in compiled valid website: ' + siteBuildDir)
-                
-                assert(fs.existsSync(path.join(siteBuildDirConfig.paths.posts.output, 'hello-world.html')), 'Missing blog post in compiled valid website: ' + siteBuildDir)
-                
-                // check pages
-
-                done()
-            })
-
-            /*after(function (done) {
-                fse.remove(siteBuildDirConfig.paths.buildDir, function (err) {
-                    assert.ifError(err)
-                    done()
-                })
-            })*/
         })
     })
 })

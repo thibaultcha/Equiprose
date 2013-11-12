@@ -181,19 +181,18 @@ describe('building.js', function () {
             // correct slug
             // correct filename?
         })
-        it('should include variables from a page file metadatas', function (done) {
+        it('should include variables from a page file metadatas', function () {
             // TO TEST
             // title
             // content
             // custom param from config (owner)
         })
-        it('should include variables from a post file metadatas (retrieved from fetchBlogPosts())', function (done) {
+        it('should include variables from a post file metadatas (retrieved from fetchBlogPosts())', function () {
             var postFiles = fs.readdirSync(siteBuildDirConfig.paths.posts.output)
-            
+
             // test on hello world
             var contentPost0 = fs.readFileSync(path.join(siteBuildDirConfig.paths.posts.output, postFiles[0]), { encoding: 'utf-8' })
             assert(contentPost0.match(/<title>Hello World<\/title>/), 'Missing variable title for compiled blog post')
-            done()
 
             // TO TEST
             // date

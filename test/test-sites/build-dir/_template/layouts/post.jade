@@ -1,7 +1,7 @@
 extend layout
 
 block content
-  h1#post-title #{title}
-  h2#post-date #{post.date}
+  h1#post-title #{metas.title}
+  h2#post-date #{metas.date}
   hr
-  .md#post-content!= content
+  div#post-content!= content

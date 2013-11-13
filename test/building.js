@@ -182,17 +182,18 @@ describe('building.js', function () {
             // correct filename?
         })
         it('should include variables from a page file metadatas', function () {
-            // TO TEST
-            // title
-            // content
-            // custom param from config (owner)
+            var contentPage = fs.readFileSync(path.join(siteBuildDirConfig.paths.buildDir, 'index.html'), { encoding: 'utf-8' })
+            assert(contentPage.match(/<title>Home<\/title>/), 'Missing variable title for compiled page')
+            assert(contentPage.match(/<div id="content">Hello, I am Miranda.<\/div>/), 'Missing variable content for compiled page')
+            assert(contentPage.match(/<div id="custom">Joe<\/div>/), 'Missing custom variable for compiled page')
         })
         it('should include variables from a post file metadatas (retrieved from fetchBlogPosts())', function () {
             var postFiles = fs.readdirSync(siteBuildDirConfig.paths.posts.output)
 
             // test on hello world
             var contentPost0 = fs.readFileSync(path.join(siteBuildDirConfig.paths.posts.output, postFiles[0]), { encoding: 'utf-8' })
-            assert(contentPost0.match(/<title>Hello World<\/title>/), 'Missing variable title for compiled blog post')
+            assert(contentPost0.match(/<h1 id="post-title">Hello World<\/h1>/), 'Missing variable title for compiled blog post')
+            assert(contentPost0.match(/<div id="post-content">My first blog post<\/div>/), 'Missing variable content for compiled blog post')
 
             // TO TEST
             // date
@@ -203,13 +204,14 @@ describe('building.js', function () {
         })
 
         after(function (done) {
-            fse.remove(siteBuildDirConfig.paths.buildDir, function (err) {
+            /*fse.remove(siteBuildDirConfig.paths.buildDir, function (err) {
                 assert.ifError(err)
                 fse.remove(siteNoBuildDirConfig.paths.buildDir, function (err) {
                     assert.ifError(err)
                     done()
                 })
-            })
+            })*/
+            done()
         })
     })
 })

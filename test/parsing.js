@@ -114,7 +114,7 @@ describe('parsing.js', function () {
         it('should return an Object', function () {
             assert(postmetas instanceof Object)
         })
-        it.skip('should return the required properties for a well formatted blog post', function () {
+        it('should return the required properties for a well formatted blog post', function () {
             // should have absolute path to post link
             assert(postmetas.slug)
             assert(postmetas.layout)

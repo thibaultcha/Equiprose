@@ -42,16 +42,27 @@ describe('compile.js', function () {
 		})
 	})
 
-	describe('#compileMarkdown()', function () {
+	describe('#renderJade()', function () {
 		var layoutsDir = 'test/test-files/compile'
 		var options = {
 			layout  : 'layout',
 	        content : {},
-	        config  : {},
+	        config  : {
+				owner: {
+					name: 'Joe'
+				}
+			},
 	        metas   : {},
 	        posts   : []
     	}
 
+    	it('should send the custom properties from config.toJade to the jadeRender options', function (done) {
+    		compile.renderJade(layoutsDir, options, function (err, html, opts) {
+    			assert.ifError(err)
+    			assert(opts.config === options.config)
+    			done()
+    		})
+    	})
 		it('should throw an error if not layout file is found', function (done) {
 			options.layout = 'inexistant'
 			var fn = function () {
@@ -72,20 +83,20 @@ describe('compile.js', function () {
 			}
 		}
 
+		it('should create the outputDir if not existing', function (done) {
+			var customOutput = path.join(outputDir, 'createdir')
+			compile.compileMarkdownToFile(mdFile, testFiles, customOutput, toJadeConfig, null, function (err) {
+				assert.ifError(err)
+				assert(fs.existsSync(customOutput), 'The output directory was not created')
+				done()
+			})
+		})
 		it('should render a file to path <outputDir/<filename>.html', function (done) {
 			var expectedOutputFile = path.join(outputDir, 'valid.html')
 			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile) {
 				assert.ifError(err)
 				assert(fs.existsSync(outputFile), 'No HTML file at path: ' + outputFile + 'for file: ' + mdFile)
 				assert.equal(outputFile, expectedOutputFile, 'invalid outputFile path or naming')
-				done()
-			})
-		})
-		it('should create the outputDir if not existing', function (done) {
-			var customOutput = path.join(outputDir, 'createdir')
-			compile.compileMarkdownToFile(mdFile, testFiles, customOutput, toJadeConfig, null, function (err, outputFile) {
-				assert.ifError(err)
-				assert(fs.existsSync(customOutput), 'The output directory was not created')
 				done()
 			})
 		})
@@ -110,21 +121,19 @@ describe('compile.js', function () {
 				done()
 			})
 		})
-		it('should import metadatas variables from markdown header to Jade', function (done) {
-			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data) {
+		it('should import metadatas variables from markdown metadatas to Jade', function (done) {
+			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data, options) {
 				assert.ifError(err)
-				assert(data.match(/<title>A title<\/title>/))
-
-				// TODO
-            	//assert(contentPage.match(/<div id="content">Hello, I am Miranda.<\/div>/), 'Missing variable content for compiled page')
-            	//assert(contentPage.match(/<div id="custom">Joe<\/div>/), 'Missing custom variable for compiled page')
+				assert(options.metas.title)
+				assert(options.content)
+				assert(options.metas.title)
 				done()
 			})
 		})
 		it('should import website-specific config.yml variables from markdown to Jade', function (done) {
-			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data) {
+			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data, options) {
 				assert.ifError(err)
-				assert(data.match(/<h1>Joe<\/h1>/))
+				assert.equal(options.config.owner.name, 'Joe')
 				done()
 			})
 		})

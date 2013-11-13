@@ -176,10 +176,9 @@ describe('building.js', function () {
                 
             assert(fs.existsSync(path.join(siteBuildDirConfig.paths.posts.output, 'hello-world.html')), 'Missing blog post in compiled valid website: ' + siteBuildDir)
             
-            // TO TEST
-            // check pages
-            // correct slug
-            // correct filename?
+            assert(fs.existsSync(path.join(siteBuildDirConfig.paths.buildDir, 'about.html')), 'Missing page about.html in compiled valid website')
+
+            assert(fs.existsSync(path.join(siteBuildDirConfig.paths.buildDir, 'project/index.html')), 'Missing nested page project/index.html in compiled valid website')
         })
         it('should include variables from a page file metadatas', function () {
             var contentPage = fs.readFileSync(path.join(siteBuildDirConfig.paths.buildDir, 'index.html'), { encoding: 'utf-8' })

@@ -128,10 +128,21 @@ describe('compile.js', function () {
 				done()
 			})
 		})
-		it.skip('should compile as a blog post if 7 arguments are sent', function (done) {
-			var postMetas = {
+		it('should compile as a blog post if 7 arguments are sent', function (done) {
+			var mdFile = path.join(testFiles, 'valid-post.md')
+			var postMetas = { 
+				filename: '2013-12-01_its-snowing-today.md',
+			    slug: 'its-snowing-today',
+			  	layout: 'layout',
+			  	toJade: {
+			  			title: 'It\'s snowing today',
+			     		content: 'It\'s snowing today',
+			     		author: ' ',
+			     		date: '13 Nov 2013',
+			     		link: 'its-snowing-today.html'
+			    	}
+			    }
 
-			}
 			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, postMetas, function (err, outputFile, data, options) {
 				assert.ifError(err)
 

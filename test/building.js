@@ -192,14 +192,9 @@ describe('building.js', function () {
             // test on hello world
             var contentPost0 = fs.readFileSync(path.join(siteBuildDirConfig.paths.posts.output, postFiles[0]), { encoding: 'utf-8' })
             assert(contentPost0.match(/<h1 id="post-title">Hello World<\/h1>/), 'Missing variable title for compiled blog post')
+            assert(contentPost0.match(/<h2 id="post-author">Joe<\/h2>/), 'Missing variable author for compiled blog post')
+            assert(contentPost0.match(/<h2 id="post-date">07 Oct 2013<\/h2>/), 'Missing variable date for compiled blog post')
             assert(contentPost0.match(/<div id="post-content">My first blog post<\/div>/), 'Missing variable content for compiled blog post')
-
-            // TO TEST
-            // date
-            // author
-            // title
-            // link
-            // content
         })
 
         after(function (done) {

@@ -126,7 +126,14 @@ describe('parsing.js', function () {
         })
         it('should return owner name if no author is specified in metadatas', function () {
             var noAuthorMetas = parse.parsePostMetadatas(postNoAuthor, 'Tests', 'DD MMM YYYY')
-            assert.equal('Tests', postmetas.toJade.author)
+            assert.equal('Tests', noAuthorMetas.toJade.author)
+        })
+        it('should return a well formatted date', function () {
+            var rightFormatMetas = parse.parsePostMetadatas(postRightFormat, 'Tests', 'DD MMM YYYY')
+            assert.equal('07 Oct 2013', rightFormatMetas.toJade.date)
+
+            rightFormatMetas = parse.parsePostMetadatas(postRightFormat, 'Tests', 'MMMM DD YYYY')
+            assert.equal('October 07 2013', rightFormatMetas.toJade.date)
         })
         it('should throw an error if blog post is missing or has invalid date value', function () {
             assert.throws(function () { parse.parsePostMetadatas(postWrongDate, 'Tests', 'DD MMM YYYY') }, /date/)

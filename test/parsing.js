@@ -1,21 +1,22 @@
 var assert = require('assert')
-, path     = require('path')
-, parse    = require('../lib/parsing.js')
+var path   = require('path')
+var parse  = require('../lib/parsing.js')
 
 describe('parsing.js', function () {
     var testFiles       = 'test/test-files'
-
+    
     var pageRightFormat = path.join(testFiles, 'page.md')
-    , pageNoTitle       = path.join(testFiles, 'errors', 'page-no-title.md')
-    , pageNoMetas       = path.join(testFiles, 'errors', 'page-no-meta.md')
-    , pageWrongSlug     = path.join(testFiles, 'errors', 'page-wrong-slug.md')
-    , pageNoContent     = path.join(testFiles, 'errors', 'page-no-content.md')
-
+    var pageNoTitle     = path.join(testFiles, 'errors', 'page-no-title.md')
+    var pageNoMetas     = path.join(testFiles, 'errors', 'page-no-meta.md')
+    var pageWrongSlug   = path.join(testFiles, 'errors', 'page-wrong-slug.md')
+    var pageNoSlug      = path.join(testFiles, 'errors', 'page-no-slug.md')
+    var pageNoContent   = path.join(testFiles, 'errors', 'page-no-content.md')
+    
     var postRightFormat = path.join(testFiles, 'post.md')
-    , postNoTitle       = path.join(testFiles, 'errors', 'post-no-title.md')
-    , postNoContent     = path.join(testFiles, 'errors', 'post-no-content.md')
-    , postNoAuthor      = path.join(testFiles, 'errors', 'post-no-author.md')
-    , postWrongDate     = path.join(testFiles, 'errors', 'post-wrong-date.md')
+    var postNoTitle     = path.join(testFiles, 'errors', 'post-no-title.md')
+    var postNoContent   = path.join(testFiles, 'errors', 'post-no-content.md')
+    var postNoAuthor    = path.join(testFiles, 'errors', 'post-no-author.md')
+    var postWrongDate   = path.join(testFiles, 'errors', 'post-wrong-date.md')
 
     describe('#parseGlobalConfig()', function () {
         it('should return the global config', function () {
@@ -31,10 +32,10 @@ describe('parsing.js', function () {
     })
 
     describe('#parseConfig()', function () {
-        var siteNoBuildDirConfig = {}
-        var siteBuildDirConfig = {}
+        var siteNoBuildDirConfig       = {}
+        var siteBuildDirConfig         = {}
         var siteAbsoluteBuildDirConfig = {}
-        var siteOverrideConfig = {}
+        var siteOverrideConfig         = {}
 
         before(function () {
             siteNoBuildDirConfig       = parse.parseConfig('test/test-sites/no-build-dir')
@@ -52,19 +53,24 @@ describe('parsing.js', function () {
             assert(siteNoBuildDirConfig.sitePath)
         })
         it('should always return paths relative to the `sitePath` property in `paths` in paths are relative', function () {
-            
             // relative buildDir
-            assert.equal(siteBuildDirConfig.paths.buildDir, path.join(siteBuildDirConfig.sitePath, 'dist'), 'buildDir is incorrect for relative buildDir')
-            assert.equal(siteBuildDirConfig.paths.assets.output, path.join(siteBuildDirConfig.sitePath, 'dist/assets'), 'assets output path is incorrect for relative buildDir')
+            assert.equal(siteBuildDirConfig.paths.buildDir, path.join(siteBuildDirConfig.sitePath, 'dist'), 
+                'buildDir is incorrect for relative buildDir')
+            assert.equal(siteBuildDirConfig.paths.assets.output, path.join(siteBuildDirConfig.sitePath, 'dist/assets'), 
+                'assets output path is incorrect for relative buildDir')
             
             // no buildDir
-            assert.equal(siteNoBuildDirConfig.paths.buildDir, path.join(siteNoBuildDirConfig.sitePath, 'www'), 'buildDir property is not relative to sitePath for no buildDir')
-            assert.equal(siteNoBuildDirConfig.paths.assets.output, path.join(siteNoBuildDirConfig.sitePath, 'www/assets'), 'assets output path incorrect for no buildDir')
+            assert.equal(siteNoBuildDirConfig.paths.buildDir, path.join(siteNoBuildDirConfig.sitePath, 'www'), 
+                'buildDir property is not relative to sitePath for no buildDir')
+            assert.equal(siteNoBuildDirConfig.paths.assets.output, path.join(siteNoBuildDirConfig.sitePath, 'www/assets'), 
+                'assets output path incorrect for no buildDir')
         })
         it('should keep absolute paths in `paths` property if those paths are absolute', function () {
             // absolute buildDir
-            assert.equal(siteAbsoluteBuildDirConfig.paths.buildDir, '/tmp', 'buildDir property is incorrect when absolute path is given')
-            assert.equal(siteAbsoluteBuildDirConfig.paths.assets.output, '/tmp/assets', 'assets output path is incorrect to sitePath for absolute buildDir')
+            assert.equal(siteAbsoluteBuildDirConfig.paths.buildDir, '/tmp', 
+                'buildDir property is incorrect when absolute path is given')
+            assert.equal(siteAbsoluteBuildDirConfig.paths.assets.output, '/tmp/assets', 
+                'assets output path is incorrect to sitePath for absolute buildDir')
         })
         it('should override any global property if the same property is overriden in config.yml', function () {
             assert.equal(siteOverrideConfig.dateFormat, 'MMM DD YYYY')
@@ -74,7 +80,7 @@ describe('parsing.js', function () {
             assert.equal(siteOverrideConfig.paths.assets.output, path.join(siteOverrideConfig.paths.buildDir, 'myassets'))
         })
         it('should include a custom property if provided in the website config file', function () {
-            assert(siteBuildDirConfig.toJade, 'No custom property found')
+            assert(siteBuildDirConfig.toJade, 'No custom property found in test config file')
             assert(siteBuildDirConfig.toJade.owner, 'Custom property `owner` has not been attached to the config object')
             assert(siteBuildDirConfig.toJade.website, 'Custom property `website` has not been attached to the config object')
             assert.equal('OwnerName', siteBuildDirConfig.toJade.owner.name, 'Custom property `owner.name` is incorrect')
@@ -159,7 +165,7 @@ describe('parsing.js', function () {
             assert(metas.toJade.title)
             assert(metas.toJade.content)
         })
-        it('should normalize the filename if no title is provided', function () {
+        it('should normalize the filename if no title is provided in metas', function () {
             var metas = parse.parseMetadatas(pageNoTitle)
             assert.equal('Page No Title',  metas.toJade.title)
         })
@@ -171,6 +177,7 @@ describe('parsing.js', function () {
         })
         it('should throw an error if slug is not valid', function () {
             assert.throws(function (){ parse.parseMetadatas(pageWrongSlug) }, /slug/)
+            assert.throws(function (){ parse.parseMetadatas(pageNoSlug) }, /slug/)
         })
     })
 })

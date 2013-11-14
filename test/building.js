@@ -12,12 +12,19 @@ describe('building.js', function () {
 
     describe('#newWebsite()', function () {
         var globalConf = parse.parseGlobalConfig()
-        var newWebsite = 'test/new-website'
+        var newWebsite = 'test/new-website/'
+        var notEmpty   = 'test/not-empty/'
 
         before(function (done) {
-            build.newWebsite(newWebsite, function (err) {
+            fse.mkdirp(notEmpty, function (err) {
                 assert.ifError(err)
-                done()
+                fs.writeFile(notEmpty + '/file.txt', 'Lorem Ipsum', { encoding: 'utf-8' }, function (err) {
+                    assert.ifError(err)
+                    build.newWebsite(newWebsite, function (err) {
+                        assert.ifError(err)
+                        done()
+                    })
+                })
             })
         })
         it('should create the directory if not existing', function () {
@@ -29,16 +36,28 @@ describe('building.js', function () {
             assert(fs.existsSync(path.join(newWebsite, globalConf.paths.assets.input)), 'Missing assets input directory')
             assert(fs.existsSync(path.join(newWebsite, globalConf.paths.templateDir)), 'Missing template directory')
         })
+        it.skip('should throw an error if the target directory is not empty', function (done) {
+            var fn = function () {
+                build.newWebsite(notEmpty, function (err) {
+                    assert.ifError(err)
+                    done()  
+                })
+            }
+            assert.throws(function(){ fn() }, /is not empty/)
+        })
         after(function (done) {
             fse.remove(newWebsite, function (err) {
                 assert.ifError(err)
-                done()
+                fse.remove(notEmpty, function (err) {
+                    assert.ifError(err)
+                    done()
+                })
             })
         })
     })
 
 	describe('#prepareOutputDir()', function () {
-        it('should recreate the buildDir if already present', function (done) {
+        it('should recreate the buildDir if it already exists', function (done) {
             before(function (done) {
                 if (fs.existsSync(config.paths.buildDir)) {
                     fse.remove(config.paths.buildDir, function (err) {
@@ -188,28 +207,35 @@ describe('building.js', function () {
         it('should compile a website to the default build directory if no buildDir is provided in config.yml', function () {
         
             var globalConfig = parse.parseGlobalConfig()
-            assert(fs.existsSync(path.join(siteNoBuildDirConfig.sitePath, globalConfig.paths.buildDir)),'Website not compiled when no buildDir property in config.yml')
+            assert(fs.existsSync(path.join(siteNoBuildDirConfig.sitePath, globalConfig.paths.buildDir)),
+                'Website not compiled when no buildDir property in config.yml')
         
         })
         it('should compile a website when a buildDir property is provided in config.yml', function () {
         
-            assert(fs.existsSync(siteBuildDirConfig.paths.buildDir), 'Website not compiled when providing a buildDir in config.yml')
+            assert(fs.existsSync(siteBuildDirConfig.paths.buildDir),
+                'Website not compiled when providing a buildDir in config.yml')
         
         })
         it('should compile a valid website with the required folders and same number of files', function () { 
             
-            assert(fs.existsSync(siteBuildDirConfig.paths.assets.output), 'No ' + siteBuildDirConfig.paths.assets.output + ' directory in compiled valid website: ' + siteBuildDir)
+            assert(fs.existsSync(siteBuildDirConfig.paths.assets.output),
+                'No ' + siteBuildDirConfig.paths.assets.output + ' directory in compiled valid website: ' + siteBuildDir)
 
             var stylesheets = fs.readdirSync(siteBuildDirConfig.paths.assets.output).filter(function (item) {return item.match(/\.css$/)})
             assert.equal(stylesheets.length, 3, 'Missing stylesheets in compiled valid website: ' + siteBuildDir)
                 
-            assert(fs.existsSync(siteBuildDirConfig.paths.posts.output), 'No ' + siteBuildDirConfig.paths.posts.output + ' directory in compiled valid website: ' + siteBuildDir)
+            assert(fs.existsSync(siteBuildDirConfig.paths.posts.output),
+                'No ' + siteBuildDirConfig.paths.posts.output + ' directory in compiled valid website: ' + siteBuildDir)
                 
-            assert(fs.existsSync(path.join(siteBuildDirConfig.paths.posts.output, 'hello-world.html')), 'Missing blog post in compiled valid website: ' + siteBuildDir)
+            assert(fs.existsSync(path.join(siteBuildDirConfig.paths.posts.output, 'hello-world.html')),
+                'Missing blog post in compiled valid website: ' + siteBuildDir)
             
-            assert(fs.existsSync(path.join(siteBuildDirConfig.paths.buildDir, 'about.html')), 'Missing page about.html in compiled valid website')
+            assert(fs.existsSync(path.join(siteBuildDirConfig.paths.buildDir, 'about.html')),
+                'Missing page about.html in compiled valid website')
 
-            assert(fs.existsSync(path.join(siteBuildDirConfig.paths.buildDir, 'project/index.html')), 'Missing nested page project/index.html in compiled valid website')
+            assert(fs.existsSync(path.join(siteBuildDirConfig.paths.buildDir, 'project/index.html')),
+                'Missing nested page project/index.html in compiled valid website')
         
         })
         it('should include variables from a page file metadatas', function () {

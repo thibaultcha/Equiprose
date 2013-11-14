@@ -16,10 +16,6 @@ describe('compile.js', function () {
 		})
 	})
 
-	describe.skip('#compileStylus()', function () {
-
-	})
-
 	describe('#compileStylusFile()', function () {
 		var stylusfile = path.join(testFiles, 'test.styl')
 
@@ -118,7 +114,7 @@ describe('compile.js', function () {
 				done()
 			})
 		})
-		  it('should render markdown content as parsed HTML', function (done) {
+		it('should render markdown content as parsed HTML', function (done) {
 			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data, options) {
 				assert.ifError(err)
 				done()

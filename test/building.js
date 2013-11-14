@@ -10,6 +10,33 @@ var helpers = require('../lib/helpers.js')
 describe('building.js', function () {
     var config = parse.parseConfig('test/test-sites/build-dir')
 
+    describe('#newWebsite()', function () {
+        var globalConf = parse.parseGlobalConfig()
+        var newWebsite = 'test/new-website'
+
+        before(function (done) {
+            build.newWebsite(newWebsite, function (err) {
+                assert.ifError(err)
+                done()
+            })
+        })
+        it('should create the directory if not existing', function () {
+            assert(fs.existsSync(newWebsite), 'Did not create the website directory')
+        })
+        it('should copy the skeleton to the given path', function () {
+            assert(fs.existsSync(path.join(newWebsite, globalConf.paths.pages.input)), 'Missing pages input directory')
+            assert(fs.existsSync(path.join(newWebsite, globalConf.paths.posts.input)), 'Missing posts input directory')
+            assert(fs.existsSync(path.join(newWebsite, globalConf.paths.assets.input)), 'Missing assets input directory')
+            assert(fs.existsSync(path.join(newWebsite, globalConf.paths.templateDir)), 'Missing template directory')
+        })
+        after(function (done) {
+            fse.remove(newWebsite, function (err) {
+                assert.ifError(err)
+                done()
+            })
+        })
+    })
+
 	describe('#prepareOutputDir()', function () {
         it('should recreate the buildDir if already present', function (done) {
             before(function (done) {
@@ -194,8 +221,7 @@ describe('building.js', function () {
         it('should include variables from a post file metadatas (retrieved from fetchBlogPosts())', function () {
             var postFiles = fs.readdirSync(siteBuildDirConfig.paths.posts.output)
             // test on hello-world.html
-            var contentPost0 = fs.readFileSync(path.join(siteBuildDirConfig.paths.posts.output, postFiles[0]), { encoding: 'utf-8' }) 
-            console.log(contentPost0)   
+            var contentPost0 = fs.readFileSync(path.join(siteBuildDirConfig.paths.posts.output, postFiles[0]), { encoding: 'utf-8' })   
             assert(/<h1 id="post-title">Hello World<\/h1>/.test(contentPost0), 'Missing variable title for compiled blog post')
             assert(/<h2 id="post-author">AuthorName<\/h2>/.test(contentPost0), 'Missing variable author for compiled blog post')
             assert(/<h2 id="post-date">07 Oct 2013<\/h2>/.test(contentPost0), 'Missing variable date for compiled blog post')

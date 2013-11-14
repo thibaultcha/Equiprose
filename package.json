@@ -16,6 +16,7 @@
     "url": "http://github.com/thibaultCha/Miranda.git"
   },
   "dependencies": {
+    "commander": "2.0.0",
     "jade": "*",
     "stylus": "*",
     "marked": "*",

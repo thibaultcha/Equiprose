@@ -1,9 +1,7 @@
-```json
-{
-	"layout": "blog",
-	"title": "Blog"
-}
-```
+=
+layout: page
+title: Blog
+=
 
 Welcome! 
 

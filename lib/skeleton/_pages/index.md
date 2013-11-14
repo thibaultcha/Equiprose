@@ -1,10 +1,8 @@
-```json
-{
-    "layout"    : "page",
-    "customCss" : "home",
-    "title"     : "Home"
-}
-```
+=
+layout: page
+title: Home
+slug: index
+=
 
 Hello :grin: 
 

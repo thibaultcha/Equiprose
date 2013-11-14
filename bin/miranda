@@ -1,1 +1,23 @@
-// Later. :)
+#!/usr/bin/env node
+
+var builder = require('../lib/building.js')
+var program = require('commander')
+
+program
+  .version('0.1.0')
+  .option('compile <path>', 'Compile a website')
+  .option('new <path>', 'Create a new website at given path')
+  .parse(process.argv)
+
+if (program.new) {
+	builder.newWebsite(program.new, function (err) {
+		if (err) throw err
+		console.log('New website at path: ' + program.new)
+	})
+}
+else if (program.compile) {
+	builder.buildSite(program.compile, function (err) {
+		if (err) throw err
+		console.log('Compiling website at path: ' + program.compile)
+	})
+}

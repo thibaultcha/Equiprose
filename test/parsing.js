@@ -77,7 +77,7 @@ describe('parsing.js', function () {
             assert(siteBuildDirConfig.toJade, 'No custom property found')
             assert(siteBuildDirConfig.toJade.owner, 'Custom property `owner` has not been attached to the config object')
             assert(siteBuildDirConfig.toJade.website, 'Custom property `website` has not been attached to the config object')
-            assert.equal('Joe', siteBuildDirConfig.toJade.owner.name, 'Custom property `owner.name` is incorrect')
+            assert.equal('OwnerName', siteBuildDirConfig.toJade.owner.name, 'Custom property `owner.name` is incorrect')
             assert.equal('Build dir', siteBuildDirConfig.toJade.website.title, 'Custom property `website.title` is incorrect')
         })
         it('should throw an error when no config.yml file is found', function () {

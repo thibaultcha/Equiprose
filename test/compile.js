@@ -1,13 +1,13 @@
 var assert = require('assert')
-, fs       = require('fs')
-, fse      = require('fs-extra')
-, path     = require('path')
+var fs     = require('fs')
+var fse    = require('fs-extra')
+var path   = require('path')
 
 var compile = require('../lib/compile.js')
 
 describe('compile.js', function () {
 	var testFiles = 'test/test-files/compile'
-	, outputDir   = path.join(testFiles, 'rendering')
+	var outputDir   = path.join(testFiles, 'rendering')
 
 	beforeEach(function (done) {
 		fse.mkdirs(outputDir, function (err) {
@@ -110,14 +110,11 @@ describe('compile.js', function () {
 				assert(options.posts === posts, 'No posts array sent to compiled page')
 				done()
 			})
-		})
-		
-		// Those implicitely mean that the variable is in options
-		
+		})		
 		it('should send the content of a markdown file to the jade template', function (done) {
-			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data) {
+			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data, options) {
 				assert.ifError(err)
-				assert(data.match(/>Valid markdown compilation test.</), 'Markdown content has not been sent to the jade template')
+				assert.equal(options.content, 'Valid markdown compilation test.', 'Markdown content has not been sent to the jade template')
 				done()
 			})
 		})
@@ -146,18 +143,17 @@ describe('compile.js', function () {
 			  	toJade: {
 			  			title: 'It\'s snowing today',
 			     		content: 'It\'s snowing today',
-			     		author: ' ',
-			     		date: '13 Nov 2013',
+			     		author: 'Joe',
+			     		date: 'Mon Oct 07 2013 18:26:47 GMT+0200 (CEST)',
 			     		link: 'its-snowing-today.html'
 			    	}
 			    }
 
 			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, postMetas, function (err, outputFile, data, options) {
 				assert.ifError(err)
-
-				// TODO
-				assert(options.metas.date)
-				assert(options.metas.author)
+				assert(options.metas.date, 'No date property in metas for post file')
+				assert.equal(options.metas.author, 'Joe', 'No author property in metas for post file')
+				assert.equal(options.metas.title, 'It\'s snowing today', 'Missing or incorrect title property in metas for post file')
 				done()
 			})
 		})

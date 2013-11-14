@@ -31,10 +31,10 @@ describe('parsing.js', function () {
     })
 
     describe('#parseConfig()', function () {
-        var siteNoBuildDirConfig
-        var siteBuildDirConfig
-        var siteAbsoluteBuildDirConfig
-        var siteOverrideConfig
+        var siteNoBuildDirConfig = {}
+        var siteBuildDirConfig = {}
+        var siteAbsoluteBuildDirConfig = {}
+        var siteOverrideConfig = {}
 
         before(function () {
             siteNoBuildDirConfig       = parse.parseConfig('test/test-sites/no-build-dir')
@@ -105,7 +105,7 @@ describe('parsing.js', function () {
     })
 
     describe('#parsePostMetadatas()', function () {
-        var postmetas
+        var postmetas = {}
 
         beforeEach(function () {
             postmetas = parse.parsePostMetadatas(postRightFormat, 'Tests', 'DD MMM YYYY')

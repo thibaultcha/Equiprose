@@ -7,7 +7,7 @@ var compile = require('../lib/compile.js')
 
 describe('compile.js', function () {
 	var testFiles = 'test/test-files/compile'
-	var outputDir   = path.join(testFiles, 'rendering')
+	var outputDir = path.join(testFiles, 'rendering')
 
 	beforeEach(function (done) {
 		fse.mkdirs(outputDir, function (err) {
@@ -114,10 +114,16 @@ describe('compile.js', function () {
 		it('should send the content of a markdown file to the jade template', function (done) {
 			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data, options) {
 				assert.ifError(err)
-				assert.equal(options.content, 'Valid markdown compilation test.', 'Markdown content has not been sent to the jade template')
+				assert(options.content.match(/Valid markdown compilation test./), 'Markdown content has not been sent to the jade template')
 				done()
 			})
 		})
+		  it('should render markdown content as parsed HTML', function (done) {
+			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data, options) {
+				assert.ifError(err)
+				done()
+			})	
+    	})
 		it('should import metadatas variables from markdown metadatas to Jade', function (done) {
 			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data, options) {
 				assert.ifError(err)

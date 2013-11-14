@@ -94,8 +94,8 @@ describe('building.js', function () {
 
     describe('#compileStylesheets()', function () {
         this.slow(300)
-        var stylPath = config.paths.templateDir
-        var outputCss  = path.join(config.sitePath, 'rendering-css')
+        var stylPath  = config.paths.templateDir
+        var outputCss = path.join(config.sitePath, 'rendering-css')
 
         beforeEach(function (done) {
             fse.remove(outputCss, function (err) {
@@ -117,9 +117,13 @@ describe('building.js', function () {
                 helpers.getFiles(stylPath, new RegExp(/\.styl$/), function (err, items) {
                     assert.ifError(err)
                     items.forEach(function (item, idx) {
+                        
                         var cssFile = path.join(outputCss, path.basename(item).replace(/\.styl$/, '.css'))
                         assert(fs.existsSync(cssFile), 'Inexistant css file: ' + cssFile + ' for file: ' + item)
-                        if (idx == items.length - 1) done()
+                        
+                        if (idx == items.length - 1) {
+                            done()
+                        }
                     })
                 })
             })
@@ -183,19 +187,19 @@ describe('building.js', function () {
         })
         it('should include variables from a page file metadatas', function () {
             var contentPage = fs.readFileSync(path.join(siteBuildDirConfig.paths.buildDir, 'index.html'), { encoding: 'utf-8' })
-            assert(contentPage.match(/<title>Home<\/title>/), 'Missing variable title for compiled page')
-            assert(contentPage.match(/<div id="content">Hello, I am Miranda.<\/div>/), 'Missing variable content for compiled page')
-            assert(contentPage.match(/<div id="custom">OwnerName<\/div>/), 'Missing custom variable for compiled page')
+            assert(/<title>Home<\/title>/.test(contentPage), 'Missing variable title for compiled page')
+            assert(/<div id="content"><p>Hello, I am Miranda.<\/p><\/div>/.test(contentPage), 'Missing variable content for compiled page')
+            assert(/<div id="custom">OwnerName<\/div>/.test(contentPage), 'Missing custom variable for compiled page')
         })
         it('should include variables from a post file metadatas (retrieved from fetchBlogPosts())', function () {
             var postFiles = fs.readdirSync(siteBuildDirConfig.paths.posts.output)
-
             // test on hello-world.html
-            var contentPost0 = fs.readFileSync(path.join(siteBuildDirConfig.paths.posts.output, postFiles[0]), { encoding: 'utf-8' })
-            assert(contentPost0.match(/<h1 id="post-title">Hello World<\/h1>/), 'Missing variable title for compiled blog post')
-            assert(contentPost0.match(/<h2 id="post-author">AuthorName<\/h2>/), 'Missing variable author for compiled blog post')
-            assert(contentPost0.match(/<h2 id="post-date">07 Oct 2013<\/h2>/), 'Missing variable date for compiled blog post')
-            assert(contentPost0.match(/<div id="post-content">My first blog post<\/div>/), 'Missing variable content for compiled blog post')
+            var contentPost0 = fs.readFileSync(path.join(siteBuildDirConfig.paths.posts.output, postFiles[0]), { encoding: 'utf-8' }) 
+            console.log(contentPost0)   
+            assert(/<h1 id="post-title">Hello World<\/h1>/.test(contentPost0), 'Missing variable title for compiled blog post')
+            assert(/<h2 id="post-author">AuthorName<\/h2>/.test(contentPost0), 'Missing variable author for compiled blog post')
+            assert(/<h2 id="post-date">07 Oct 2013<\/h2>/.test(contentPost0), 'Missing variable date for compiled blog post')
+            assert(/<div id="post-content"><p>My first blog post<\/p><\/div>/.test(contentPost0), 'Missing or invalid variable content for compiled blog post')
         })
 
         after(function (done) {

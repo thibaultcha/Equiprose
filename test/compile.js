@@ -59,7 +59,7 @@ describe('compile.js', function () {
     			done()
     		})
     	})
-		it('should throw an error if not layout file is found', function (done) {
+		it('should throw an error if no layout file is found', function (done) {
 			options.layout = 'inexistant'
 			var fn = function () {
 				compile.renderJade('test', options, function (err, html) {
@@ -73,23 +73,45 @@ describe('compile.js', function () {
 
 	describe('#compileMarkdownToFile()', function () {
 		var mdFile = path.join(testFiles, 'valid-page.md')
-		var toJadeConfig = {
-			owner: {
-				name: 'Joe'
+		var config = {
+			paths: {
+			 	templateDir: testFiles,
+			 	buildDir: outputDir,
+			 	pages: {
+			    	input: "_pages"
+			 	}
+			},
+			toJade: {
+				owner: {
+					name: 'Joe'
+				}
 			}
 		}
+		var fakePosts = [
+			{ toJade: { title: 'Hello World' } },
+			{ toJade: { title: 'It\' snowing today' } }
+		]
 
 		it('should create the outputDir if not existing', function (done) {
-			var customOutput = path.join(outputDir, 'createdir')
-			compile.compileMarkdownToFile(mdFile, testFiles, customOutput, toJadeConfig, null, function (err) {
+			before(function (next) {
+				fs.exists(config.paths.buildDir, function (exists) {
+					if (exists) {
+						fse.remove(config.paths.buildDir, function (err) {
+							assert.ifError(err)
+							done()
+						})
+					}
+				})
+			})
+			compile.compileMarkdownToFile(mdFile, config, fakePosts, function (err) {
 				assert.ifError(err)
-				assert(fs.existsSync(customOutput), 'The output directory was not created')
+				assert(fs.existsSync(config.paths.buildDir), 'The output directory was not created')
 				done()
 			})
 		})
 		it('should render a file to path <outputDir/<filename>.html', function (done) {
 			var expectedOutputFile = path.join(outputDir, 'valid.html')
-			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile) {
+			compile.compileMarkdownToFile(mdFile, config, fakePosts, function (err, outputFile) {
 				assert.ifError(err)
 				assert(fs.existsSync(outputFile), 'No HTML file at path: ' + outputFile + 'for file: ' + mdFile)
 				assert.equal(outputFile, expectedOutputFile, 'invalid outputFile path or naming')
@@ -97,31 +119,28 @@ describe('compile.js', function () {
 			})
 		})
 		it('should send a `posts` property containing an array of blog posts to each compiled page', function (done) {
-			var posts = [
-				{ title: 'Hello World' },
-				{ title: 'It\'s snowing today' }
-			]
-			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, posts, function (err, outputFile, data, options) {
+			compile.compileMarkdownToFile(mdFile, config, fakePosts, function (err, outputFile, data, options) {
 				assert.ifError(err)
-				assert(options.posts === posts, 'No posts array sent to compiled page')
+				assert.equal(options.posts[0], fakePosts[0].toJade)
+				assert.equal(options.posts[1], fakePosts[1].toJade)
 				done()
 			})
-		})		
+		})
 		it('should send the content of a markdown file to the jade template', function (done) {
-			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data, options) {
+			compile.compileMarkdownToFile(mdFile, config, fakePosts, function (err, outputFile, data, options) {
 				assert.ifError(err)
 				assert(options.content.match(/Valid markdown compilation test./), 'Markdown content has not been sent to the jade template')
 				done()
 			})
 		})
 		it('should render markdown content as parsed HTML', function (done) {
-			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data, options) {
+			compile.compileMarkdownToFile(mdFile, config, fakePosts, function (err, outputFile, data, options) {
 				assert.ifError(err)
 				done()
 			})	
     	})
 		it('should import metadatas variables from markdown metadatas to Jade', function (done) {
-			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data, options) {
+			compile.compileMarkdownToFile(mdFile, config, fakePosts, function (err, outputFile, data, options) {
 				assert.ifError(err)
 				assert(options.metas.title)
 				assert(options.content)
@@ -129,9 +148,9 @@ describe('compile.js', function () {
 			})
 		})
 		it('should import website-specific config.yml variables from markdown to Jade', function (done) {
-			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err, outputFile, data, options) {
+			compile.compileMarkdownToFile(mdFile, config, fakePosts, function (err, outputFile, data, options) {
 				assert.ifError(err)
-				assert.equal(options.config.owner.name, 'Joe')
+				assert.equal(options.config.owner.name, config.toJade.owner.name)
 				done()
 			})
 		})
@@ -150,7 +169,7 @@ describe('compile.js', function () {
 			    	}
 			    }
 
-			compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, postMetas, function (err, outputFile, data, options) {
+			compile.compileMarkdownToFile(mdFile, config, fakePosts, postMetas, function (err, outputFile, data, options) {
 				assert.ifError(err)
 				assert(options.metas.date, 'No date property in metas for post file')
 				assert.equal(options.metas.author, 'Joe', 'No author property in metas for post file')
@@ -161,7 +180,7 @@ describe('compile.js', function () {
 		it('should throw an error if not layout file is found', function (done) {
 			var mdFile = path.join('test/test-files/errors', 'page-no-layout.md')
 			var fn = function () {
-				compile.compileMarkdownToFile(mdFile, testFiles, outputDir, toJadeConfig, null, function (err) {
+				compile.compileMarkdownToFile(mdFile, config, fakePosts, function (err) {
 					done()
 					assert.ifError(err)
 				})

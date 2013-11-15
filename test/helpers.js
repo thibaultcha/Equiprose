@@ -115,6 +115,24 @@ describe('helpers.js', function () {
         })
     })
 
+    describe('#recursiveExists()', function () {
+        it('should return an empty array if filename is not in given arboresence', function (done) {
+            helpers.recursiveExists('foo.txt', 'test/', function (err, paths) {
+                assert.ifError(err)
+                assert.equal(0, paths.length)
+                done()
+            })
+        })
+        it('should return an array containing paths to matches if filename is in given arborescence', function (done) {
+            helpers.recursiveExists('helpers.js', 'test/', function (err, paths) {
+                assert.ifError(err)
+                assert.equal(1, paths.length)
+                assert.equal(paths[0], 'test/helpers.js')
+                done()
+            })
+        })
+    })
+
     describe('#enumerateProperties()', function () {
         var obj = { 
             foo: 'foo', 

@@ -17,4 +17,4 @@ test-cov:
 test-coveralls:
 	$(MAKE) test REPORTER=mocha-lcov-reporter | $(BIN)/coveralls
 
-.PHONY: install dev site test clean test-coveralls test-cov
+.PHONY: install dev test test-coveralls test-cov

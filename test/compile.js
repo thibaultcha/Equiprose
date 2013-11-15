@@ -125,7 +125,6 @@ describe('compile.js', function () {
 				assert.ifError(err)
 				assert(options.metas.title)
 				assert(options.content)
-				assert(options.metas.title)
 				done()
 			})
 		})

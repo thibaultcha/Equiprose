@@ -1,135 +1,70 @@
-/** FUNCTIONS **/
+@import 'functions'
 
-border-radius()
-  -webkit-border-radius arguments
-  -moz-border-radius arguments
-  border-radius arguments
+// Dimensions
+global-width = 650px
 
-center()
-  margin 0 auto
-
-/** BASE STYLE **/
-
-@font-face
-  font-family 'Quicksand'
-  src url('../Quicksand_Book.otf')
-@font-face
-  font-family 'ProximaNova'
-  src url('../ProximaNova-Light.otf')
-@font-face
-  font-family 'ProximaNova'
-  font-style italic
-  src url('../ProximaNova-LightIt.otf')
-@font-face
-  font-family 'ProximaNova'
-  font-weight bold
-  src url('../ProximaNova-Bold.otf')
-@font-face
-  font-family 'ProximaNova'
-  font-weight bold
-  font-style italic
-  src url('../ProximaNova-BoldIt.otf')
-
-// Nice colors
-nice-salmon = #fa5b4d
-nice-yellow = #fbcf55
-nice-green  = #4d926f
-// Main colors
-main-color = nice-green
+// Colors
 background-color = #faf9f0
+link-color = #607EEF
+link-hover = lighten(link-color, 30%)
 text-color = #444
-// Main layout values
-container-width = 550px
 
-body
-  font-family 'Georgia'
-  background-color background-color
-  color text-color
+global-reset()
 
 a
   text-decoration none
-  color #607EEF
+  color link-color
+a:hover
+	color link-hover
 
-.circled-img-wrap
-  position relative
-  overflow hidden
-  float left
-  img
-    position relative
-    z-index 998
-  .img-overlay
-    z-index 999
-    background-color transparent
-    width 70px
-    height 70px
-    position absolute 
-    top -20px
-    left -20px
-    border-radius 70px
-    -moz-border-radius 70px
-    -webkit-border-radius 70px
-    border 20px solid main-color
+body
+  font-family 'Georgia'
+  font-size 18px
+  //background-color background-color
+  color text-color
+::selection
+	background rgba(93, 217, 190, 0.5)
+	color white
 
 header
-  height 6em
-  background-color main-color
-  border-bottom 1px solid darken(main-color, 30%)
-  #avatar
-    float left
-    margin -1.5em 0 0 -6em
-  nav
-    width container-width + 5
-    center()
-    padding-top 2.3em
-    font-family 'Quicksand'
-    color #fff
-    text-shadow 0px -1px 0px darken(main-color, 10%)
-    a
-      color inherit
-    #title
-      float left
-      font-size 18pt
-    #links
-      float right
-      margin .2em 0 0 0
-      li
-        display inline
-        margin-left 2em
-    a:hover
-      color nice-yellow
+	width global-width
+	center()
+	font-family 'Myriad Pro'
+	color #ABE
+	//color #5DD9BE
+	h1
+		width 150px
+		float left
+	nav
+		float right
+		margin-top 2em
+		a
+			float right
+			display inline
 
-#content-container
-  width container-width
-  margin 50px auto
-  p
-    margin 1em 0
-  li
-    padding 5px 0
-  h1
-    font-size 20pt
-  h2
-    font-size 12pt
-  p
-    line-height 1.8
-  hr
-    border 0
-    margin 25pt 0
-    height 1px
-    background-color lighten(text-color, 70%)
-  strong
-    background-color main-color
-    color background-color
-    padding 0 3px
-    border-radius(3px)
-  ul
-    list-style circle
-  ol
-    list-style-type decimal
+.container
+	clear both
+	width global-width
+	center()
+	h3
+		font-family 'Myriad Pro'
+	.posts
+		padding 0
+		margin-bottom 3em
+		li
+			padding 0.5em 0
+			a
+				color text-color
+			.post-date
+				color link-color
+				font-size 16px
+		:hover
+			color red
+
 
 footer
-  font-family 'Georgia'
-  width container-width
-  center()
-  padding 1em 0 2em 0
-  border-top 1px dotted #ccc
-  font-size 9pt
+	width global-width
+	center()
+	padding 0.5em 0
+	font-size 0.8em
+	border-top 1px dotted #ccc

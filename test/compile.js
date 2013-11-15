@@ -73,12 +73,16 @@ describe('compile.js', function () {
 
 	describe('#compileMarkdownToFile()', function () {
 		var mdFile = path.join(testFiles, 'valid-page.md')
+		var outputBlog = path.join(outputDir, 'blog')
 		var config = {
 			paths: {
 			 	templateDir: testFiles,
 			 	buildDir: outputDir,
 			 	pages: {
 			    	input: "_pages"
+			 	},
+			 	posts: {
+			 		output: outputBlog
 			 	}
 			},
 			toJade: {

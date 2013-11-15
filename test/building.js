@@ -183,7 +183,7 @@ describe('building.js', function () {
         })
     })
 
-    describe.skip('#buildSite()', function () {
+    describe('#buildSite()', function () {
         this.slow(500)
         var siteNoBuildDir = 'test/test-sites/no-build-dir'
         var siteNoBuildDirConfig = ''

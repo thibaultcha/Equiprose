@@ -3,25 +3,27 @@ var path    = require('path')
 var fs      = require('fs')
 var fse     = require('fs-extra')
 
-var parse   = require('../lib/parsing.js')
-var build   = require('../lib/building.js')
-var helpers = require('../lib/helpers.js')
+var parse   = require('../lib/parsing')
+var build   = require('../lib/building')
+var helpers = require('../lib/helpers')
 
 describe('building.js', function () {
     var config = parse.parseConfig('test/test-sites/build-dir')
 
     describe('#newWebsite()', function () {
-        var globalConf = parse.parseGlobalConfig()
-        var newWebsite = 'test/new-website/'
-        var notEmpty   = 'test/not-empty/'
+        var globalConf  = parse.parseGlobalConfig()
+        var newWebsite  = 'test/new-website/'
+        var notEmpty    = 'test/not-empty/'
+        var websitepath = ''
 
         before(function (done) {
             fse.mkdirp(notEmpty, function (err) {
                 assert.ifError(err)
                 fs.writeFile(notEmpty + '/file.txt', 'Lorem Ipsum', { encoding: 'utf-8' }, function (err) {
                     assert.ifError(err)
-                    build.newWebsite(newWebsite, function (err) {
+                    build.newWebsite(newWebsite, function (err, sitePath) {
                         assert.ifError(err)
+                        websitepath = sitePath
                         done()
                     })
                 })
@@ -35,6 +37,9 @@ describe('building.js', function () {
             assert(fs.existsSync(path.join(newWebsite, globalConf.paths.posts.input)), 'Missing posts input directory')
             assert(fs.existsSync(path.join(newWebsite, globalConf.paths.assets.input)), 'Missing assets input directory')
             assert(fs.existsSync(path.join(newWebsite, globalConf.paths.templateDir)), 'Missing template directory')
+        })
+        it('should return the absolute path of the new website in callback', function () {
+            assert.equal(websitepath.charAt(0), '/')
         })
         it.skip('should throw an error if the target directory is not empty', function (done) {
             var fn = function () {
@@ -140,8 +145,8 @@ describe('building.js', function () {
 
     describe('#compileStylesheets()', function () {
         this.slow(300)
-        var stylPath  = config.paths.templateDir
-        var outputCss = path.join(config.sitePath, 'rendering-css')
+        var stylPath    = config.paths.templateDir
+        var outputCss   = path.join(config.sitePath, 'rendering-css')
 
         beforeEach(function (done) {
             fse.remove(outputCss, function (err) {
@@ -191,19 +196,26 @@ describe('building.js', function () {
         var siteBuildDir = 'test/test-sites/build-dir'
         var siteBuildDirConfig = ''
 
+        var websitePath = ''
+
         before(function (done) {
             siteNoBuildDirConfig = parse.parseConfig(siteNoBuildDir)
             siteBuildDirConfig   = parse.parseConfig(siteBuildDir)
 
             build.buildSite(siteNoBuildDir, function (err) {
                 assert.ifError(err)
-                build.buildSite(siteBuildDir, function (err) {
+                build.buildSite(siteBuildDir, function (err, sitePath) {
                     assert.ifError(err)
+                    websitepath = sitePath
                     done()
                 })
             })
         })
 
+
+        it('should return the absolute path to the compiled website in the callback', function () {
+            assert.equal(websitepath.charAt(0), '/')
+        })
         it('should compile a website to the default build directory if no buildDir is provided in config.yml', function () {
         
             var globalConfig = parse.parseGlobalConfig()

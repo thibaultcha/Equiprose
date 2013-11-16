@@ -1,6 +1,6 @@
 var assert = require('assert')
 var path   = require('path')
-var parse  = require('../lib/parsing.js')
+var parse  = require('../lib/parsing')
 
 describe('parsing.js', function () {
     var testFiles       = 'test/test-files'

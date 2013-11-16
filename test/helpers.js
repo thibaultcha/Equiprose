@@ -1,6 +1,6 @@
 var assert = require('assert')
 , fs       = require('fs')
-, helpers  = require('../lib/helpers.js')
+, helpers  = require('../lib/helpers')
 
 describe('helpers.js', function () {
 

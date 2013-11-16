@@ -3,7 +3,7 @@ var fs     = require('fs')
 var fse    = require('fs-extra')
 var path   = require('path')
 
-var compile = require('../lib/compile.js')
+var compile = require('../lib/compile')
 
 describe('compile.js', function () {
 	var testFiles = 'test/test-files/compile'

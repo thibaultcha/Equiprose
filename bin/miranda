@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-
-var builder = require('../lib/building.js')
 var program = require('commander')
+var colors  = require('colors')
+var builder = require('../lib/building')
 
 program
   .version('0.1.0')
@@ -10,14 +10,17 @@ program
   .parse(process.argv)
 
 if (program.new) {
-	builder.newWebsite(program.new, function (err) {
+	builder.newWebsite(program.new, function (err, path) {
 		if (err) throw err
-		console.log('New website at path: ' + program.new)
+		console.log('✔'.green + ' New website created at path ' + path)
 	})
 }
 else if (program.compile) {
-	builder.buildSite(program.compile, function (err) {
+	builder.buildSite(program.compile, function (err, path) {
 		if (err) throw err
-		console.log('Compiling website at path: ' + program.compile)
+		console.log('✔'.green + ' Compiled website at path: ' + path)
 	})
+}
+else {
+	program.help()
 }

@@ -52,20 +52,20 @@ describe('parsing.js', function () {
             assert(siteBuildDirConfig.sitePath)
             assert(siteNoBuildDirConfig.sitePath)
         })
-        it('should always return paths relative to the `sitePath` property in `paths` in paths are relative', function () {
+        it('should convert paths to absolute when `paths` are relative', function () {
             // relative buildDir
-            assert.equal(siteBuildDirConfig.paths.buildDir, path.join(siteBuildDirConfig.sitePath, 'dist'), 
+            assert.equal(siteBuildDirConfig.paths.buildDir, path.resolve(path.join(siteBuildDirConfig.sitePath, 'dist')), 
                 'buildDir is incorrect for relative buildDir')
-            assert.equal(siteBuildDirConfig.paths.assets.output, path.join(siteBuildDirConfig.sitePath, 'dist/assets'), 
+            assert.equal(siteBuildDirConfig.paths.assets.output, path.resolve(path.join(siteBuildDirConfig.sitePath, 'dist/assets')), 
                 'assets output path is incorrect for relative buildDir')
             
             // no buildDir
-            assert.equal(siteNoBuildDirConfig.paths.buildDir, path.join(siteNoBuildDirConfig.sitePath, 'www'), 
+            assert.equal(siteNoBuildDirConfig.paths.buildDir, path.resolve(path.join(siteNoBuildDirConfig.sitePath, 'www')), 
                 'buildDir property is not relative to sitePath for no buildDir')
-            assert.equal(siteNoBuildDirConfig.paths.assets.output, path.join(siteNoBuildDirConfig.sitePath, 'www/assets'), 
+            assert.equal(siteNoBuildDirConfig.paths.assets.output, path.resolve(path.join(siteNoBuildDirConfig.sitePath, 'www/assets')), 
                 'assets output path incorrect for no buildDir')
         })
-        it('should keep absolute paths in `paths` property if those paths are absolute', function () {
+        it('should keep absolute paths when `paths` are absolute', function () {
             // absolute buildDir
             assert.equal(siteAbsoluteBuildDirConfig.paths.buildDir, '/tmp', 
                 'buildDir property is incorrect when absolute path is given')
@@ -75,9 +75,9 @@ describe('parsing.js', function () {
         it('should override any global property if the same property is overriden in config.yml', function () {
             assert.equal(siteOverrideConfig.dateFormat, 'MMM DD YYYY')
             assert.equal(siteOverrideConfig.paths.buildDir, '/tmp')
-            assert.equal(siteOverrideConfig.paths.templateDir, path.join(siteOverrideConfig.sitePath, 'custom_template'))
-            assert.equal(siteOverrideConfig.paths.assets.input, path.join(siteOverrideConfig.sitePath, 'custom_assets'))
-            assert.equal(siteOverrideConfig.paths.assets.output, path.join(siteOverrideConfig.paths.buildDir, 'myassets'))
+            assert.equal(siteOverrideConfig.paths.templateDir, path.resolve(path.join(siteOverrideConfig.sitePath, 'custom_template')))
+            assert.equal(siteOverrideConfig.paths.assets.input, path.resolve(path.join(siteOverrideConfig.sitePath, 'custom_assets')))
+            assert.equal(siteOverrideConfig.paths.assets.output, path.resolve(path.join(siteOverrideConfig.paths.buildDir, 'myassets')))
         })
         it('should include a custom property if provided in the website config file', function () {
             assert(siteBuildDirConfig.toJade, 'No custom property found in test config file')

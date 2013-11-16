@@ -3,10 +3,15 @@ var program = require('commander')
 var colors  = require('colors')
 var builder = require('../lib/building')
 
+function list (val) {
+	return val.split(' ')
+}
+
 program
   .version('0.1.0')
   .option('compile <path>', 'Compile a website')
-  .option('new <path>', 'Create a new website at given path')
+  .option('create <path>', 'Create a new website at given path')
+  .option('test <a> <b>', 'a test', list)
   .parse(process.argv)
 
 if (program.new) {
@@ -20,6 +25,9 @@ else if (program.compile) {
 		if (err) throw err
 		console.log('✔'.green + ' Compiled website at path: ' + path)
 	})
+}
+else if (program.test) {
+	console.log(program.test)
 }
 else {
 	program.help()

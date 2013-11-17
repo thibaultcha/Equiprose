@@ -1,7 +1,15 @@
 #!/usr/bin/env node
 var program = require('commander')
 var colors  = require('colors')
+var path    = require('path')
+
+var parser  = require('../lib/parsing')
 var builder = require('../lib/building')
+
+process.on('uncaughtException', function (err) {
+    console.log('✘'.red + ' ' + err.message)
+    process.exit(1)
+})
 
 function list (val) {
 	return val.split(' ')
@@ -9,21 +17,33 @@ function list (val) {
 
 program
   .version('0.1.0')
-  .option('compile <path>', 'Compile a website')
+  .option('compile [path]', 'Compile a website')
   .option('create <path>', 'Create a new website at given path')
   .option('test <a> <b>', 'a test', list)
   .parse(process.argv)
 
-if (program.new) {
-	builder.newWebsite(program.new, function (err, path) {
+if (program.create) {
+	builder.newWebsite(program.create, function (err, path) {
 		if (err) throw err
-		console.log('✔'.green + ' New website created at path ' + path)
+		console.log('✔'.green + ' New website created at path: ' + path)
 	})
 }
 else if (program.compile) {
-	builder.buildSite(program.compile, function (err, path) {
+	var configPath = '.'
+	if (typeof(program.compile) === 'string') {
+		configPath = program.compile
+	}
+	var siteConfig = parser.parseConfig(configPath)
+
+	console.log('Compiling website using config at path: ' + path.resolve(configPath)+'/config.yml')
+	console.log('    pages: ' + siteConfig.paths.pages.input)
+	console.log('    posts: ' + siteConfig.paths.posts.input)
+	console.log('   assets: ' + siteConfig.paths.assets.input)
+	console.log(' template: ' + siteConfig.paths.templateDir)
+
+	builder.buildSite(siteConfig, function (err, path) {
 		if (err) throw err
-		console.log('✔'.green + ' Compiled website at path: ' + path)
+		console.log('\n'+'✔'.green + ' Compiled website at path: ' + path)
 	})
 }
 else if (program.test) {

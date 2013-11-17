@@ -191,20 +191,20 @@ describe('building.js', function () {
     describe('#buildSite()', function () {
         this.slow(500)
         var siteNoBuildDir = 'test/test-sites/no-build-dir'
-        var siteNoBuildDirConfig = ''
+        var siteNoBuildDirConfig = {}
         
         var siteBuildDir = 'test/test-sites/build-dir'
-        var siteBuildDirConfig = ''
+        var siteBuildDirConfig = {}
 
-        var websitePath = ''
+        var websitepath = ''
 
         before(function (done) {
             siteNoBuildDirConfig = parse.parseConfig(siteNoBuildDir)
             siteBuildDirConfig   = parse.parseConfig(siteBuildDir)
 
-            build.buildSite(siteNoBuildDir, function (err) {
+            build.buildSite(siteNoBuildDirConfig, function (err) {
                 assert.ifError(err)
-                build.buildSite(siteBuildDir, function (err, sitePath) {
+                build.buildSite(siteBuildDirConfig, function (err, sitePath) {
                     assert.ifError(err)
                     websitepath = sitePath
                     done()

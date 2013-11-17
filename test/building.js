@@ -248,7 +248,6 @@ describe('building.js', function () {
 
             assert(fs.existsSync(path.join(siteBuildDirConfig.paths.buildDir, 'project/index.html')),
                 'Missing nested page project/index.html in compiled valid website')
-        
         })
         it('should include variables from a page file metadatas', function () {
             var contentPage = fs.readFileSync(path.join(siteBuildDirConfig.paths.buildDir, 'index.html'), { encoding: 'utf-8' })

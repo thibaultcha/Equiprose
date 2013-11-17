@@ -5,11 +5,12 @@ html
     link(rel='stylesheet', href='/assets/styles.css')
   body
     header
-      h1 Miranda
+      h1 
+        a(href="/") #{config.website.title}
       nav
         a(href="/about/") About
     .container
       .main-content
         block content
     footer
-      p Built with <a href="#">Miranda</a>.
+      p Built with <a href="https://github.com/thibaultCha/Miranda">Miranda</a>.

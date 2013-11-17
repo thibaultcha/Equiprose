@@ -1,5 +1,5 @@
 =
-layout: about
+layout: page
 title: Miranda - About
 slug: index
 =

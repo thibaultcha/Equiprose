@@ -1,16 +1,16 @@
 !!!5
 html
   head
-    title #{metas.title}
+    title= metas.title
     link(rel='stylesheet', href='/assets/styles.css')
+    block head
   body
     header
       h1 
-        a(href="/") #{config.website.title}
+        a(href="/")= config.website.title
       nav
         a(href="/about/") About
     .container
-      .main-content
-        block content
+      block content
     footer
       p Built with <a href="https://github.com/thibaultCha/Miranda">Miranda</a>.

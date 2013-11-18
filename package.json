@@ -24,7 +24,8 @@
     "emoji-images": "*",
     "colors": "*",
     "yamljs": "*",
-    "fs-extra": "0.8.x"
+    "fs-extra": "0.8.x",
+    "pygmentize-bundled": "*"
   },
   "devDependencies": {
     "mocha": "*",

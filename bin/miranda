@@ -5,22 +5,19 @@ var path    = require('path')
 
 var parser  = require('../lib/parsing')
 var builder = require('../lib/building')
+var server  = require('../lib/serve')
 
 process.on('uncaughtException', function (err) {
-    console.log('✘'.red + ' ' + err.message)
+    console.log('✘'.red + ' ' + err.message + err.stack)
     process.exit(1)
 })
-
-function list (val) {
-	console.log(val)
-	return val.split('.')
-}
 
 program
   .version('0.1.0')
   .option('build [path]', 'Compile a website')
   .option('new [path]', 'Create a new website at given path')
-  .option('test <a>.<b>', 'a test', list)
+  .option('serve [path]', 'Start a server on localhost:port')
+  .option('-p, --port [port]')
   .parse(process.argv)
 
 if (program.new) {
@@ -34,27 +31,38 @@ if (program.new) {
 	})
 }
 else if (program.build) {
-	var configPath = '.'
+	var sitePath = '.'
 	if (typeof(program.build) === 'string') {
-		configPath = program.build
+		sitePath = program.build
 	}
 
-	console.log('Compiling website using config: ' + path.resolve(configPath)+'/config.yml')
+	console.log('Compiling website using config: ' + path.resolve(sitePath)+'/config.yml')
 	
-	var siteConfig = parser.parseConfig(configPath)
+	var siteConfig = parser.parseConfig(sitePath)
 	
 	console.log('    pages: ' + siteConfig.paths.pages.input)
 	console.log('    posts: ' + siteConfig.paths.posts.input)
 	console.log('   assets: ' + siteConfig.paths.assets.input)
 	console.log(' template: ' + siteConfig.paths.templateDir)
 
-	builder.buildSite(siteConfig, function (err, path) {
+	builder.buildSite(siteConfig, function (err, websitePath) {
 		if (err) throw err
-		console.log('\n'+'✔'.green + ' Compiled website at path: ' + path)
+		console.log('\n'+'✔'.green + ' Compiled website at path: ' + websitePath)
 	})
 }
-else if (program.test) {
-	console.log(program.test)
+else if (program.serve) {
+	var sitePath = '.'
+	if (typeof(program.serve) === 'string') {
+		sitePath = path.resolve(program.serve)
+	}
+
+	var siteConfig = parser.parseConfig(sitePath)
+
+	console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
+
+	server.startServer(siteConfig, program.port || 8888, function (str) {
+		console.log('✔'.green + ' Server running on ' + str)
+	})
 }
 else {
 	program.help()

@@ -17,21 +17,21 @@
   },
   "dependencies": {
     "commander": "2.0.0",
-    "jade": "*",
-    "stylus": "*",
-    "marked": "*",
-    "moment": "*",
-    "emoji-images": "*",
-    "colors": "*",
-    "yamljs": "*",
-    "fs-extra": "0.8.x",
-    "pygmentize-bundled": "*"
+    "jade": "0.35.0",
+    "stylus": "0.38.0",
+    "marked": "0.2.9",
+    "moment": "2.4.0",
+    "emoji-images": "0.1.1",
+    "colors": "0.6.2",
+    "yamljs": "0.1.4",
+    "fs-extra": "0.8.1",
+    "pygmentize-bundled": "2.1.0"
   },
   "devDependencies": {
-    "mocha": "*",
-    "blanket": "*",
-    "coveralls": "~2.3.0",
-    "mocha-lcov-reporter": "*"
+    "mocha": "1.13.0",
+    "blanket": "1.1.5",
+    "coveralls": "2.3.0",
+    "mocha-lcov-reporter": "0.0.1"
   },
   "engines": {
     "node": ">=0.10.21"

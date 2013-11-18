@@ -18,6 +18,8 @@ Miranda will be available on [npm](https://npmjs.org) very soon. In order to use
 
 - Create pages from command
 - Create blog posts from command
+- Syntax highlighting
+- Compress option for Jade and Stylus output
 
 ## Licence
 

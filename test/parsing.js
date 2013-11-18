@@ -103,7 +103,6 @@ describe('parsing.js', function () {
             assert(metas.slug)
             assert(metas.content)
             assert(metas.filename)
-            assert(metas.dirpath)
         })
         it('should throw an error when passing a bad formatted file', function () {
             assert.throws(function (){ parse.getMetadatas(pageNoMetas) }, Error)

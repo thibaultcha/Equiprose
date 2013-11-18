@@ -2,6 +2,7 @@
 layout: post
 title: Hello World
 slug: hello-world
+author: Nemo
 date: Sun Nov 16 2013 18:26:47 GMT+0200 (CEST)
 =
 
@@ -17,7 +18,7 @@ Cum autem commodis intervallata temporibus convivia longa et noxia coeperint app
 
 **Fuerit toto in consulatu** sine provincia, cui fuerit, antequam designatus est, decreta provincia. Sortietur an non? Nam et non sortiri absurdum est, et, quod sortitus sis, non habere. Proficiscetur paludatus? Quo? _Quo pervenire ante certam diem non licebit. ianuario, Februario, provinciam non habebit; Kalendis ei denique Martiis nascetur repente provincia._
 
-> Cool quoted text yeah ;)
+> Some quoted text
 
 1. Item 1
 2. Item 2

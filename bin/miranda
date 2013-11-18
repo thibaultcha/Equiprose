@@ -6,6 +6,7 @@ var path    = require('path')
 var parser  = require('../lib/parsing')
 var builder = require('../lib/building')
 var server  = require('../lib/serve')
+var pjson   = require('../package.json')
 
 process.on('uncaughtException', function (err) {
     console.log('✘'.red + ' ' + err.message + err.stack)
@@ -13,11 +14,11 @@ process.on('uncaughtException', function (err) {
 })
 
 program
-  .version('0.1.0')
+  .version(pjson.version)
   .option('build [path]', 'Compile a website')
   .option('new [path]', 'Create a new website at given path')
   .option('serve [path]', 'Start a server on localhost:port')
-  .option('-p, --port [port]')
+  .option('-p, --port [port]', 'Specify the port where to run the test server')
   .parse(process.argv)
 
 if (program.new) {

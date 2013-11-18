@@ -6,7 +6,13 @@ Miranda is a static website and blog generator built with [Node.js](http://nodej
 
 ## Usage
 
-Miranda will be available on [npm](https://npmjs.org) very soon. In order to use it, you can already download (or clone) the master branch, and add the `bin/` folder to your `$PATH`.
+Miranda will be available on [npm](https://npmjs.org) very soon.
+
+## Install
+
+In order to use it, you can already download (or clone) the master branch, and add the `bin/` folder to your `$PATH`.
+
+And run `make install` in the project root directory.
 
 ### Commands
 
@@ -14,11 +20,14 @@ Miranda will be available on [npm](https://npmjs.org) very soon. In order to use
 
 `miranda build [path]`
 
+`miranda serve [path] -p [port]`
+
 ## Roadmap
 
-- Create pages from command
-- Create blog posts from command
-- Syntax highlighting
+- npm publication
+- Create pages from command line
+- Create blog posts from command line
+- Syntax highlighting for code snippets
 - Compress option for Jade and Stylus output
 
 ## Licence

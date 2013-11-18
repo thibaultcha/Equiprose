@@ -6,13 +6,13 @@ Miranda is a static website and blog generator built with [Node.js](http://nodej
 
 ## Usage
 
-Miranda will be available on [npm](https://npmjs.org) very soon.
+Miranda will be available on [npm](https://npmjs.org) very soon. For now, docs are included in the Miranda 101 blog post when creating a new website.
 
-## Install
+### Install
 
 In order to use it, you can already download (or clone) the master branch, and add the `bin/` folder to your `$PATH`.
 
-And run `make install` in the project root directory.
+And run `make install` in the project root directory to install npm's dependencies.
 
 ### Commands
 
@@ -21,6 +21,8 @@ And run `make install` in the project root directory.
 `miranda build [path]`
 
 `miranda serve [path] -p [port]`
+
+`path` refers to a directory containing a `config.yml` file. If no `path` is provided, the command targets the current directory.
 
 ## Roadmap
 

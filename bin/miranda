@@ -6,25 +6,27 @@ var path    = require('path')
 var parser  = require('../lib/parsing')
 var builder = require('../lib/building')
 var server  = require('../lib/serve')
+var files   = require('../lib/files')
 var pjson   = require('../package.json')
 
 process.on('uncaughtException', function (err) {
-    console.log('✘'.red + ' ' + err.message + err.stack)
+    console.log('✘'.red + ' ' + err.message)
     process.exit(1)
 })
 
 program
   .version(pjson.version)
+  .option('create [path]', 'Create a new website at given path')
   .option('build [path]', 'Compile a website')
-  .option('new [path]', 'Create a new website at given path')
   .option('serve [path]', 'Start a server on localhost:port')
+  .option('new <type>', 'Create a new post or page')
   .option('-p, --port [port]', 'Specify the port where to run the test server')
   .parse(process.argv)
 
-if (program.new) {
+if (program.create) {
 	var websitePath = '.'
-	if (typeof(program.new) === 'string') {
-		websitePath = program.new
+	if (typeof(program.create) === 'string') {
+		websitePath = program.create
 	}
 	builder.newWebsite(websitePath, function (err, path) {
 		if (err) throw err
@@ -64,6 +66,34 @@ else if (program.serve) {
 	server.startServer(siteConfig, program.port || 8888, function (str) {
 		console.log('✔'.green + ' Server running on ' + str)
 	})
+}
+else if (program.new) {
+	var readline = require('readline').createInterface({ input: process.stdin, output: process.stdout });
+	var sitePath = '.';
+	var siteConfig = parser.parseConfig(sitePath);
+
+	switch (program.new) {
+		case 'post':
+			readline.question('Post title: ', function (title) {
+				readline.question('Post author: ', function (author) {
+					files.newPost(title, author, siteConfig.paths.posts.input, function (err, postPath) {
+						if (err) {
+							throw err;
+						} else {
+							console.log('✔'.green + ' New post created at path: ' + postPath);
+						}
+						readline.close();
+					});
+				});
+			});
+			break;
+		case 'page':
+
+			break;
+		default:
+			throw new Error('miranda new <page|post>');
+			break;
+	}
 }
 else {
 	program.help()

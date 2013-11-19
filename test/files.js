@@ -1,8 +1,9 @@
-var assert = require('assert');
-var fs     = require('fs');
-var path   = require('path');
-var fse    = require('fs-extra');
-var files  = require('../lib/files');
+var assert  = require('assert');
+var fs      = require('fs');
+var path    = require('path');
+var fse     = require('fs-extra');
+var files   = require('../lib/files');
+var helpers = require('../lib/helpers');
 
 describe('files.js', function () {
     var testDir = path.join(__dirname, 'test-files/new-files');
@@ -34,8 +35,8 @@ describe('files.js', function () {
 
                 fs.readFile(pagePath, { encoding: 'utf-8' }, function (err, data) {
                     assert.ifError(err);
-                    var metaStr   = data.match(/^=([\s\S]+?)=([\s\S]*)/)
-                    var metadatas = require('yamljs').parse(metaStr[1])
+                    var metaStr   = data.match(/^=([\s\S]+?)=([\s\S]*)/);
+                    var metadatas = require('yamljs').parse(metaStr[1]);
                     
                     assert.equal(metadatas.layout, 'page');
                     assert.equal(metadatas.title, 'Metas');
@@ -43,7 +44,7 @@ describe('files.js', function () {
 
                     done();
                 });
-            });  
+            });
         });
         it.skip('should throw an error if a file with the same name already exists', function (done) {
             var existingFile = 'bar';
@@ -63,13 +64,36 @@ describe('files.js', function () {
         });
     });
 
-    describe.skip('#newPost()', function () {
+    describe('#newPost()', function () {
         var newpostTitle = 'Hello World';
 
         it('should create a post with given name at given path', function (done) {
-            files.newPost(newpostTitle, testDir, function (err, postPath) {
-                
+            files.newPost(newpostTitle, 'Joe', testDir, function (err, postPath) {
+                assert.ifError(err);
+
+                assert(fs.existsSync(postPath), 'Post does not exist');
+
+                done();
             });
+        });
+        it('should include metadatas in its content', function (done) {
+            files.newPost(newpostTitle, 'David', testDir, function (err, postPath) {
+                assert.ifError(err);
+
+                fs.readFile(postPath, { encoding: 'utf-8' }, function (err, data) {
+                    assert.ifError(err);
+                    var metaStr   = data.match(/^=([\s\S]+?)=([\s\S]*)/);
+                    var metadatas = require('yamljs').parse(metaStr[1]);
+
+                    assert.equal(metadatas.layout, 'post', 'Invalid post in metadatas');
+                    assert.equal(metadatas.title, 'Hello World', 'Invalid title in metadatas');
+                    assert.equal(metadatas.author, 'David', 'Invalid author in metadatas');
+                    assert.equal(metadatas.slug, 'hello-world', 'Invalid slug in metadatas');
+                    assert(helpers.isValidDate(new Date(metadatas.date)), 'Invalid date in metadatas');
+
+                    done();
+                });
+            });  
         });
     });
 

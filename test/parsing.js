@@ -155,9 +155,6 @@ describe('parsing.js', function () {
         it('should throw an error if blog post is missing title value', function () {
             assert.throws(function () { parse.parsePostMetadatas(postNoTitle, fakeConfig) }, /title/)
         })
-        it('should throw an error if blog post is missing content value', function () {
-            assert.throws(function () { parse.parsePostMetadatas(postNoContent, fakeConfig) }, /content/)
-        })
     })
 
     describe('#parseMetadatas()', function () {

@@ -16,13 +16,17 @@ And run `make install` in the project root directory to install npm's dependenci
 
 ### Commands
 
-`miranda new [path]`
+`miranda create [path]`
 
 `miranda build [path]`
 
 `miranda serve [path] -p [port]`
 
 `path` refers to a directory containing a `config.yml` file. If no `path` is provided, the command targets the current directory.
+
+`miranda new <page|post>`
+
+Must be run inside a website directory.
 
 ## Roadmap
 

@@ -1,19 +1,47 @@
 #!/usr/bin/env node
-var program = require('commander')
-var colors  = require('colors')
-var path    = require('path')
+var program = require('commander');
+var colors  = require('colors');
+var path    = require('path');
 
-var parser  = require('../lib/parsing')
-var builder = require('../lib/building')
-var server  = require('../lib/serve')
-var files   = require('../lib/files')
-var pjson   = require('../package.json')
+var parser  = require('../lib/parsing');
+var builder = require('../lib/building');
+var server  = require('../lib/serve');
+var files   = require('../lib/files');
+var pjson   = require('../package.json');
 
 process.on('uncaughtException', function (err) {
-    console.log('✘'.red + ' ' + err.message)
-    process.exit(1)
-})
+    console.log('✘'.red + ' ' + err.message);
+    process.exit(1);
+});
 
+/* Functions */
+function pathFromArg (arg) {
+	var sitePath = '.';
+	if (typeof(arg) === 'string') {
+		sitePath = path.resolve(arg);
+	}
+	return sitePath;
+}
+
+function build (sitePath) {
+	console.log('Compiling website using config: ' + path.resolve(sitePath)+'/config.yml');
+	
+	var siteConfig = parser.parseConfig(sitePath);
+	
+	console.log('    pages: ' + siteConfig.paths.pages.input);
+	console.log('    posts: ' + siteConfig.paths.posts.input);
+	console.log('   assets: ' + siteConfig.paths.assets.input);
+	console.log(' template: ' + siteConfig.paths.templateDir);
+
+	builder.buildSite(siteConfig, function (err, websitePath) {
+		if (err) {
+			throw err;
+		}
+		console.log('\n'+'✔'.green + ' Compiled website at path: ' + websitePath);
+	});
+}
+
+/* commander.js */
 program
   .version(pjson.version)
   .option('create [path]', 'Create a new website at given path')
@@ -21,59 +49,38 @@ program
   .option('serve [path]', 'Start a server on localhost:port')
   .option('new <type>', 'Create a new post or page')
   .option('-p, --port [port]', 'Specify the port where to run the test server')
-  .parse(process.argv)
+  .parse(process.argv);
 
 if (program.create) {
-	var websitePath = '.'
-	if (typeof(program.create) === 'string') {
-		websitePath = program.create
-	}
-	builder.newWebsite(websitePath, function (err, path) {
-		if (err) throw err
-		console.log('✔'.green + ' New website created at path: ' + path)
-	})
+	var sitePath = pathFromArg(program.create);
+	builder.newWebsite(sitePath, function (err, path) {
+		if (err) {
+			throw err;
+		}
+		console.log('✔'.green + ' New website created at path: ' + path);
+	});
 }
 else if (program.build) {
-	var sitePath = '.'
-	if (typeof(program.build) === 'string') {
-		sitePath = program.build
-	}
-
-	console.log('Compiling website using config: ' + path.resolve(sitePath)+'/config.yml')
-	
-	var siteConfig = parser.parseConfig(sitePath)
-	
-	console.log('    pages: ' + siteConfig.paths.pages.input)
-	console.log('    posts: ' + siteConfig.paths.posts.input)
-	console.log('   assets: ' + siteConfig.paths.assets.input)
-	console.log(' template: ' + siteConfig.paths.templateDir)
-
-	builder.buildSite(siteConfig, function (err, websitePath) {
-		if (err) throw err
-		console.log('\n'+'✔'.green + ' Compiled website at path: ' + websitePath)
-	})
+	var sitePath = pathFromArg(program.build);
+	build(sitePath);
 }
 else if (program.serve) {
-	var sitePath = '.'
-	if (typeof(program.serve) === 'string') {
-		sitePath = path.resolve(program.serve)
-	}
+	var sitePath = pathFromArg(program.serve);
+	var siteConfig = parser.parseConfig(sitePath);
 
-	var siteConfig = parser.parseConfig(sitePath)
-
-	console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
+	console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir);
 
 	server.startServer(siteConfig, program.port || 8888, function (str) {
-		console.log('✔'.green + ' Server running on ' + str)
-	})
+		console.log('✔'.green + ' Server running on ' + str);
+	});
 }
 else if (program.new) {
-	var readline = require('readline').createInterface({ input: process.stdin, output: process.stdout });
 	var sitePath = '.';
-	var siteConfig = parser.parseConfig(sitePath);
+	var readline = require('readline').createInterface({ input: process.stdin, output: process.stdout });
 
 	switch (program.new) {
 		case 'post':
+			var siteConfig = parser.parseConfig(sitePath);
 			readline.question('Post title: ', function (title) {
 				readline.question('Post author: ', function (author) {
 					files.newPost(title, author, siteConfig.paths.posts.input, function (err, postPath) {
@@ -88,13 +95,13 @@ else if (program.new) {
 			});
 			break;
 		case 'page':
-
+		
 			break;
 		default:
-			throw new Error('miranda new <page|post>');
+			throw new Error('wrong argument: ' + program.new + '\nUsage: miranda new <page|post>');
 			break;
 	}
 }
 else {
-	program.help()
+	program.help();
 }

@@ -95,9 +95,9 @@ else if (program.new) {
 			});
 			break;
 		case 'page':
-			readline.question('Path to page from \'/\': ', function (pagePath) {
+			readline.question('Path to new page from \'' + siteConfig.paths.pages.input + '\': ', function (pagePath) {
 				pagePath = path.join(siteConfig.paths.pages.input, path.dirname(pagePath), path.basename(pagePath));
-				files.newPage(path.basename(pagePath), path.dirname(pagePath), function (err) {
+				files.newPage(path.basename(pagePath), path.dirname(pagePath), function (err, pagePath) {
 					if (err) {
 						throw err;
 					} else {

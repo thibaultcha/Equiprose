@@ -55,7 +55,16 @@ describe('files.js', function () {
 
                 done();
             });
-        })
+        });
+        it('should remove extension from parameter filename to prevent confusion', function (done) {
+            files.newPage('foo.md', testDir, function (err, pagePath) {
+                assert.ifError(err);
+
+                assert.equal(path.basename(pagePath), 'foo.md');
+
+                done();
+            });
+        });
         it.skip('should throw an error if a file with the same name already exists', function (done) {
             var existingFile = 'bar';
 

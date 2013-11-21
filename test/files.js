@@ -46,6 +46,16 @@ describe('files.js', function () {
                 });
             });
         });
+        it('should create the dir if not existing', function (done) {
+            var newDir = path.join(testDir, 'new-dir');
+            files.newPage(metaspage, newDir, function (err, pagePath) {
+                assert.ifError(err);
+
+                assert(fs.existsSync(newDir));
+
+                done();
+            });
+        })
         it.skip('should throw an error if a file with the same name already exists', function (done) {
             var existingFile = 'bar';
 

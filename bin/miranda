@@ -47,7 +47,7 @@ program
   .option('create [path]', 'Create a new website at given path')
   .option('build [path]', 'Compile a website')
   .option('serve [path]', 'Start a server on localhost:port')
-  .option('new <type>', 'Create a new post or page')
+  .option('new <page|post>', 'Create a new post or page')
   .option('-p, --port [port]', 'Specify the port where to run the test server')
   .parse(process.argv);
 
@@ -77,10 +77,10 @@ else if (program.serve) {
 else if (program.new) {
 	var sitePath = '.';
 	var readline = require('readline').createInterface({ input: process.stdin, output: process.stdout });
+	var siteConfig = parser.parseConfig(sitePath);
 
 	switch (program.new) {
 		case 'post':
-			var siteConfig = parser.parseConfig(sitePath);
 			readline.question('Post title: ', function (title) {
 				readline.question('Post author: ', function (author) {
 					files.newPost(title, author, siteConfig.paths.posts.input, function (err, postPath) {
@@ -95,7 +95,17 @@ else if (program.new) {
 			});
 			break;
 		case 'page':
-		
+			readline.question('Path to page from \'/\': ', function (pagePath) {
+				pagePath = path.join(siteConfig.paths.pages.input, path.dirname(pagePath), path.basename(pagePath));
+				files.newPage(path.basename(pagePath), path.dirname(pagePath), function (err) {
+					if (err) {
+						throw err;
+					} else {
+						console.log('✔'.green + ' New page created at path: ' + pagePath);
+					}
+					readline.close();
+				});
+			});
 			break;
 		default:
 			throw new Error('wrong argument: ' + program.new + '\nUsage: miranda new <page|post>');

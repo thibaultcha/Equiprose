@@ -1,7 +1,7 @@
 {
   "name": "Miranda",
   "author": "thibaultCha",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A static website and blog generator",
   "private": true,
   "scripts": {

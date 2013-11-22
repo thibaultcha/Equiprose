@@ -10,7 +10,7 @@ var files   = require('../lib/files')
 var pjson   = require('../package.json')
 
 process.on('uncaughtException', function (err) {
-    console.log('✘'.red + ' ' + err.message +'\n'+ err.stack)
+    console.log('✘'.red + ' ' + err.message)
     process.exit(1)
 })
 
@@ -135,7 +135,20 @@ program
     .command('about')
     .description('About Miranda')
     .action(function () {
-        console.log('Miranda: ' + pjson.version)
+        console.log('')
+        console.log('\
+ __  __ _                     _\n\
+|  \\/  (_)_ __ __ _ _ __   __| | __ _ \n\
+| |\\/| | | \'__/ _` | \'_ \\ / _` |/ _` |\n\
+| |  | | | | | (_| | | | | (_| | (_| |\n\
+|_|  |_|_|_|  \\__,_|_| |_|\\__,_|\\__,_|'.rainbow)
+        console.log('')
+        console.log('  A static website and blog generator in Node.js'.italic)
+        console.log('')
+        console.log('  version: ' + pjson.version)
+        console.log('   author: Thibault Charbonnier')
+        console.log('   GitHub: https://github.com/thibaultCha/Miranda')
+        console.log('')
     })
 
 program

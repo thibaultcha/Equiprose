@@ -22,16 +22,13 @@ And run `make install` in the project root directory to install npm's dependenci
 
 `miranda serve [path] -p [port]`
 
-`path` refers to a directory containing a `config.yml` file. If no `path` is provided, the command targets the current directory.
+`miranda new <page|post> [path]` (Must be run inside a website directory containing a `config.yml`)
 
-`miranda new <page|post>` (Must be run inside a website directory containing a `config.yml`)
+`path` always refers to a directory containing a `config.yml` file. If no `path` is provided, the command targets the current directory.
 
 ## Roadmap
 
 - npm publication
-- about command
-- formatted help
-- Syntax highlighting for code snippets
 - Compress option for Jade and Stylus output
 
 ## Licence

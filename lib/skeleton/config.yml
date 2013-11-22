@@ -1,5 +1,17 @@
+#dateFormat: DD MMM YYYY
+#paths:
+#  templateDir: _template
+#  pages:
+#    input: _pages
+#  posts:
+#    input: _posts
+#    output: blog
+#  assets:
+#    input: _assets
+#    output: assets
+#  buildDir: www
 toJade:
   owner:
     name: Your Name
   website:
-    title: Miranda
+    title: My Website

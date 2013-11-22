@@ -10,7 +10,7 @@ var files   = require('../lib/files')
 var pjson   = require('../package.json')
 
 process.on('uncaughtException', function (err) {
-    console.log('✘'.red + ' ' + err.message)
+    console.log('✘'.red + ' ' + err.message +'\n'+ err.stack)
     process.exit(1)
 })
 
@@ -42,7 +42,7 @@ function buildFromArg (arg, callback) {
 
         builder.buildSite(siteConfig, function (err, websitePath) {
             if (err) return callback(err)
-            console.log('✔'.green + ' Compiled website at path: ' + websitePath)
+            console.log('✔'.green + ' Compiled website at path: ' + websitePath.underline)
             callback(null, siteConfig)
         })
     })
@@ -60,7 +60,7 @@ program
 
         builder.newWebsite(sitePath, function (err, path) {
             if (err) throw err
-            console.log('✔'.green + ' New website created at path: ' + path)
+            console.log('✔'.green + ' New website created at path: ' + path.underline)
         })
     })
 
@@ -74,7 +74,7 @@ program
     })
 
 program
-    .command('serve [path] <options>')
+    .command('serve [path] [options]')
     .description('Start a server on localhost:port')
     .action(function () {
         // we have to handle `$ miranda serve ~/Desktop` and `$ miranda serve -p 1234`
@@ -84,18 +84,22 @@ program
 
             console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
         
-            server.startServer(siteConfig, program.port || 8888, function (str) {
-                console.log('✔'.green + ' Server running on ' + str)
+            server.startServer(siteConfig, program.port || 8888, function (address) {
+                console.log('✔'.green + ' Server running on ' + address.underline)
             })
         })
     })
 
 program
-    .command('new <page|post>')
+    .command('new <page|post> [path]')
     .description('Create a new post or page')
     .action(function () {
         var type = program.rawArgs.slice(3)[0]
-        
+
+        if ((type !== 'post') && (type !== 'page')) {
+            throw new Error('Invalid argument: ' + type + '\n  Usage: miranda new <page|post> [path]')
+        }
+
         configFromArg(program.rawArgs.slice(4)[0], function (siteConfig) {
             var readline = require('readline').createInterface({ input: process.stdin, output: process.stdout })
 
@@ -105,7 +109,7 @@ program
                         readline.question('Post author: ', function (author) {
                             files.newPost(title, author, siteConfig.paths.posts.input, function (err, postPath) {
                                 if (err) throw err
-                                console.log('✔'.green + ' New post created at path: ' + postPath)
+                                console.log('✔'.green + ' New post created at path: ' + postPath.underline)
                             })
                             readline.close()
                         })
@@ -116,13 +120,12 @@ program
                         pagePath = path.join(siteConfig.paths.pages.input, path.dirname(pagePath), path.basename(pagePath))
                         files.newPage(path.basename(pagePath), path.dirname(pagePath), function (err, pagePath) {
                             if (err) throw err
-                            console.log('✔'.green + ' New page created at path: ' + pagePath)
+                            console.log('✔'.green + ' New page created at path: ' + pagePath.underline)
                         })
                         readline.close()
                     })
                     break;
                 default:
-                    throw new Error('wrong argument: ' + program.new + '\nUsage: miranda new <page|post>')
                     break;
             }
         })
@@ -142,9 +145,13 @@ program.on('--help', function () {
     console.log('  Examples:')
     console.log('')
     console.log('    $ miranda create ~/website')
-    console.log('    $ miranda new post')
+    console.log('    $ miranda new post ~/website')
     console.log('    $ miranda serve ~/website -p 9000')
     console.log('')
 })
 
 program.parse(process.argv)
+
+if (program.rawArgs.length < 3) {
+    program.help()
+}

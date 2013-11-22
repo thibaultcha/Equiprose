@@ -1,6 +1,6 @@
-var assert = require('assert')
-, fs       = require('fs')
-, helpers  = require('../lib/helpers')
+var assert  = require('assert')
+var fs      = require('fs')
+var helpers = require('../lib/helpers')
 
 describe('helpers.js', function () {
 
@@ -69,9 +69,9 @@ describe('helpers.js', function () {
     })
 
     describe('#getFiles()', function () {
-        var regex  = new RegExp(/\.md$/)
-        , testPath = 'test/test-sites/build-dir/_pages'
-        , files
+        var regex    = new RegExp(/\.md$/)
+        var testPath = 'test/test-sites/build-dir/_pages'
+        var files    = []
 
         it('should return an Array', function (done) {
             helpers.getFiles(testPath, regex, function (err, results) {
@@ -92,7 +92,7 @@ describe('helpers.js', function () {
     })
 
     describe('#walk()', function () {
-        var files
+        var files    = []
         var testPath = 'test/test-sites/build-dir'
 
         before(function (done) {

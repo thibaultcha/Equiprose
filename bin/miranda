@@ -1,138 +1,132 @@
 #!/usr/bin/env node
-var program = require('commander');
-var colors  = require('colors');
-var path    = require('path');
+var program = require('commander')
+var colors  = require('colors')
+var path    = require('path')
 
-var parser  = require('../lib/parsing');
-var builder = require('../lib/building');
-var server  = require('../lib/serve');
-var files   = require('../lib/files');
-var pjson   = require('../package.json');
+var parser  = require('../lib/parsing')
+var builder = require('../lib/building')
+var server  = require('../lib/serve')
+var files   = require('../lib/files')
+var pjson   = require('../package.json')
 
 process.on('uncaughtException', function (err) {
-  console.log('✘'.red + ' ' + err.message);
-  process.exit(1);
-});
+  console.log('✘'.red + ' ' + err.message)
+  process.exit(1)
+})
 
 /* Functions */
 function pathFromArg (arg) {
-  return arg ? path.resolve(arg) : '.';
+  return arg ? path.resolve(arg) : '.'
 }
 
 function buildFromArg (arg) {
-  var sitePath   = pathFromArg(arg);
-  var siteConfig = parser.parseConfig(sitePath);
+  var sitePath   = pathFromArg(arg)
+  var siteConfig = parser.parseConfig(sitePath)
 
-  console.log('Compiling website using config: ' + path.resolve(sitePath)+'/config.yml'); 
-  console.log('    pages: ' + siteConfig.paths.pages.input);
-  console.log('    posts: ' + siteConfig.paths.posts.input);
-  console.log('   assets: ' + siteConfig.paths.assets.input);
-  console.log(' template: ' + siteConfig.paths.templateDir);
+  console.log('Compiling website using config: ' + path.resolve(sitePath)+'/config.yml')
+  console.log('    pages: ' + siteConfig.paths.pages.input)
+  console.log('    posts: ' + siteConfig.paths.posts.input)
+  console.log('   assets: ' + siteConfig.paths.assets.input)
+  console.log(' template: ' + siteConfig.paths.templateDir)
 
   builder.buildSite(siteConfig, function (err, websitePath) {
-    if (err) {
-      throw err;
-    }
-    console.log('✔'.green + ' Compiled website at path: ' + websitePath);
-  });
+    if (err) throw err
+    console.log('✔'.green + ' Compiled website at path: ' + websitePath)
+})
 }
 
 /* commander.js */
 program
-  .version(pjson.version)
+.version(pjson.version)
 
 program
-  .command('create [path]')
-  .description('Create a new website at given path')
-  .action(function () {
-    var sitePath = pathFromArg(program.rawArgs.slice(3)[0]);
+.command('create [path]')
+.description('Create a new website at given path')
+.action(function () {
+    var sitePath = pathFromArg(program.rawArgs.slice(3)[0])
     builder.newWebsite(sitePath, function (err, path) {
-      if (err) {
-        throw err;
-      }
-      console.log('✔'.green + ' New website created at path: ' + path);
-    });
-  });
+        if (err) throw err
+        console.log('✔'.green + ' New website created at path: ' + path)
+    })
+})
 
 program
-  .command('build [path]')
-  .description('Compile a website to its buildDir')
-  .action(function () {
-    buildFromArg(program.rawArgs.slice(3)[0]);
-  });
+.command('build [path]')
+.description('Compile a website to its buildDir')
+.action(function () {
+    buildFromArg(program.rawArgs.slice(3)[0])
+})
 
 program
-  .command('serve [path]')
-  .option('-p, --port')
-  .description('Start a server on localhost:port')
-  .action(function () {
+.command('serve [path]')
+.option('-p, --port')
+.description('Start a server on localhost:port')
+.action(function () {
     // rewrite to avoid reparsing + what if -p option on [3]
-    var sitePath   = pathFromArg(program.rawArgs.slice(3)[0]);
-    var siteConfig = parser.parseConfig(sitePath);
-    buildFromArg(sitePath);
-    console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir);
+    var sitePath   = pathFromArg(program.rawArgs.slice(3)[0])
+    var siteConfig = parser.parseConfig(sitePath)
+    buildFromArg(sitePath)
+    
+    console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
+    
     server.startServer(siteConfig, program.port || 8888, function (str) {
-      console.log('✔'.green + ' Server running on ' + str);
-    });
-  });
+        console.log('✔'.green + ' Server running on ' + str)
+    })
+})
 
 program
-  .command('new <page|post>')
-  .description('Create a new post or page')
-  .action(function () {
-    var sitePath   = pathFromArg(program.rawArgs.slice(4)[0]);
-    var readline   = require('readline').createInterface({ input: process.stdin, output: process.stdout });
-    var siteConfig = parser.parseConfig(sitePath);
+.command('new <page|post>')
+.description('Create a new post or page')
+.action(function () {
+    var sitePath   = pathFromArg(program.rawArgs.slice(4)[0])
+    var readline   = require('readline').createInterface({ input: process.stdin, output: process.stdout })
+    var siteConfig = parser.parseConfig(sitePath)
 
     switch (program.new) {
-      case 'post':
-        readline.question('Post title: ', function (title) {
-          readline.question('Post author: ', function (author) {
-            files.newPost(title, author, siteConfig.paths.posts.input, function (err, postPath) {
-              if (err) {
-                throw err;
-              }
-              console.log('✔'.green + ' New post created at path: ' + postPath);
-            });
-          });
-        });
+        case 'post':
+            readline.question('Post title: ', function (title) {
+                readline.question('Post author: ', function (author) {
+                    files.newPost(title, author, siteConfig.paths.posts.input, function (err, postPath) {
+                        if (err) throw err
+                        console.log('✔'.green + ' New post created at path: ' + postPath)
+                    })
+                })
+            })
+            break;
+        case 'page':
+            readline.question('Path to new page from \'' + siteConfig.paths.pages.input + '\': ', function (pagePath) {
+                pagePath = path.join(siteConfig.paths.pages.input, path.dirname(pagePath), path.basename(pagePath))
+                files.newPage(path.basename(pagePath), path.dirname(pagePath), function (err, pagePath) {
+                    if (err) throw err
+                    console.log('✔'.green + ' New page created at path: ' + pagePath)
+                })
+            })
+        break;
+      default:
+        throw new Error('wrong argument: ' + program.new + '\nUsage: miranda new <page|post>')
       break;
-    case 'page':
-      readline.question('Path to new page from \'' + siteConfig.paths.pages.input + '\': ', function (pagePath) {
-        pagePath = path.join(siteConfig.paths.pages.input, path.dirname(pagePath), path.basename(pagePath));
-        files.newPage(path.basename(pagePath), path.dirname(pagePath), function (err, pagePath) {
-          if (err) {
-            throw err;
-          }
-          console.log('✔'.green + ' New page created at path: ' + pagePath);
-        });
-      });
-      break;
-    default:
-      throw new Error('wrong argument: ' + program.new + '\nUsage: miranda new <page|post>');
-    break;
   }
 
-  readline.close();
-});
+    readline.close()
+})
 
 program
-  .command('about')
-  .description('About Miranda')
-  .action(function () {
-    console.log('Miranda: ' + pjson.version);
-  });
+.command('about')
+.description('About Miranda')
+.action(function () {
+    console.log('Miranda: ' + pjson.version)
+})
 
 program
-  .option('-p, --port [port]', 'Specify the port where to run the test server')
+.option('-p, --port [port]', 'Specify the port where to run the test server')
 
 program.on('--help', function () {
-  console.log('  Examples:');
-  console.log('');
-  console.log('    $ miranda create ~/website');
-  console.log('    $ miranda new post');
-  console.log('    $ miranda serve ~/website -p 9000');
-  console.log('');
-});
+    console.log('  Examples:')
+    console.log('')
+    console.log('    $ miranda create ~/website')
+    console.log('    $ miranda new post')
+    console.log('    $ miranda serve ~/website -p 9000')
+    console.log('')
+})
 
-program.parse(process.argv);
+program.parse(process.argv)

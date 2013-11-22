@@ -10,115 +10,133 @@ var files   = require('../lib/files')
 var pjson   = require('../package.json')
 
 process.on('uncaughtException', function (err) {
-  console.log('✘'.red + ' ' + err.message)
-  process.exit(1)
+    console.log('✘'.red + ' ' + err.message)
+    process.exit(1)
 })
 
 /* Functions */
 function pathFromArg (arg) {
-  return arg ? path.resolve(arg) : '.'
+    return arg ? path.resolve(arg) : '.'
 }
 
-function buildFromArg (arg) {
-  var sitePath   = pathFromArg(arg)
-  var siteConfig = parser.parseConfig(sitePath)
+function configFromArg (arg, callback) {
+    var path   = pathFromArg(arg)
+    var config = parser.parseConfig(path)
 
-  console.log('Compiling website using config: ' + path.resolve(sitePath)+'/config.yml')
-  console.log('    pages: ' + siteConfig.paths.pages.input)
-  console.log('    posts: ' + siteConfig.paths.posts.input)
-  console.log('   assets: ' + siteConfig.paths.assets.input)
-  console.log(' template: ' + siteConfig.paths.templateDir)
+    if (callback && typeof(callback) === 'function') {
+        callback(config)
+    }
+}
 
-  builder.buildSite(siteConfig, function (err, websitePath) {
-    if (err) throw err
-    console.log('✔'.green + ' Compiled website at path: ' + websitePath)
-})
+function buildFromArg (arg, callback) {
+    if (!callback || typeof(callback) !== 'function') {
+        callback = function(){}
+    }
+
+    configFromArg(arg, function (siteConfig) {
+        console.log('Compiling website using config: ' + siteConfig.sitePath +'/config.yml')
+        console.log('    pages: ' + siteConfig.paths.pages.input)
+        console.log('    posts: ' + siteConfig.paths.posts.input)
+        console.log('   assets: ' + siteConfig.paths.assets.input)
+        console.log(' template: ' + siteConfig.paths.templateDir)
+
+        builder.buildSite(siteConfig, function (err, websitePath) {
+            if (err) return callback(err)
+            console.log('✔'.green + ' Compiled website at path: ' + websitePath)
+            callback(null, siteConfig)
+        })
+    })
 }
 
 /* commander.js */
 program
-.version(pjson.version)
+    .version(pjson.version)
 
 program
-.command('create [path]')
-.description('Create a new website at given path')
-.action(function () {
-    var sitePath = pathFromArg(program.rawArgs.slice(3)[0])
-    builder.newWebsite(sitePath, function (err, path) {
-        if (err) throw err
-        console.log('✔'.green + ' New website created at path: ' + path)
+    .command('create [path]')
+    .description('Create a new website at given path')
+    .action(function () {
+        var sitePath = pathFromArg(program.rawArgs.slice(3)[0])
+
+        builder.newWebsite(sitePath, function (err, path) {
+            if (err) throw err
+            console.log('✔'.green + ' New website created at path: ' + path)
+        })
     })
-})
 
 program
-.command('build [path]')
-.description('Compile a website to its buildDir')
-.action(function () {
-    buildFromArg(program.rawArgs.slice(3)[0])
-})
-
-program
-.command('serve [path]')
-.option('-p, --port')
-.description('Start a server on localhost:port')
-.action(function () {
-    // rewrite to avoid reparsing + what if -p option on [3]
-    var sitePath   = pathFromArg(program.rawArgs.slice(3)[0])
-    var siteConfig = parser.parseConfig(sitePath)
-    buildFromArg(sitePath)
-    
-    console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
-    
-    server.startServer(siteConfig, program.port || 8888, function (str) {
-        console.log('✔'.green + ' Server running on ' + str)
+    .command('build [path]')
+    .description('Compile a website to its buildDir')
+    .action(function () {
+        buildFromArg(program.rawArgs.slice(3)[0], function (err) {
+            if (err) throw err
+        })
     })
-})
 
 program
-.command('new <page|post>')
-.description('Create a new post or page')
-.action(function () {
-    var sitePath   = pathFromArg(program.rawArgs.slice(4)[0])
-    var readline   = require('readline').createInterface({ input: process.stdin, output: process.stdout })
-    var siteConfig = parser.parseConfig(sitePath)
+    .command('serve [path] <options>')
+    .description('Start a server on localhost:port')
+    .action(function () {
+        // we have to handle `$ miranda serve ~/Desktop` and `$ miranda serve -p 1234`
+        var pathArg = program.rawArgs.slice(3)[0] !== '-p' ? program.rawArgs.slice(3)[0] : '.'
+        buildFromArg(pathArg, function (err, siteConfig) {
+            if (err) throw err
 
-    switch (program.new) {
-        case 'post':
-            readline.question('Post title: ', function (title) {
-                readline.question('Post author: ', function (author) {
-                    files.newPost(title, author, siteConfig.paths.posts.input, function (err, postPath) {
-                        if (err) throw err
-                        console.log('✔'.green + ' New post created at path: ' + postPath)
+            console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
+        
+            server.startServer(siteConfig, program.port || 8888, function (str) {
+                console.log('✔'.green + ' Server running on ' + str)
+            })
+        })
+    })
+
+program
+    .command('new <page|post>')
+    .description('Create a new post or page')
+    .action(function () {
+        var type = program.rawArgs.slice(3)[0]
+        
+        configFromArg(program.rawArgs.slice(4)[0], function (siteConfig) {
+            var readline = require('readline').createInterface({ input: process.stdin, output: process.stdout })
+
+            switch (type) {
+                case 'post':
+                    readline.question('Post title: ', function (title) {
+                        readline.question('Post author: ', function (author) {
+                            files.newPost(title, author, siteConfig.paths.posts.input, function (err, postPath) {
+                                if (err) throw err
+                                console.log('✔'.green + ' New post created at path: ' + postPath)
+                            })
+                            readline.close()
+                        })
                     })
-                })
-            })
-            break;
-        case 'page':
-            readline.question('Path to new page from \'' + siteConfig.paths.pages.input + '\': ', function (pagePath) {
-                pagePath = path.join(siteConfig.paths.pages.input, path.dirname(pagePath), path.basename(pagePath))
-                files.newPage(path.basename(pagePath), path.dirname(pagePath), function (err, pagePath) {
-                    if (err) throw err
-                    console.log('✔'.green + ' New page created at path: ' + pagePath)
-                })
-            })
-        break;
-      default:
-        throw new Error('wrong argument: ' + program.new + '\nUsage: miranda new <page|post>')
-      break;
-  }
-
-    readline.close()
-})
+                    break;
+                case 'page':
+                    readline.question('Path to new page from \'' + siteConfig.paths.pages.input + '\': ', function (pagePath) {
+                        pagePath = path.join(siteConfig.paths.pages.input, path.dirname(pagePath), path.basename(pagePath))
+                        files.newPage(path.basename(pagePath), path.dirname(pagePath), function (err, pagePath) {
+                            if (err) throw err
+                            console.log('✔'.green + ' New page created at path: ' + pagePath)
+                        })
+                        readline.close()
+                    })
+                    break;
+                default:
+                    throw new Error('wrong argument: ' + program.new + '\nUsage: miranda new <page|post>')
+                    break;
+            }
+        })
+    })
 
 program
-.command('about')
-.description('About Miranda')
-.action(function () {
-    console.log('Miranda: ' + pjson.version)
-})
+    .command('about')
+    .description('About Miranda')
+    .action(function () {
+        console.log('Miranda: ' + pjson.version)
+    })
 
 program
-.option('-p, --port [port]', 'Specify the port where to run the test server')
+    .option('-p, --port [port]', 'Specify the port where to run the test server')
 
 program.on('--help', function () {
     console.log('  Examples:')

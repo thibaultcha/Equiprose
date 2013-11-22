@@ -152,7 +152,7 @@ program
     })
 
 program
-    .option('-p, --port [port]', 'Specify the port where to run the test server')
+    .option('-p, --port', 'Specify the port on which to run the test server')
 
 program.on('--help', function () {
     console.log('  Examples:')

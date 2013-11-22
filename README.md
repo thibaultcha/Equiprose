@@ -29,6 +29,8 @@ And run `make install` in the project root directory to install npm's dependenci
 ## Roadmap
 
 - npm publication
+- fix last pending tests
+- help on invalid command
 - Compress option for Jade and Stylus output
 
 ## Licence

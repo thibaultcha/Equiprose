@@ -1,3 +1,5 @@
+# Uncomment to override default values
+
 #dateFormat: DD MMM YYYY
 #paths:
 #  templateDir: _template

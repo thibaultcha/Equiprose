@@ -12,4 +12,4 @@ paths:
   assets:
     input: _assets
     output: assets
-  buildDir: wwwp
+  buildDir: www

@@ -1,4 +1,5 @@
 configFile: config.yml
+compress: true
 dateFormat: DD MMM YYYY
 paths:
   templateDir: _template

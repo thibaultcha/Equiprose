@@ -1,6 +1,7 @@
 # Uncomment to override default values
 
 #dateFormat: DD MMM YYYY
+#compress: true
 #paths:
 #  templateDir: _template
 #  pages:

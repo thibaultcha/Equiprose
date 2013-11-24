@@ -6,15 +6,23 @@ Miranda is a static website and blog generator built with [Node.js](http://nodej
 
 ## Usage
 
-Miranda will be available on [npm](https://npmjs.org) very soon. For now, docs are included in the Miranda 101 blog post when creating a new website.
+For now, docs are included in the Miranda 101 blog post when creating a new website.
 
 ### Install
+
+Miranda will be available on [npm](https://npmjs.org) very soon.
 
 In order to use it, you can already download (or clone) the master branch, and add the `bin/` folder to your `$PATH`.
 
 And run `make install` in the project root directory to install npm's dependencies.
 
+### Development
+
+Clone the sources, and run `make install`, `make dev` to install all dependencies.
+
 ### Commands
+
+`miranda -h`: Outputs help.
 
 `miranda create [path]`
 
@@ -22,16 +30,24 @@ And run `make install` in the project root directory to install npm's dependenci
 
 `miranda serve [path] -p [port]`
 
-`miranda new <page|post> [path]` (Must be run inside a website directory containing a `config.yml`)
+`miranda new <page|post> [path]`
 
 `path` always refers to a directory containing a `config.yml` file. If no `path` is provided, the command targets the current directory.
+
+### Build your first website
+
+`miranda create ~/Desktop/test`
+
+`miranda serve ~/Desktop/test`
+
+Browse to `http://localhost:8888`. That's it.
 
 ## Roadmap
 
 - npm publication
-- fix last pending tests
 - help on invalid command
-- Compress option for Jade and Stylus output
+- live update on directory changes
+- compress option for Jade and Stylus output
 
 ## Licence
 

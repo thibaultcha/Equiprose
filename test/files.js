@@ -18,6 +18,11 @@ describe('files.js', function () {
     describe('#newPage()', function () {
         var newpage   = 'page'
         var metaspage = 'metas'
+        var existingFile = 'bar'
+
+        before(function () {
+            fs.writeFileSync(path.join(testDir, existingFile + '.md'), 'foo')
+        })
 
         it('should create a page with given name at given path', function (done) {
             files.newPage(newpage, testDir, function (err, pagePath) {
@@ -50,36 +55,22 @@ describe('files.js', function () {
             var newDir = path.join(testDir, 'new-dir')
             files.newPage(metaspage, newDir, function (err, pagePath) {
                 assert.ifError(err)
-
                 assert(fs.existsSync(newDir))
-
                 done()
             })
         })
         it('should remove extension from parameter filename to prevent confusion', function (done) {
             files.newPage('foo.md', testDir, function (err, pagePath) {
                 assert.ifError(err)
-
                 assert.equal(path.basename(pagePath), 'foo.md')
-
                 done()
             })
         })
-        it.skip('should throw an error if a file with the same name already exists', function (done) {
-            var existingFile = 'bar'
-
-            before(function () {
-                fs.writeFileSync(path.join(testDir, existingFile + '.md'), 'foo')
+        it('should return an error if a file with the same name already exists', function (done) {
+            files.newPage(existingFile, testDir, function (err) {
+                assert(err !== null)
+                done()
             })
-
-            assert.throws(function () { 
-                files.newPage(existingFile, testDir, function (err) {
-                    done()
-                    if (err) throw err
-                    //assert.ifError(err)
-                });
-            }, 
-            /already exists/)
         })
     })
 
@@ -89,9 +80,7 @@ describe('files.js', function () {
         it('should create a post with given name at given path', function (done) {
             files.newPost(newpostTitle, 'Joe', testDir, function (err, postPath) {
                 assert.ifError(err)
-
                 assert(fs.existsSync(postPath), 'Post does not exist')
-
                 done()
             })
         })

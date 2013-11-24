@@ -41,14 +41,11 @@ describe('building.js', function () {
         it('should return the absolute path of the new website in callback', function () {
             assert.equal(websitepath.charAt(0), '/')
         })
-        it.skip('should throw an error if the target directory is not empty', function (done) {
-            var fn = function () {
-                build.newWebsite(notEmpty, function (err) {
-                    assert.ifError(err)
-                    done()  
-                })
-            }
-            assert.throws(function(){ fn() }, /is not empty/)
+        it('should return an error if the target directory is not empty', function (done) {
+            build.newWebsite(notEmpty, function (err) {
+                assert(err !== null)
+                done()  
+            })
         })
         after(function (done) {
             fse.remove(newWebsite, function (err) {

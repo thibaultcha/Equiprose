@@ -4,11 +4,22 @@
 
 Miranda is a static website and blog generator built with [Node.js](http://nodejs.org).
 
-## Usage
+- **[Features](#features)**
+- **[Install](#install)**
+- **[Usage](#usage)**
+- **[Roadmap](#roadmap)**
+- **[Licence](#licence)**
 
-For now, docs are included in the Miranda 101 blog post when creating a new website.
+## Features
 
-### Install
+- Static website + blog generator
+- Shipped to you as a simple binary script
+- Markdown to HTML
+- Native emojis support :+1:
+- Write your template using [Jade](http://jade-lang.com) and [Stylus](http://learnboost.github.io/stylus/)
+- Multiple and widely configurable websites
+
+## Install
 
 Miranda will be available on [npm](https://npmjs.org) very soon.
 
@@ -16,13 +27,13 @@ In order to use it, you can already download (or clone) the master branch, and a
 
 And run `make install` in the project root directory to install npm's dependencies.
 
-### Development
+## Usage
 
-Clone the sources, and run `make install`, `make dev` to install all dependencies.
+Docs are hosted on the [wiki](https://github.com/thibaultCha/Miranda/wiki), but below is a sample so you can see how simple it is to use.
 
 ### Commands
 
-`miranda -h`: Outputs help.
+`miranda -h`: prints help.
 
 `miranda create [path]`
 
@@ -34,20 +45,29 @@ Clone the sources, and run `make install`, `make dev` to install all dependencie
 
 `path` always refers to a directory containing a `config.yml` file. If no `path` is provided, the command targets the current directory.
 
+`miranda about`
+
 ### Build your first website
 
 `miranda create ~/Desktop/test`
 
 `miranda serve ~/Desktop/test`
 
-Browse to `http://localhost:8888`. That's it.
+Browse to `http://localhost:8888`. That's it. (By the way, pull request about the base template are welcomed too).
 
 ## Roadmap
 
 - npm publication
 - help on invalid command
 - live update on directory changes
-- compress option for Jade and Stylus output
+
+## Development
+
+Clone the sources, and run `make install`, `make dev` to install all dependencies.
+
+`make test`: runs the tests.
+
+`make test-cov`: runs the coverage.
 
 ## Licence
 

@@ -14,7 +14,8 @@ Miranda is a static website and blog generator built with [Node.js](http://nodej
 
 - Static website + blog generator
 - Shipped to you as a simple binary script
-- Markdown to HTML
+- Website preview
+- Markdown support
 - Native emojis support :+1:
 - Write your template using [Jade](http://jade-lang.com) and [Stylus](http://learnboost.github.io/stylus/)
 - Multiple and widely configurable websites

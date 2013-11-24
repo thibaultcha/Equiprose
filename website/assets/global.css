@@ -1,0 +1,66 @@
+p code,ul code{padding:0 5px;border:1px solid #ddd;background-color:#f8f8f8;font-size:14px;line-height:19px;overflow-x:auto}
+blockquote{margin:1em 0;padding:0 0 0 15px;font-size:16px;border-left:2px solid #aaa;}
+blockquote p{margin:12px 0;color:#999}
+.highlight{background-color:#f8f8f8;border:1px solid #ccc;font-size:14px;line-height:19px;padding:6px 10px;border-radius:3px;overflow:auto}
+.c{color:#998;font-style:italic}
+.err{color:#a61717;background-color:#e3d2d2}
+.k{font-weight:bold}
+.o{font-weight:bold}
+.cm{color:#998;font-style:italic}
+.cp{color:#999;font-weight:bold}
+.c1{color:#998;font-style:italic}
+.cs{color:#999;font-weight:bold;font-style:italic}
+.gd{color:#000;background-color:#fdd;}
+.gd .x{color:#000;background-color:#faa}
+.ge{font-style:italic}
+.gr{color:#a00}
+.gh{color:#999}
+.gi{color:#000;background-color:#dfd;}
+.gi .x{color:#000;background-color:#afa}
+.go{color:#888}
+.gp{color:#555}
+.gs{font-weight:bold}
+.gu{color:#800080;font-weight:bold}
+.gt{color:#a00}
+.kc{font-weight:bold}
+.kd{font-weight:bold}
+.kn{font-weight:bold}
+.kp{font-weight:bold}
+.kr{font-weight:bold}
+.kt{color:#458;font-weight:bold}
+.m{color:#099}
+.s{color:#d14}
+.n{color:#333}
+.na{color:#008080}
+.nb{color:#0086b3}
+.nc{color:#458;font-weight:bold}
+.no{color:#008080}
+.ni{color:#800080}
+.ne{color:#900;font-weight:bold}
+.n{color:#900;font-weight:bold}
+.nn{color:#555}
+.nt{color:#000080}
+.nv{color:#008080}
+.ow{font-weight:bold}
+.w{color:#bbb}
+.mf{color:#099}
+.mh{color:#099}
+.mi{color:#099}
+.mo{color:#099}
+.sb{color:#d14}
+.sc{color:#d14}
+.sd{color:#d14}
+.s2{color:#d14}
+.se{color:#d14}
+.sh{color:#d14}
+.si{color:#d14}
+.sx{color:#d14}
+.sr{color:#009926}
+.s1{color:#d14}
+.ss{color:#990073}
+.bp{color:#999}
+.vc{color:#008080}
+.vg{color:#008080}
+.vi{color:#008080}
+.il{color:#099}
+.gc{color:#999;background-color:#eaf2f5}

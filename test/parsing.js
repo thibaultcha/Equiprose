@@ -87,7 +87,11 @@ describe('parsing.js', function () {
             assert.equal('Build dir', siteBuildDirConfig.toJade.website.title, 'Custom property `website.title` is incorrect')
         })
         it('should throw an error when no config.yml file is found', function () {
-            assert.throws(function () { parse.parseConfig('test/test-sites/errors/no-config') }, /No config.yml file/)
+            assert.throws(function(){ parse.parseConfig('test/test-sites/errors/no-config') }, /No config.yml file/)
+        })
+        it('should throw an error if missing any input directory', function () {
+            assert.throws(function(){ parse.parseConfig('test/test-sites/errors/no-assets-input-dir') }, Error)
+            assert.throws(function(){ parse.parseConfig('test/test-sites/errors/no-posts-input-dir') }, Error)
         })
     })
 

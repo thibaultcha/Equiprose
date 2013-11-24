@@ -1,5 +1,0 @@
-paths:
-  buildDir: /tmp
-toJade: 
-  website:
-    title: Absolute Build Dir

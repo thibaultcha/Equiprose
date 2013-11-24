@@ -1,7 +1,0 @@
-paths:
-  buildDir: ./dist
-toJade:
-  owner:
-    name: OwnerName
-  website:
-    title: Build dir

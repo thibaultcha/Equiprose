@@ -79,6 +79,7 @@ program
     .action(function () {
         // we have to handle `$ miranda serve ~/Desktop` and `$ miranda serve -p 1234`
         var pathArg = program.rawArgs.slice(3)[0] !== '-p' ? program.rawArgs.slice(3)[0] : '.'
+
         buildFromArg(pathArg, function (err, siteConfig) {
             if (err) throw err
 
@@ -152,7 +153,7 @@ program
     })
 
 program
-    .option('-p, --port', 'Specify the port on which to run the test server')
+    .option('-p, --port [port]', 'Specify the port on which to run the test server')
 
 program.on('--help', function () {
     console.log('  Examples:')

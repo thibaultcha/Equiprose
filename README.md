@@ -2,7 +2,7 @@
 
 [![Build Status](https://api.travis-ci.org/thibaultCha/Miranda.png)](https://travis-ci.org/thibaultCha/Miranda) [![Coverage Status](https://coveralls.io/repos/thibaultCha/Miranda/badge.png?branch=master)](https://coveralls.io/r/thibaultCha/Miranda?branch=master)
 
-Miranda is a static website and blog generator built with [Node.js](http://nodejs.org).
+[Miranda](http://thibaultcha.github.io/Miranda/) is a static website and blog generator built with [Node.js](http://nodejs.org).
 
 - **[Features](#features)**
 - **[Install](#install)**
@@ -22,11 +22,15 @@ Miranda is a static website and blog generator built with [Node.js](http://nodej
 
 ## Install
 
-Miranda will be available on [npm](https://npmjs.org) very soon.
+Node `0.10` or greater:
 
-In order to use it, you can already download (or clone) the master branch, and add the `bin/` folder to your `$PATH`.
+```
+$ [sudo] npm install -g miranda
+```
+é
+Or:
 
-And run `make install` in the project root directory to install npm's dependencies.
+Clone the master branch, add the `bin/` folder to your `$PATH`, run `make install` in the project root directory to install dependencies.
 
 ## Usage
 

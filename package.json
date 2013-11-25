@@ -26,25 +26,25 @@
     "url": "http://github.com/thibaultCha/Miranda.git"
   },
   "dependencies": {
-    "express": "3.4.4",
-    "commander": "2.0.0",
-    "jade": "0.35.0",
-    "stylus": "0.38.0",
-    "marked": "0.2.9",
-    "moment": "2.4.0",
-    "emoji-images": "0.1.1",
-    "colors": "0.6.2",
-    "yamljs": "0.1.4",
-    "fs-extra": "0.8.1",
-    "pygmentize-bundled": "2.1.0"
+    "express": "3.4.x",
+    "commander": "2.0.x",
+    "jade": "0.35.x",
+    "stylus": "0.38.x",
+    "marked": "0.2.x",
+    "moment": "2.4.x",
+    "emoji-images": "0.1.x",
+    "colors": "0.6.x",
+    "yamljs": "0.1.x",
+    "fs-extra": "0.8.x",
+    "pygmentize-bundled": "2.1.x"
   },
   "devDependencies": {
-    "mocha": "1.13.0",
-    "blanket": "1.1.5",
-    "coveralls": "2.3.0",
-    "mocha-lcov-reporter": "0.0.1"
+    "mocha": "1.13.x",
+    "blanket": "1.1.x",
+    "coveralls": "2.3.x",
+    "mocha-lcov-reporter": "0.0.x"
   },
   "engines": {
-    "node": ">=0.10.21"
+    "node": ">=0.10.x"
   }
 }

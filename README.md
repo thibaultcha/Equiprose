@@ -27,7 +27,7 @@ Node `0.10` or greater:
 ```
 $ [sudo] npm install -g miranda
 ```
-é
+
 Or:
 
 Clone the master branch, add the `bin/` folder to your `$PATH`, run `make install` in the project root directory to install dependencies.

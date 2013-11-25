@@ -38,41 +38,39 @@ Docs are hosted on the [wiki](https://github.com/thibaultCha/Miranda/wiki), but 
 
 ### Commands
 
-`miranda -h`: prints help.
+`$ miranda -h`: prints help.
 
-`miranda create [path]`
+`$ miranda create [path]`
 
-`miranda build [path]`
+`$ miranda build [path]`
 
-`miranda serve [path] -p [port]`
+`$ miranda serve [path] -p [port]`
 
-`miranda new <page|post> [path]`
+`$ miranda new <page|post> [path]`
 
 `path` always refers to a directory containing a `config.yml` file. If no `path` is provided, the command targets the current directory.
 
-`miranda about`
+`$ miranda about`
 
 ### Build your first website
 
-`miranda create ~/Desktop/test`
+`$ miranda create ~/Desktop/test`
 
-`miranda serve ~/Desktop/test`
+`$ miranda serve ~/Desktop/test`
 
 Browse to `http://localhost:8888`. That's it. (By the way, pull request about the base template are welcomed too).
 
 ## Roadmap
 
-- npm publication
-- help on invalid command
 - live update on directory changes
 
 ## Development
 
-Clone the sources, and run `make install`, `make dev` to install all dependencies.
+Clone the sources and run `$ make dev` to install all dependencies.
 
-`make test`: runs the tests.
+`$ make test`: runs the tests.
 
-`make test-cov`: runs the coverage.
+`$ make test-cov`: runs the coverage.
 
 ## Licence
 

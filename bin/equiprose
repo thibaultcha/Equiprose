@@ -77,7 +77,7 @@ program
     .command('serve [path] [options]')
     .description('Start a server on localhost:port')
     .action(function () {
-        // we have to handle `$ miranda serve ~/Desktop` and `$ miranda serve -p 1234`
+        // we have to handle `$ equiprose serve ~/Desktop` and `$ equiprose serve -p 1234`
         var pathArg = program.rawArgs.slice(3)[0] !== '-p' ? program.rawArgs.slice(3)[0] : '.'
 
         buildFromArg(pathArg, function (err, siteConfig) {
@@ -98,7 +98,7 @@ program
         var type = program.rawArgs.slice(3)[0]
 
         if ((type !== 'post') && (type !== 'page')) {
-            throw new Error('Invalid argument: ' + type + '\n  Usage: miranda new <page|post> [path]')
+            throw new Error('Invalid argument: ' + type + '\n  Usage: equiprose new <page|post> [path]')
         }
 
         configFromArg(program.rawArgs.slice(4)[0], function (siteConfig) {
@@ -134,21 +134,22 @@ program
 
 program
     .command('about')
-    .description('About Miranda')
+    .description('About Equiprose')
     .action(function () {
         console.log('')
         console.log('\
- __  __ _                     _\n\
-|  \\/  (_)_ __ __ _ _ __   __| | __ _ \n\
-| |\\/| | | \'__/ _` | \'_ \\ / _` |/ _` |\n\
-| |  | | | | | (_| | | | | (_| | (_| |\n\
-|_|  |_|_|_|  \\__,_|_| |_|\\__,_|\\__,_|'.rainbow)
+ _____            _ \n\
+| ____|__ _ _   _(_)_ __  _ __ ___  ___  ___     \n\
+|  _| / _` | | | | | \'_ \\| \'__/ _ \\/ __|/ _ \\ \n\
+| |__| (_| | |_| | | |_) | | | (_)  \\__\\ __/  \n\
+|_____\\__, |\\__,_|_| .__/|_|  \\___/|___/\\___|\n\
+         |_|       |_|   '.rainbow)
         console.log('')
         console.log('  A static website and blog generator in Node.js'.italic)
         console.log('')
         console.log('  version: ' + pjson.version)
         console.log('   author: Thibault Charbonnier')
-        console.log('   GitHub: https://github.com/thibaultCha/Miranda')
+        console.log('   GitHub: https://github.com/thibaultCha/Equiprose')
         console.log('')
     })
 
@@ -158,9 +159,9 @@ program
 program.on('--help', function () {
     console.log('  Examples:')
     console.log('')
-    console.log('    $ miranda create ~/website')
-    console.log('    $ miranda new post ~/website')
-    console.log('    $ miranda serve ~/website -p 9000')
+    console.log('    $ equiprose create ~/website')
+    console.log('    $ equiprose new post ~/website')
+    console.log('    $ equiprose serve ~/website -p 9000')
     console.log('')
 })
 

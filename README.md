@@ -1,8 +1,8 @@
-# Miranda
+# Equiprose
 
-[![Build Status](https://api.travis-ci.org/thibaultCha/Miranda.png)](https://travis-ci.org/thibaultCha/Miranda) [![Coverage Status](https://coveralls.io/repos/thibaultCha/Miranda/badge.png?branch=master)](https://coveralls.io/r/thibaultCha/Miranda?branch=master)
+[![Build Status](https://api.travis-ci.org/thibaultCha/Equiprose.png)](https://travis-ci.org/thibaultCha/Equiprose) [![Coverage Status](https://coveralls.io/repos/thibaultCha/Equiprose/badge.png?branch=master)](https://coveralls.io/r/thibaultCha/Equiprose?branch=master)
 
-[Miranda](http://thibaultcha.github.io/Miranda/) is a static website and blog generator built with [Node.js](http://nodejs.org).
+[Equiprose](http://thibaultcha.github.io/Equiprose/) is a static website and blog generator built with [Node.js](http://nodejs.org).
 
 - **[Features](#features)**
 - **[Install](#install)**
@@ -25,7 +25,7 @@
 Node `0.10` or greater:
 
 ```
-$ [sudo] npm install -g miranda
+$ [sudo] npm install -g equiprose
 ```
 
 Or:
@@ -34,29 +34,29 @@ Clone the master branch, add the `bin/` folder to your `$PATH`, run `make instal
 
 ## Usage
 
-Docs are hosted on the [wiki](https://github.com/thibaultCha/Miranda/wiki), but below is a sample so you can see how simple it is to use.
+Docs are hosted on the [wiki](https://github.com/thibaultCha/Equiprose/wiki), but below is a sample so you can see how simple it is to use.
 
 ### Commands
 
-`$ miranda -h`: prints help.
+`$ equiprose -h`: prints help.
 
-`$ miranda create [path]`
+`$ equiprose create [path]`
 
-`$ miranda build [path]`
+`$ equiprose build [path]`
 
-`$ miranda serve [path] -p [port]`
+`$ equiprose serve [path] -p [port]`
 
-`$ miranda new <page|post> [path]`
+`$ equiprose new <page|post> [path]`
 
 `path` always refers to a directory containing a `config.yml` file. If no `path` is provided, the command targets the current directory.
 
-`$ miranda about`
+`$ equiprose about`
 
 ### Build your first website
 
-`$ miranda create ~/Desktop/test`
+`$ equiprose create ~/Desktop/test`
 
-`$ miranda serve ~/Desktop/test`
+`$ equiprose serve ~/Desktop/test`
 
 Browse to `http://localhost:8888`. That's it. (By the way, pull request about the base template are welcomed too).
 

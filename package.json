@@ -1,5 +1,5 @@
 {
-  "name": "Miranda",
+  "name": "equiprose",
   "author": "Thibault Charbonnier <thibaultcha@me.com>",
   "version": "1.0.0",
   "description": "A static website and blog generator",
@@ -12,7 +12,7 @@
   "license": "MIT",
   "preferGlobal": true,
   "bin": {
-    "miranda": "./bin/miranda"
+    "equiprose": "./bin/equiprose"
   },
   "scripts": {
     "test": "make test",
@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/thibaultCha/Miranda.git"
+    "url": "http://github.com/thibaultCha/Equiprose.git"
   },
   "dependencies": {
     "express": "3.4.x",

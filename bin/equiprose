@@ -148,8 +148,8 @@ program
         console.log('  A static website and blog generator in Node.js'.italic)
         console.log('')
         console.log('  version: ' + pjson.version)
-        console.log('   author: Thibault Charbonnier')
-        console.log('   GitHub: https://github.com/thibaultCha/Equiprose')
+        console.log('   author: ' + pjson.author)
+        console.log('   GitHub: ' + pjson.repository.url)
         console.log('')
     })
 

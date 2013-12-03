@@ -23,7 +23,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/thibaultCha/Equiprose.git"
+    "url": "https://github.com/thibaultCha/Equiprose.git"
   },
   "dependencies": {
     "express": "3.4.x",

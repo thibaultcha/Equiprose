@@ -1,6 +1,6 @@
 # Equiprose
 
-[![Build Status](https://api.travis-ci.org/thibaultCha/Equiprose.png)](https://travis-ci.org/thibaultCha/Equiprose) [![Coverage Status](https://coveralls.io/repos/thibaultCha/Equiprose/badge.png?branch=master)](https://coveralls.io/r/thibaultCha/Equiprose?branch=master)
+[![Build Status](https://api.travis-ci.org/thibaultCha/Equiprose.png)](https://travis-ci.org/thibaultCha/Equiprose) [![Coverage Status](https://coveralls.io/repos/thibaultCha/Equiprose/badge.png?branch=master)](https://coveralls.io/r/thibaultCha/Equiprose?branch=master) [![NPM version](https://badge.fury.io/js/equiprose.png)](http://badge.fury.io/js/equiprose)
 
 Equiprose is a static website and blog generator built with [Node.js](http://nodejs.org).
 

@@ -63,6 +63,8 @@ Browse to `http://localhost:8888`. That's it. (By the way, pull request about th
 ## Roadmap
 
 - live update on directory changes
+- custom blog path (including dates)
+- code optimizations
 
 ## Development
 

@@ -68,53 +68,6 @@ describe('helpers.js', function () {
         })
     })
 
-    describe('#getFiles()', function () {
-        var regex    = new RegExp(/\.md$/)
-        var testPath = 'test/test-sites/build-dir/_pages'
-        var files    = []
-
-        it('should return an Array', function (done) {
-            helpers.getFiles(testPath, regex, function (err, results) {
-                assert.ifError(err)
-                assert(results instanceof Array, 'results is not an Array')
-                files = results
-                done()
-            })
-        })
-        it('should only return files matching the specified regex', function () {
-            for (var i = files.length - 1; i >= 0; i--)
-                assert(regex.test(files[i]), 'Returned file not matching regex')
-        })
-        it('should only return valid file paths', function () {
-            for (var i = files.length - 1; i >= 0; i--)
-                assert(fs.existsSync(files[i]), 'Returned invalid file')
-        })
-    })
-
-    describe('#walk()', function () {
-        var files    = []
-        var testPath = 'test/test-sites/build-dir'
-
-        before(function (done) {
-            helpers.getFiles(testPath, new RegExp(/\.md$/), function (err, results) {
-                assert.ifError(err)
-                files = results
-                done()
-            })
-        })
-
-        it('should callback each file matching the specified regex', function (done) {
-            helpers.walk(testPath, new RegExp(/\.md$/), function (err, item, idx) {
-                assert.ifError(err)
-                assert(/\.md$/.test(item))
-                assert(fs.existsSync(item))
-                
-                if (idx == files.length - 1)
-                    done()
-            })
-        })
-    })
-
     describe('#recursiveExists()', function () {
         it('should return an empty array if filename is not in given arboresence', function (done) {
             helpers.recursiveExists('foo.txt', 'test/', function (err, paths) {

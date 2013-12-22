@@ -1,7 +1,8 @@
-var assert  = require('assert')
-var path    = require('path')
-var fs      = require('fs')
-var fse     = require('fs-extra')
+var assert = require('assert')
+var path   = require('path')
+var fs     = require('fs')
+var fse    = require('fs-extra')
+var glob   = require('glob')
 
 var parse   = require('../lib/parsing')
 var build   = require('../lib/building')
@@ -132,9 +133,9 @@ describe('building.js', function () {
             }  
         })
         it('should return as much blogs posts than there are files', function (done) {
-            helpers.getFiles(config.paths.posts.input, new RegExp(/\.md$/), function (err, items) {
+            glob(config.paths.posts.input + '/*.md', { sync: true }, function (err, foundPosts) {
                 assert.ifError(err)
-                assert.equal(posts.length, items.length)
+                assert.equal(posts.length, foundPosts.length)
                 done()
             })
         })
@@ -162,17 +163,13 @@ describe('building.js', function () {
         it('should compile all Stylus files from template to outputCss', function (done) {
             build.compileStylesheets(stylPath, outputCss, function (err) {
                 assert.ifError(err)
-                helpers.getFiles(stylPath, new RegExp(/\.styl$/), function (err, items) {
+                glob(stylPath + '/**/*.styl', { sync: true }, function (err, items) {
                     assert.ifError(err)
                     items.forEach(function (item, idx) {
-                        
                         var cssFile = path.join(outputCss, path.basename(item).replace(/\.styl$/, '.css'))
-                        assert(fs.existsSync(cssFile), 'Inexistant css file: ' + cssFile + ' for file: ' + item)
-                        
-                        if (idx == items.length - 1) {
-                            done()
-                        }
+                        assert(fs.existsSync(cssFile), 'Missing css file: ' + cssFile + ' for file: ' + item)
                     })
+                    done()
                 })
             })
         })

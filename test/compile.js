@@ -41,15 +41,15 @@ describe('compile.js', function () {
     describe('#renderJade()', function () {
         var layoutsDir = 'test/test-files/compile'
         var options = {
-            layout  : 'layout'
-        ,    content : {}
-        ,    config  : {
+            layout: 'layout'
+        ,    content: {}
+        ,    config: {
                 owner: {
                     name: 'Joe'
                 }
             }
-        ,    metas   : {}
-        ,    posts   : []
+        ,    metas: {}
+        ,    posts: []
         }
 
         it('should send the custom properties from config.toJade to the jadeRender options', function (done) {

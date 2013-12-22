@@ -60,16 +60,17 @@ describe('building.js', function () {
     })
 
 	describe('#prepareOutputDir()', function () {
-        it('should recreate the buildDir if it already exists', function (done) {
-            before(function (done) {
-                if (fs.existsSync(config.paths.buildDir)) {
-                    fse.remove(config.paths.buildDir, function (err) {
-                        assert.ifError(err)
-                        done()
-                    })
-                }
-            })
-
+        before(function (done) {
+            if (fs.existsSync(config.paths.buildDir)) {
+                fse.remove(config.paths.buildDir, function (err) {
+                    assert.ifError(err)
+                    done()
+                })
+            } else {
+                done()
+            }
+        })
+        it('should create the buildDir if it doesn\'t already exist', function (done) {
             build.prepareOutputDir(config.paths.buildDir, config.paths.assets.input, config.paths.assets.output, function (err) {
                 assert.ifError(err)
                 assert(fs.existsSync(config.paths.buildDir), 'buildDir has not been created')
@@ -85,27 +86,24 @@ describe('building.js', function () {
 				done()
 			})
 		})
-        it('should override the existing files before preparing the directory', function (done) {
-            before(function (done) {
-                var dir = path.join(config.paths.assets.output, 'js')
-                fse.mkdirp(dir, function (err) {
+        it('should erase the existing non-hidden files if the buildDir already exists', function (done) {
+            fse.mkdirp(config.paths.assets.output, function (err) {
+                assert.ifError(err)
+                fs.writeFileSync(path.join(config.paths.assets.output, 'to-remove.js'), 'test')
+                fs.writeFileSync(path.join(config.paths.buildDir, 'to-remove.html'), 'test')
+                fs.writeFileSync(path.join(config.paths.buildDir, '.not-to-remove'), 'test')
+                
+                build.prepareOutputDir(config.paths.buildDir, config.paths.assets.input, config.paths.assets.output, function (err) {
                     assert.ifError(err)
-                    fs.writeFileSync(path.join(dir, 'to-remove.js'), 'test')
+                    assert(fs.existsSync(path.join(config.paths.buildDir, '.not-to-remove')), 'Removed hidden file in existing buildDir/ though it should not')
+                    assert(!fs.existsSync(path.join(config.paths.buildDir, 'to-remove.html')), 'Failed to clean builDir/ before copying new assets: existing to-remove.html')
+                    assert(!fs.existsSync(path.join(config.paths.assets.output, 'to-remove.js')), 'Failed to clean builDir/assets/ before copying new assets: existing: to-remove.js')
                     done()
                 })
             })
-
-            build.prepareOutputDir(config.paths.buildDir, config.paths.assets.input, config.paths.assets.output, function (err) {
-                assert.ifError(err)
-                var jsFiles = fs.readdirSync(path.join(config.paths.assets.output, 'js'))
-                jsFiles.forEach(function (item) {
-                    assert(item !== 'to-remove.js', 'Failed to remove assets/js dir before copying new assets')
-                })
-                done()
-            })
         })
 
-		after(function (done) {
+		afterEach(function (done) {
 			fse.remove(config.paths.buildDir, function (err) {
                 assert.ifError(err)
 				done()
@@ -133,7 +131,7 @@ describe('building.js', function () {
             }  
         })
         it('should return as much blogs posts than there are files', function (done) {
-            glob(config.paths.posts.input + '/*.md', { sync: true }, function (err, foundPosts) {
+            glob(config.paths.posts.input + '/*.md', { sync: true, nosort: true }, function (err, foundPosts) {
                 assert.ifError(err)
                 assert.equal(posts.length, foundPosts.length)
                 done()
@@ -163,7 +161,7 @@ describe('building.js', function () {
         it('should compile all Stylus files from template to outputCss', function (done) {
             build.compileStylesheets(stylPath, outputCss, function (err) {
                 assert.ifError(err)
-                glob(stylPath + '/**/*.styl', { sync: true }, function (err, items) {
+                glob(stylPath + '/**/*.styl', { sync: true, nosort: true }, function (err, items) {
                     assert.ifError(err)
                     items.forEach(function (item, idx) {
                         var cssFile = path.join(outputCss, path.basename(item).replace(/\.styl$/, '.css'))
@@ -205,7 +203,6 @@ describe('building.js', function () {
                 })
             })
         })
-
 
         it('should return the absolute path to the compiled website in the callback', function () {
             assert.equal(websitepath.charAt(0), '/')

@@ -5,9 +5,10 @@
   "description": "A static website and blog generator",
   "keywords": [
     "static",
-    "generator",
     "blog",
-    "website"
+    "generator",
+    "website",
+    "markdown"
   ],
   "license": "MIT",
   "preferGlobal": true,

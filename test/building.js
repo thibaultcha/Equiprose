@@ -141,8 +141,8 @@ describe('building.js', function () {
 
     describe('#compileStylesheets()', function () {
         this.slow(300)
-        var stylPath    = config.paths.templateDir
-        var outputCss   = path.join(config.sitePath, 'rendering-css')
+        var stylPath  = config.paths.templateDir
+        var outputCss = path.join(config.sitePath, 'rendering-css')
 
         beforeEach(function (done) {
             fse.remove(outputCss, function (err) {
@@ -171,6 +171,12 @@ describe('building.js', function () {
                 })
             })
         })
+        it('should callback if 0 stylsheets are found', function (done) {
+            build.compileStylesheets('test/test-sites/no-styl', outputCss, function (err) {
+                assert.ifError(err)
+                done()
+            })
+        })
 
         afterEach(function (done) {
             fse.remove(outputCss, function (err) {
@@ -187,6 +193,12 @@ describe('building.js', function () {
         
         var siteBuildDir = 'test/test-sites/build-dir'
         var siteBuildDirConfig = {}
+
+        var siteNoPosts = 'test/test-sites/no-posts'
+        var siteNoPostsConfig = {}
+
+        var siteNoStyl = 'test/test-sites/no-styl'
+        var siteNoStylConfig = {}
 
         var websitepath = ''
 
@@ -254,6 +266,23 @@ describe('building.js', function () {
             assert(/<h2 id="post-author">AuthorName<\/h2>/.test(contentPost0), 'Missing variable author for compiled blog post')
             assert(/<h2 id="post-date">07 Oct 2013<\/h2>/.test(contentPost0), 'Missing variable date for compiled blog post')
             assert(/<div id="post-content"><p>My first blog post<\/p><\/div>/.test(contentPost0), 'Missing or invalid variable content for compiled blog post')
+        })
+        it('should compile a website with 0 blog posts', function (done) {
+            siteNoPostsConfig = parse.parseConfig(siteNoPosts)
+            build.buildSite(siteNoPostsConfig, function (err, sitePath) {
+                assert.ifError(err)
+                done()
+            })
+        })
+        it('should compile a website with 0 stylesheets', function (done) {
+            siteNoStylConfig = parse.parseConfig(siteNoStyl)
+            build.buildSite(siteNoStylConfig, function (err, sitePath) {
+                assert.ifError(err)
+                done()
+            })
+        })
+        it.skip('should compile a website with 0 pages', function (done) {
+            
         })
 
         after(function (done) {

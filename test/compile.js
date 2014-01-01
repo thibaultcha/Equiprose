@@ -99,42 +99,40 @@ describe('compile.js', function () {
     describe('#compileMarkdownToFile()', function () {
         var mdFile = path.join(testFiles, 'valid-page.md')
         var outputBlog = path.join(outputDir, 'blog')
-        var config = {
-            paths: {
-                templateDir: testFiles
-            ,   buildDir: outputDir
-            ,   pages: {
-                    input: "_pages"
-                }
-            ,   posts: {
-                    output: outputBlog
-                }
-            ,   assets: {
-                    output: "assets"
-                }
-            }
-        ,   toJade: {
-                owner: {
-                    name: 'Joe'
-                }
-            }
+        var config =
+        { paths: 
+          { templateDir: testFiles
+          , buildDir: outputDir
+          , pages: 
+            { input: "_pages" }
+          , posts: 
+            { output: outputBlog }
+          , assets: 
+            { output: "assets" }
+          }
+        , toJade: 
+          { owner: 
+            { name: 'Joe' }
+          }
         }
         var fakePosts = [
             { toJade: { title: 'Hello World' } },
             { toJade: { title: 'It\' snowing today' } }
         ]
 
-        it('should create the outputDir if not existing', function (done) {
-            before(function (next) {
-                fs.exists(config.paths.buildDir, function (exists) {
-                    if (exists) {
-                        fse.remove(config.paths.buildDir, function (err) {
-                            assert.ifError(err)
-                            done()
-                        })
-                    }
-                })
+        before(function (done) {
+            fs.exists(config.paths.buildDir, function (exists) {
+                if (exists) {
+                    fse.remove(config.paths.buildDir, function (err) {
+                        assert.ifError(err)
+                        done()
+                    })
+                } else {
+                    done()
+                }
             })
+        })
+        it('should create the outputDir if not existing', function (done) {
             compile.compileMarkdownToFile(mdFile, config, fakePosts, function (err) {
                 assert.ifError(err)
                 assert(fs.existsSync(config.paths.buildDir), 'The output directory was not created')
@@ -186,19 +184,19 @@ describe('compile.js', function () {
                 done()
             })
         })
-        it('should compile as a blog post if 7 arguments are sent', function (done) {
+        it('should compile as a blog post if 5 arguments are sent', function (done) {
             var mdFile = path.join(testFiles, 'valid-post.md')
-            var postMetas = { 
-                filename: '2013-12-01_its-snowing-today.md',
-                slug: 'its-snowing-today',
-                layout: 'layout',
-                toJade: {
-                        title: 'It\'s snowing today',
-                        content: 'It\'s snowing today',
-                        author: 'Joe',
-                        date: 'Mon Oct 07 2013 18:26:47 GMT+0200 (CEST)',
-                        link: 'its-snowing-today.html'
-                    }
+            var postMetas = 
+                { filename: '2013-12-01_its-snowing-today.md'
+                , slug: 'its-snowing-today'
+                , layout: 'layout'
+                , toJade:
+                 { title: 'It\'s snowing today'
+                 , content: 'It\'s snowing today'
+                 , author: 'Joe'
+                 , date: 'Mon Oct 07 2013 18:26:47 GMT+0200 (CEST)'
+                 , link: 'its-snowing-today.html'
+                 }
                 }
 
             compile.compileMarkdownToFile(mdFile, config, fakePosts, postMetas, function (err, outputFile, data, options) {

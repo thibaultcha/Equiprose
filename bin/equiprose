@@ -142,7 +142,7 @@ program
         console.log('  A static website and blog generator in Node.js'.italic)
         console.log('')
         console.log('  version: ' + pjson.version)
-        console.log('   author: ' + pjson.author)
+        console.log('   author: ' + pjson.author.name + ' <' + pjson.author.email + '>')
         console.log('   GitHub: ' + pjson.repository.url)
         console.log('')
     })

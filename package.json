@@ -1,6 +1,9 @@
 {
   "name": "equiprose",
-  "author": "Thibault Charbonnier <thibaultcha@me.com>",
+  "author": {
+    "name": "Thibault Charbonnier",
+    "email": "thibaultcha@me.com"
+  },
   "version": "1.0.1",
   "description": "A static website and blog generator",
   "keywords": [

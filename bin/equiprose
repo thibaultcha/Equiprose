@@ -23,16 +23,10 @@ function configFromArg (arg, callback) {
     var path   = pathFromArg(arg)
     var config = parser.parseConfig(path)
 
-    if (callback && typeof(callback) === 'function') {
-        callback(config)
-    }
+    callback(config)
 }
 
 function buildFromArg (arg, callback) {
-    if (!callback || typeof(callback) !== 'function') {
-        callback = function(){}
-    }
-
     configFromArg(arg, function (siteConfig) {
         console.log('Compiling website using config: ' + siteConfig.sitePath +'/config.yml')
         console.log('    pages: ' + siteConfig.paths.pages.input)

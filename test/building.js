@@ -1,7 +1,8 @@
-var assert  = require('assert')
-var path    = require('path')
-var fs      = require('fs')
-var fse     = require('fs-extra')
+var assert = require('assert')
+var path   = require('path')
+var fs     = require('fs')
+var fse    = require('fs-extra')
+var glob   = require('glob')
 
 var parse   = require('../lib/parsing')
 var build   = require('../lib/building')
@@ -59,16 +60,17 @@ describe('building.js', function () {
     })
 
 	describe('#prepareOutputDir()', function () {
-        it('should recreate the buildDir if it already exists', function (done) {
-            before(function (done) {
-                if (fs.existsSync(config.paths.buildDir)) {
-                    fse.remove(config.paths.buildDir, function (err) {
-                        assert.ifError(err)
-                        done()
-                    })
-                }
-            })
-
+        before(function (done) {
+            if (fs.existsSync(config.paths.buildDir)) {
+                fse.remove(config.paths.buildDir, function (err) {
+                    assert.ifError(err)
+                    done()
+                })
+            } else {
+                done()
+            }
+        })
+        it('should create the buildDir if it doesn\'t already exist', function (done) {
             build.prepareOutputDir(config.paths.buildDir, config.paths.assets.input, config.paths.assets.output, function (err) {
                 assert.ifError(err)
                 assert(fs.existsSync(config.paths.buildDir), 'buildDir has not been created')
@@ -84,27 +86,24 @@ describe('building.js', function () {
 				done()
 			})
 		})
-        it('should override the existing files before preparing the directory', function (done) {
-            before(function (done) {
-                var dir = path.join(config.paths.assets.output, 'js')
-                fse.mkdirp(dir, function (err) {
+        it('should erase the existing non-hidden files if the buildDir already exists', function (done) {
+            fse.mkdirp(config.paths.assets.output, function (err) {
+                assert.ifError(err)
+                fs.writeFileSync(path.join(config.paths.assets.output, 'to-remove.js'), 'test')
+                fs.writeFileSync(path.join(config.paths.buildDir, 'to-remove.html'), 'test')
+                fs.writeFileSync(path.join(config.paths.buildDir, '.not-to-remove'), 'test')
+                
+                build.prepareOutputDir(config.paths.buildDir, config.paths.assets.input, config.paths.assets.output, function (err) {
                     assert.ifError(err)
-                    fs.writeFileSync(path.join(dir, 'to-remove.js'), 'test')
+                    assert(fs.existsSync(path.join(config.paths.buildDir, '.not-to-remove')), 'Removed hidden file in existing buildDir/ though it should not')
+                    assert(!fs.existsSync(path.join(config.paths.buildDir, 'to-remove.html')), 'Failed to clean builDir/ before copying new assets: existing to-remove.html')
+                    assert(!fs.existsSync(path.join(config.paths.assets.output, 'to-remove.js')), 'Failed to clean builDir/assets/ before copying new assets: existing: to-remove.js')
                     done()
                 })
             })
-
-            build.prepareOutputDir(config.paths.buildDir, config.paths.assets.input, config.paths.assets.output, function (err) {
-                assert.ifError(err)
-                var jsFiles = fs.readdirSync(path.join(config.paths.assets.output, 'js'))
-                jsFiles.forEach(function (item) {
-                    assert(item !== 'to-remove.js', 'Failed to remove assets/js dir before copying new assets')
-                })
-                done()
-            })
         })
 
-		after(function (done) {
+		afterEach(function (done) {
 			fse.remove(config.paths.buildDir, function (err) {
                 assert.ifError(err)
 				done()
@@ -132,9 +131,9 @@ describe('building.js', function () {
             }  
         })
         it('should return as much blogs posts than there are files', function (done) {
-            helpers.getFiles(config.paths.posts.input, new RegExp(/\.md$/), function (err, items) {
+            glob(config.paths.posts.input + '/*.md', { sync: true, nosort: true }, function (err, foundPosts) {
                 assert.ifError(err)
-                assert.equal(posts.length, items.length)
+                assert.equal(posts.length, foundPosts.length)
                 done()
             })
         })
@@ -142,8 +141,8 @@ describe('building.js', function () {
 
     describe('#compileStylesheets()', function () {
         this.slow(300)
-        var stylPath    = config.paths.templateDir
-        var outputCss   = path.join(config.sitePath, 'rendering-css')
+        var stylPath  = config.paths.templateDir
+        var outputCss = path.join(config.sitePath, 'rendering-css')
 
         beforeEach(function (done) {
             fse.remove(outputCss, function (err) {
@@ -162,18 +161,20 @@ describe('building.js', function () {
         it('should compile all Stylus files from template to outputCss', function (done) {
             build.compileStylesheets(stylPath, outputCss, function (err) {
                 assert.ifError(err)
-                helpers.getFiles(stylPath, new RegExp(/\.styl$/), function (err, items) {
+                glob(stylPath + '/**/*.styl', { sync: true, nosort: true }, function (err, items) {
                     assert.ifError(err)
                     items.forEach(function (item, idx) {
-                        
                         var cssFile = path.join(outputCss, path.basename(item).replace(/\.styl$/, '.css'))
-                        assert(fs.existsSync(cssFile), 'Inexistant css file: ' + cssFile + ' for file: ' + item)
-                        
-                        if (idx == items.length - 1) {
-                            done()
-                        }
+                        assert(fs.existsSync(cssFile), 'Missing css file: ' + cssFile + ' for file: ' + item)
                     })
+                    done()
                 })
+            })
+        })
+        it('should callback if 0 stylsheets are found', function (done) {
+            build.compileStylesheets('test/test-sites/no-styl', outputCss, function (err) {
+                assert.ifError(err)
+                done()
             })
         })
 
@@ -193,6 +194,12 @@ describe('building.js', function () {
         var siteBuildDir = 'test/test-sites/build-dir'
         var siteBuildDirConfig = {}
 
+        var siteNoPosts = 'test/test-sites/no-posts'
+        var siteNoPostsConfig = {}
+
+        var siteNoStyl = 'test/test-sites/no-styl'
+        var siteNoStylConfig = {}
+
         var websitepath = ''
 
         before(function (done) {
@@ -208,7 +215,6 @@ describe('building.js', function () {
                 })
             })
         })
-
 
         it('should return the absolute path to the compiled website in the callback', function () {
             assert.equal(websitepath.charAt(0), '/')
@@ -260,6 +266,23 @@ describe('building.js', function () {
             assert(/<h2 id="post-author">AuthorName<\/h2>/.test(contentPost0), 'Missing variable author for compiled blog post')
             assert(/<h2 id="post-date">07 Oct 2013<\/h2>/.test(contentPost0), 'Missing variable date for compiled blog post')
             assert(/<div id="post-content"><p>My first blog post<\/p><\/div>/.test(contentPost0), 'Missing or invalid variable content for compiled blog post')
+        })
+        it('should compile a website with 0 blog posts', function (done) {
+            siteNoPostsConfig = parse.parseConfig(siteNoPosts)
+            build.buildSite(siteNoPostsConfig, function (err, sitePath) {
+                assert.ifError(err)
+                done()
+            })
+        })
+        it('should compile a website with 0 stylesheets', function (done) {
+            siteNoStylConfig = parse.parseConfig(siteNoStyl)
+            build.buildSite(siteNoStylConfig, function (err, sitePath) {
+                assert.ifError(err)
+                done()
+            })
+        })
+        it.skip('should compile a website with 0 pages', function (done) {
+            
         })
 
         after(function (done) {

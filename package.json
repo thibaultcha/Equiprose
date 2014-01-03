@@ -1,13 +1,14 @@
 {
   "name": "equiprose",
   "author": "Thibault Charbonnier <thibaultcha@me.com>",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A static website and blog generator",
   "keywords": [
     "static",
-    "generator",
     "blog",
-    "website"
+    "generator",
+    "website",
+    "markdown"
   ],
   "license": "MIT",
   "preferGlobal": true,
@@ -26,11 +27,13 @@
     "url": "https://github.com/thibaultCha/Equiprose.git"
   },
   "dependencies": {
+    "glob": "3.2.x",
     "express": "3.4.x",
     "commander": "2.0.x",
     "jade": "0.35.x",
     "stylus": "0.38.x",
     "marked": "0.2.x",
+    "enumerate-properties": "1.0.x",
     "moment": "2.4.x",
     "emoji-images": "0.1.x",
     "colors": "0.6.x",
@@ -43,8 +46,5 @@
     "blanket": "1.1.x",
     "coveralls": "2.3.x",
     "mocha-lcov-reporter": "0.0.x"
-  },
-  "engines": {
-    "node": ">=0.10.x"
   }
 }

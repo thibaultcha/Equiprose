@@ -41,31 +41,53 @@ describe('compile.js', function () {
     describe('#renderJade()', function () {
         var layoutsDir = 'test/test-files/compile'
         var options = {
-            layout  : 'layout',
-            content : {},
-            config  : {
+            layout: 'layout'
+        ,    content: {}
+        ,    config: {
                 owner: {
                     name: 'Joe'
                 }
-            },
-            metas   : {},
-            posts   : []
+            }
+        ,    metas: {}
+        ,    posts: []
         }
 
         it('should send the custom properties from config.toJade to the jadeRender options', function (done) {
-            compile.renderJade(layoutsDir, options, function (err, html, opts) {
+            compile.renderJade(layoutsDir, options, function (err, html, jadeOptions) {
                 assert.ifError(err)
-                assert(opts.config === options.config)
+                assert(jadeOptions.config === options.config)
                 done()
             })
         })
         it.skip('should emojify the content', function (done) {
 
         })
-        it('should throw an error if no layout file is found', function (done) {
-            options.layout = 'inexistant'
+        it('should compress if compress is set to true', function (done) {
+            compile.renderJade(layoutsDir, options, true, function (err, html, jadeOptions) {
+                assert.ifError(err)
+                assert(jadeOptions.pretty === false)
+                done()
+            })
+        })
+        it('should render pretty if compress is set to false', function (done) {
+            compile.renderJade(layoutsDir, options, false, function (err, html, jadeOptions) {
+                assert.ifError(err)
+                assert(jadeOptions.pretty === true)
+                done()
+            })
+        })
+        it('should throw an error if more than one layout file is found', function (done) {
             var fn = function () {
-                compile.renderJade('test', options, function (err, html) {
+                compile.renderJade(layoutsDir, { layout: 'duplicate' }, function (err, html) {
+                    done()
+                    assert.ifError(err)
+                })
+            }
+            assert.throws(function(){ fn() }, /Multiple jade files/)
+        })
+        it('should throw an error if no layout file is found', function (done) {
+            var fn = function () {
+                compile.renderJade(layoutsDir, { layout: 'inexistant' }, function (err, html) {
                     done()
                     assert.ifError(err)
                 })
@@ -77,42 +99,40 @@ describe('compile.js', function () {
     describe('#compileMarkdownToFile()', function () {
         var mdFile = path.join(testFiles, 'valid-page.md')
         var outputBlog = path.join(outputDir, 'blog')
-        var config = {
-            paths: {
-                templateDir: testFiles,
-                buildDir: outputDir,
-                pages: {
-                    input: "_pages"
-                },
-                posts: {
-                    output: outputBlog
-                },
-                assets: {
-                    output: "assets"
-                }
-            },
-            toJade: {
-                owner: {
-                    name: 'Joe'
-                }
-            }
+        var config =
+        { paths: 
+          { templateDir: testFiles
+          , buildDir: outputDir
+          , pages: 
+            { input: "_pages" }
+          , posts: 
+            { output: outputBlog }
+          , assets: 
+            { output: "assets" }
+          }
+        , toJade: 
+          { owner: 
+            { name: 'Joe' }
+          }
         }
         var fakePosts = [
             { toJade: { title: 'Hello World' } },
             { toJade: { title: 'It\' snowing today' } }
         ]
 
-        it('should create the outputDir if not existing', function (done) {
-            before(function (next) {
-                fs.exists(config.paths.buildDir, function (exists) {
-                    if (exists) {
-                        fse.remove(config.paths.buildDir, function (err) {
-                            assert.ifError(err)
-                            done()
-                        })
-                    }
-                })
+        before(function (done) {
+            fs.exists(config.paths.buildDir, function (exists) {
+                if (exists) {
+                    fse.remove(config.paths.buildDir, function (err) {
+                        assert.ifError(err)
+                        done()
+                    })
+                } else {
+                    done()
+                }
             })
+        })
+        it('should create the outputDir if not existing', function (done) {
             compile.compileMarkdownToFile(mdFile, config, fakePosts, function (err) {
                 assert.ifError(err)
                 assert(fs.existsSync(config.paths.buildDir), 'The output directory was not created')
@@ -164,19 +184,19 @@ describe('compile.js', function () {
                 done()
             })
         })
-        it('should compile as a blog post if 7 arguments are sent', function (done) {
+        it('should compile as a blog post if 5 arguments are sent', function (done) {
             var mdFile = path.join(testFiles, 'valid-post.md')
-            var postMetas = { 
-                filename: '2013-12-01_its-snowing-today.md',
-                slug: 'its-snowing-today',
-                layout: 'layout',
-                toJade: {
-                        title: 'It\'s snowing today',
-                        content: 'It\'s snowing today',
-                        author: 'Joe',
-                        date: 'Mon Oct 07 2013 18:26:47 GMT+0200 (CEST)',
-                        link: 'its-snowing-today.html'
-                    }
+            var postMetas = 
+                { filename: '2013-12-01_its-snowing-today.md'
+                , slug: 'its-snowing-today'
+                , layout: 'layout'
+                , toJade:
+                 { title: 'It\'s snowing today'
+                 , content: 'It\'s snowing today'
+                 , author: 'Joe'
+                 , date: 'Mon Oct 07 2013 18:26:47 GMT+0200 (CEST)'
+                 , link: 'its-snowing-today.html'
+                 }
                 }
 
             compile.compileMarkdownToFile(mdFile, config, fakePosts, postMetas, function (err, outputFile, data, options) {
@@ -187,7 +207,7 @@ describe('compile.js', function () {
                 done()
             })
         })
-        it('should throw an error if not layout file is found', function (done) {
+        it('should throw an error if no layout file is found', function (done) {
             var mdFile = path.join('test/test-files/errors', 'page-no-layout.md')
             var fn = function () {
                 compile.compileMarkdownToFile(mdFile, config, fakePosts, function (err) {
@@ -201,7 +221,6 @@ describe('compile.js', function () {
 
     afterEach(function (done) {
         fse.remove(outputDir, function (err) {
-            assert.ifError(err)
             done()
         })
     })

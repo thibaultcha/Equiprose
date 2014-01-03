@@ -13,3 +13,7 @@ Valid markdown compilation test.
 ## Title level 2
 
 [link](https://github.com/)
+
+```javascript
+code
+```

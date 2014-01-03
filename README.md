@@ -6,7 +6,8 @@ Equiprose is a static website and blog generator built with [Node.js](http://nod
 
 - **[Features](#features)**
 - **[Install](#install)**
-- **[Usage](#usage)**
+- **[Documentation](#documentation)**
+- **[Changelog](#changelog)**
 - **[Roadmap](#roadmap)**
 - **[Licence](#licence)**
 
@@ -22,7 +23,7 @@ Equiprose is a static website and blog generator built with [Node.js](http://nod
 
 ## Install
 
-Node `0.10` or greater:
+Node `0.10.0` or greater:
 
 ```
 $ [sudo] npm install -g equiprose
@@ -32,25 +33,23 @@ Or:
 
 Clone the master branch, add the `bin/` folder to your `$PATH`, run `make install` in the project root directory to install dependencies.
 
-## Usage
+## Documentation
 
-Docs are hosted on the [wiki](https://github.com/thibaultCha/Equiprose/wiki), but below is a sample so you can see how simple it is to use.
+[Documentation is on the wiki](https://github.com/thibaultCha/Equiprose/wiki), but below is a sample so you can see how simple it is to use.
 
 ### Commands
 
-`$ equiprose -h`: prints help.
+- `$ equiprose -h`: prints help.
 
-`$ equiprose create [path]`
+- `$ equiprose create [path]`: create a website at given path.
 
-`$ equiprose build [path]`
+- `$ equiprose build [path]`: build the website at given path.
 
-`$ equiprose serve [path] -p [port]`
+- `$ equiprose serve [path] [-p port]`: start a test server at given port (or 8888 by default).
 
-`$ equiprose new <page|post> [path]`
+- `$ equiprose new <page|post> [path]`: create a new page or post for website at give path.
 
-`path` always refers to a directory containing a `config.yml` file. If no `path` is provided, the command targets the current directory.
-
-`$ equiprose about`
+NB: `path` always refers to a directory containing a `config.yml` file. If no `path` is provided, the command targets the current directory.
 
 ### Build your first website
 
@@ -58,13 +57,7 @@ Docs are hosted on the [wiki](https://github.com/thibaultCha/Equiprose/wiki), bu
 
 `$ equiprose serve ~/Desktop/test`
 
-Browse to `http://localhost:8888`. That's it. (By the way, pull request about the base template are welcomed too).
-
-## Roadmap
-
-- live update on directory changes
-- custom blog path (including dates)
-- code optimizations
+Browse to `http://localhost:8888`. That's it. (By the way, pull requests about the new templates are welcomed too).
 
 ## Development
 
@@ -74,7 +67,21 @@ Clone the sources and run `$ make dev` to install all dependencies.
 
 `$ make test-cov`: runs the coverage.
 
-## Licence
+## Changelog
+
+### 1.0.1 (01/01/2013)
+* Fix hidden files being removed on `build`
+* Replaced custom search functions by [node-glob](https://github.com/isaacs/node-glob)
+* Replaced custom object properties enumeration functions by a standalone module: [node-enumerate-properties](https://github.com/thibaultCha/node-enumerate-properties)
+
+### 1.0.0 (03/12/2013)
+* Initial release
+
+## Roadmap
+
+Refer to the [GitHub issues](https://github.com/thibaultCha/Equiprose/issues).
+
+## License
 
 Copyright (C) 2013 by Thibault Charbonnier.
 

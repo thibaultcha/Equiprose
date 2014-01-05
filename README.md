@@ -47,7 +47,7 @@ Clone the master branch, add the `bin/` folder to your `$PATH`, run `make instal
 
 - `$ equiprose serve [path] [-p port]`: start a test server at given port (or 8888 by default).
 
-- `$ equiprose new <page|post> [path]`: create a new page or post for website at give path.
+- `$ equiprose new <page|post> [path]`: create a new page or post for website at given path.
 
 NB: `path` always refers to a directory containing a `config.yml` file. If no `path` is provided, the command targets the current directory.
 

@@ -64,11 +64,13 @@ blockquote p{margin:12px 0;color:#999}
 .vi{color:#008080}
 .il{color:#099}
 .gc{color:#999;background-color:#eaf2f5}
-ol,ul{list-style:none}
+table{border-collapse:separate;border-spacing:0;vertical-align:middle}
+caption,th,td{text-align:left;font-weight:normal;vertical-align:middle}
 a img{border:none}
 a{text-decoration:none;color:#607eef;-webkit-transition:.2s color ease;-moz-transition:.2s color ease;-ms-transition:.2s color ease;-o-transition:.2s color ease;transition:.2s color ease}
 a:hover{color:#90a5f4}
 ul{padding-left:15px;list-style-type:circle}
+ol{padding-left:20px}
 blockquote{margin:1em 0;padding:0 0 0 15px;font-size:16px;border-left:2px solid #aaa;}
 blockquote p{margin:12px 0;color:#999}
 body{font-family:'Georgia';font-size:18px;color:#444}

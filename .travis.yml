@@ -2,7 +2,8 @@ language: node_js
 node_js:
   - "0.10.21"
   - "0.10.23"
-script: 
+  - "0.10.25"
+script:
   - make test
 after_script:
   - make test-coveralls

@@ -43,11 +43,19 @@ function buildFromArg (arg, callback) {
 }
 
 /* commander.js */
+var commands =
+{ 'create': 'create [path]'
+, 'build': 'build [path]'
+, 'serve': 'serve [path] [options]'
+, 'new': 'new <page|post> [path]'
+, 'about': 'about'
+}
+
 program
     .version(pjson.version)
 
 program
-    .command('create [path]')
+    .command(commands['create'])
     .description('Create a new website at given path')
     .action(function () {
         var sitePath = pathFromArg(program.rawArgs.slice(3)[0])
@@ -59,7 +67,7 @@ program
     })
 
 program
-    .command('build [path]')
+    .command(commands['build'])
     .description('Compile a website to its buildDir')
     .action(function () {
         buildFromArg(program.rawArgs.slice(3)[0], function (err) {
@@ -68,7 +76,7 @@ program
     })
 
 program
-    .command('serve [path] [options]')
+    .command(commands['serve'])
     .description('Start a server on localhost:port')
     .action(function () {
         // we have to handle `$ equiprose serve ~/Desktop` and `$ equiprose serve -p 1234`
@@ -78,7 +86,7 @@ program
             if (err) throw err
 
             console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
-        
+
             server.startServer(siteConfig, program.port || 8888, function (address) {
                 console.log('✔'.green + ' Server running on ' + address.underline)
             })
@@ -86,7 +94,7 @@ program
     })
 
 program
-    .command('new <page|post> [path]')
+    .command(commands['new'])
     .description('Create a new post or page')
     .action(function () {
         var type = program.rawArgs.slice(3)[0]
@@ -127,7 +135,7 @@ program
     })
 
 program
-    .command('about')
+    .command(commands['about'])
     .description('About Equiprose')
     .action(function () {
         console.log('')
@@ -162,5 +170,10 @@ program.on('--help', function () {
 program.parse(process.argv)
 
 if (program.rawArgs.length < 3) {
+    program.help()
+}
+
+if (!commands.hasOwnProperty(process.argv[2])) {
+    console.log('  Invalid command: ' + process.argv[2])
     program.help()
 }

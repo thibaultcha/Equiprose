@@ -4,7 +4,7 @@
     "name": "Thibault Charbonnier",
     "email": "thibaultcha@me.com"
   },
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A static website and blog generator",
   "keywords": [
     "static",
@@ -18,8 +18,7 @@
   "bin": {
     "equiprose": "./bin/equiprose"
   },
-  "scripts": {
-    "test": "make test",
+  "config": {
     "blanket": {
       "pattern": "lib",
       "data-cover-never": "node_modules"
@@ -32,12 +31,12 @@
   "dependencies": {
     "glob": "3.2.x",
     "express": "3.4.x",
-    "commander": "2.0.x",
-    "jade": "0.35.x",
-    "stylus": "0.38.x",
-    "marked": "0.2.x",
+    "commander": "2.1.x",
+    "jade": "1.1.x",
+    "stylus": "0.42.x",
+    "marked": "0.3.x",
     "enumerate-properties": "1.0.x",
-    "moment": "2.4.x",
+    "moment": "2.5.x",
     "emoji-images": "0.1.x",
     "colors": "0.6.x",
     "yamljs": "0.1.x",
@@ -45,9 +44,9 @@
     "pygmentize-bundled": "2.1.x"
   },
   "devDependencies": {
-    "mocha": "1.13.x",
+    "mocha": "1.17.x",
     "blanket": "1.1.x",
-    "coveralls": "2.3.x",
+    "coveralls": "2.7.x",
     "mocha-lcov-reporter": "0.0.x"
   }
 }

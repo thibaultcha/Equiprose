@@ -97,21 +97,22 @@ describe('compile.js', function () {
     })
 
     describe('#compileMarkdownToFile()', function () {
+        this.slow(300)
         var mdFile = path.join(testFiles, 'valid-page.md')
         var outputBlog = path.join(outputDir, 'blog')
         var config =
-        { paths: 
+        { paths:
           { templateDir: testFiles
           , buildDir: outputDir
-          , pages: 
+          , pages:
             { input: "_pages" }
-          , posts: 
+          , posts:
             { output: outputBlog }
-          , assets: 
+          , assets:
             { output: "assets" }
           }
-        , toJade: 
-          { owner: 
+        , toJade:
+          { owner:
             { name: 'Joe' }
           }
         }
@@ -167,7 +168,7 @@ describe('compile.js', function () {
             compile.compileMarkdownToFile(mdFile, config, fakePosts, function (err, outputFile, data, options) {
                 assert.ifError(err)
                 done()
-            })  
+            })
         })
         it('should import metadatas variables from markdown metadatas to Jade', function (done) {
             compile.compileMarkdownToFile(mdFile, config, fakePosts, function (err, outputFile, data, options) {
@@ -186,7 +187,7 @@ describe('compile.js', function () {
         })
         it('should compile as a blog post if 5 arguments are sent', function (done) {
             var mdFile = path.join(testFiles, 'valid-post.md')
-            var postMetas = 
+            var postMetas =
                 { filename: '2013-12-01_its-snowing-today.md'
                 , slug: 'its-snowing-today'
                 , layout: 'layout'

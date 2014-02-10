@@ -69,6 +69,11 @@ Clone the sources and run `$ make dev` to install all dependencies.
 
 ## Changelog
 
+### 1.0.2 (09/02/2014)
+* Updated dependencies
+* Updated Jade doctype in skeleton
+* Print help on invalid command
+
 ### 1.0.1 (01/01/2013)
 * Fix hidden files being removed on `build`
 * Replaced custom search functions by [node-glob](https://github.com/isaacs/node-glob)

@@ -69,6 +69,9 @@ Clone the sources and run `$ make dev` to install all dependencies.
 
 ## Changelog
 
+### 1.0.3 (16/02/2014)
+* Allow to ignore a post by prefixing it with an underscore `_`
+
 ### 1.0.2 (09/02/2014)
 * Updated dependencies
 * Updated Jade doctype in skeleton

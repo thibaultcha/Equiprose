@@ -71,6 +71,7 @@ Clone the sources and run `$ make dev` to install all dependencies.
 
 ### 1.0.3 (16/02/2014)
 * Allow to ignore a post by prefixing it with an underscore `_`
+* Fix posts order
 
 ### 1.0.2 (09/02/2014)
 * Updated dependencies

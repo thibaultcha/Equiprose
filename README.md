@@ -69,7 +69,7 @@ Clone the sources and run `$ make dev` to install all dependencies.
 
 ## Changelog
 
-### 1.0.3 (16/02/2014)
+### 1.0.4 (16/02/2014)
 * Allow to ignore a post by prefixing it with an underscore `_`
 * Fix posts order
 
@@ -92,7 +92,7 @@ Refer to the [GitHub issues](https://github.com/thibaultCha/Equiprose/issues).
 
 ## License
 
-Copyright (C) 2013 by Thibault Charbonnier.
+Copyright (C) 2013-2014 by Thibault Charbonnier.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

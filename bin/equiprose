@@ -36,19 +36,19 @@ function buildFromArg (arg, callback) {
 
     builder.buildSite(siteConfig, function (err, websitePath) {
       if (err) return callback(err)
-        console.log('✔'.green + ' Compiled website at path: ' + websitePath.underline)
+      console.log('✔'.green + ' Compiled website at path: ' + websitePath.underline)
       callback(null, siteConfig)
     })
   })
 }
 
 /* commander.js */
-var commands =
-{ 'create': 'create [path]'
-, 'build': 'build [path]'
-, 'serve': 'serve [path] [options]'
-, 'new': 'new <page|post> [path]'
-, 'about': 'about'
+var commands = {
+  'create': 'create [path]',
+  'build': 'build [path]',
+  'serve': 'serve [path] [options]',
+  'new': 'new <page|post> [path]',
+  'about': 'about'
 }
 
 program
@@ -62,7 +62,7 @@ program
 
   builder.newWebsite(sitePath, function (err, path) {
     if (err) throw err
-      console.log('✔'.green + ' New website created at path: ' + path.underline)
+    console.log('✔'.green + ' New website created at path: ' + path.underline)
   })
 })
 
@@ -79,19 +79,19 @@ program
 .command(commands['serve'])
 .description('Start a server on localhost:port')
 .action(function () {
-        // we have to handle `$ equiprose serve ~/Desktop` and `$ equiprose serve -p 1234`
-        var pathArg = program.rawArgs.slice(3)[0] !== '-p' ? program.rawArgs.slice(3)[0] : '.'
+  // we have to handle `$ equiprose serve ~/Desktop` and `$ equiprose serve -p 1234`
+  var pathArg = program.rawArgs.slice(3)[0] !== '-p' ? program.rawArgs.slice(3)[0] : '.'
 
-        buildFromArg(pathArg, function (err, siteConfig) {
-          if (err) throw err
+  buildFromArg(pathArg, function (err, siteConfig) {
+    if (err) throw err
 
-            console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
+    console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
 
-          server.startServer(siteConfig, program.port || 8888, function (address) {
-            console.log('✔'.green + ' Server running on ' + address.underline)
-          })
-        })
-      })
+    server.startServer(siteConfig, program.port || 8888, function (address) {
+      console.log('✔'.green + ' Server running on ' + address.underline)
+    })
+  })
+})
 
 program
 .command(commands['new'])
@@ -112,7 +112,7 @@ program
         readline.question('Post author: ', function (author) {
           files.newPost(title, author, siteConfig.paths.posts.input, function (err, postPath) {
             if (err) throw err
-              console.log('✔'.green + ' New post created at path: ' + postPath.underline)
+            console.log('✔'.green + ' New post created at path: ' + postPath.underline)
           })
           readline.close()
         })
@@ -123,7 +123,7 @@ program
         pagePath = path.join(siteConfig.paths.pages.input, path.dirname(pagePath), path.basename(pagePath))
         files.newPage(path.basename(pagePath), path.dirname(pagePath), function (err, pagePath) {
           if (err) throw err
-            console.log('✔'.green + ' New page created at path: ' + pagePath.underline)
+          console.log('✔'.green + ' New page created at path: ' + pagePath.underline)
         })
         readline.close()
       })

@@ -53,25 +53,25 @@ describe('parsing.js', function () {
       assert(siteNoBuildDirConfig.sitePath)
     })
     it('should convert paths to absolute when `paths` are relative', function () {
-            // relative buildDir
-            assert.equal(siteBuildDirConfig.paths.buildDir, path.resolve(path.join(siteBuildDirConfig.sitePath, 'dist')),
-              'buildDir is incorrect for relative buildDir')
-            assert.equal(siteBuildDirConfig.paths.assets.output, path.resolve(path.join(siteBuildDirConfig.sitePath, 'dist/assets')),
-              'assets output path is incorrect for relative buildDir')
+      // relative buildDir
+      assert.equal(siteBuildDirConfig.paths.buildDir, path.resolve(path.join(siteBuildDirConfig.sitePath, 'dist')),
+        'buildDir is incorrect for relative buildDir')
+      assert.equal(siteBuildDirConfig.paths.assets.output, path.resolve(path.join(siteBuildDirConfig.sitePath, 'dist/assets')),
+        'assets output path is incorrect for relative buildDir')
 
-            // no buildDir
-            assert.equal(siteNoBuildDirConfig.paths.buildDir, path.resolve(path.join(siteNoBuildDirConfig.sitePath, 'www')),
-              'buildDir property is not relative to sitePath for no buildDir')
-            assert.equal(siteNoBuildDirConfig.paths.assets.output, path.resolve(path.join(siteNoBuildDirConfig.sitePath, 'www/assets')),
-              'assets output path incorrect for no buildDir')
-          })
+      // no buildDir
+      assert.equal(siteNoBuildDirConfig.paths.buildDir, path.resolve(path.join(siteNoBuildDirConfig.sitePath, 'www')),
+        'buildDir property is not relative to sitePath for no buildDir')
+      assert.equal(siteNoBuildDirConfig.paths.assets.output, path.resolve(path.join(siteNoBuildDirConfig.sitePath, 'www/assets')),
+        'assets output path incorrect for no buildDir')
+    })
     it('should keep absolute paths when `paths` are absolute', function () {
-            // absolute buildDir
-            assert.equal(siteAbsoluteBuildDirConfig.paths.buildDir, '/tmp',
-              'buildDir property is incorrect when absolute path is given')
-            assert.equal(siteAbsoluteBuildDirConfig.paths.assets.output, '/tmp/assets',
-              'assets output path is incorrect to sitePath for absolute buildDir')
-          })
+      // absolute buildDir
+      assert.equal(siteAbsoluteBuildDirConfig.paths.buildDir, '/tmp',
+        'buildDir property is incorrect when absolute path is given')
+      assert.equal(siteAbsoluteBuildDirConfig.paths.assets.output, '/tmp/assets',
+        'assets output path is incorrect to sitePath for absolute buildDir')
+    })
     it('should override any global property if the same property is overriden in config.yml', function () {
       assert.equal(siteOverrideConfig.dateFormat, 'MMM DD YYYY')
       assert.equal(siteOverrideConfig.paths.buildDir, '/tmp')
@@ -95,98 +95,98 @@ describe('parsing.js', function () {
     })
   })
 
-describe('#getMetadatas()', function () {
-  var metas = parse.getMetadatas(pageRightFormat)
+  describe('#getMetadatas()', function () {
+    var metas = parse.getMetadatas(pageRightFormat)
 
-  it('should return an Object', function () {
-    assert(metas instanceof Object)
+    it('should return an Object', function () {
+      assert(metas instanceof Object)
+    })
+    it('should contain an Object with the required properties for a well formatted file', function () {
+      assert(metas.layout)
+      assert(metas.title)
+      assert(metas.slug)
+      assert(metas.content)
+      assert(metas.filename)
+    })
+    it('should throw an error when passing a bad formatted file', function () {
+      assert.throws(function (){ parse.getMetadatas(pageNoMetas) }, Error)
+    })
   })
-  it('should contain an Object with the required properties for a well formatted file', function () {
-    assert(metas.layout)
-    assert(metas.title)
-    assert(metas.slug)
-    assert(metas.content)
-    assert(metas.filename)
-  })
-  it('should throw an error when passing a bad formatted file', function () {
-    assert.throws(function (){ parse.getMetadatas(pageNoMetas) }, Error)
-  })
-})
 
-describe('#parsePostMetadatas()', function () {
-  var postmetas = {}
-  var fakeConfig = {
-    dateFormat: 'DD MMM YYYY',
-    paths: {
-      posts: {
-        output: 'blog'
+  describe('#parsePostMetadatas()', function () {
+    var postmetas = {}
+    var fakeConfig = {
+      dateFormat: 'DD MMM YYYY',
+      paths: {
+        posts: {
+          output: 'blog'
+        }
       }
     }
-  }
 
-  beforeEach(function () {
-    postmetas = parse.parsePostMetadatas(postRightFormat, fakeConfig)
+    beforeEach(function () {
+      postmetas = parse.parsePostMetadatas(postRightFormat, fakeConfig)
+    })
+
+    it('should return an Object', function () {
+      assert(postmetas instanceof Object)
+    })
+    it('should return the required properties for a well formatted blog post', function () {
+              // should have absolute path to post link
+              assert(postmetas.slug)
+              assert(postmetas.layout)
+              assert(postmetas.toJade.date)
+              assert(postmetas.toJade.author)
+              assert(postmetas.toJade.title)
+              assert(postmetas.toJade.link)
+              assert(postmetas.toJade.content)
+            })
+    it.skip('should return owner name if no author is specified in metadatas', function () {
+      var noAuthorMetas = parse.parsePostMetadatas(postNoAuthor, fakeConfig)
+      assert.equal('Tests', noAuthorMetas.toJade.author)
+    })
+    it('should return a well formatted date', function () {
+      var rightFormatMetas = parse.parsePostMetadatas(postRightFormat, fakeConfig)
+      assert.equal('07 Oct 2013', rightFormatMetas.toJade.date)
+
+      fakeConfig.dateFormat = 'MMMM DD YYYY'
+      rightFormatMetas = parse.parsePostMetadatas(postRightFormat, fakeConfig)
+      assert.equal('October 07 2013', rightFormatMetas.toJade.date)
+    })
+    it('should throw an error if blog post is missing or has invalid date value', function () {
+      assert.throws(function () { parse.parsePostMetadatas(postWrongDate, fakeConfig) }, /date/)
+    })
+    it('should throw an error if blog post is missing title value', function () {
+      assert.throws(function () { parse.parsePostMetadatas(postNoTitle, fakeConfig) }, /title/)
+    })
   })
 
-  it('should return an Object', function () {
-    assert(postmetas instanceof Object)
-  })
-  it('should return the required properties for a well formatted blog post', function () {
-            // should have absolute path to post link
-            assert(postmetas.slug)
-            assert(postmetas.layout)
-            assert(postmetas.toJade.date)
-            assert(postmetas.toJade.author)
-            assert(postmetas.toJade.title)
-            assert(postmetas.toJade.link)
-            assert(postmetas.toJade.content)
-          })
-  it.skip('should return owner name if no author is specified in metadatas', function () {
-    var noAuthorMetas = parse.parsePostMetadatas(postNoAuthor, fakeConfig)
-    assert.equal('Tests', noAuthorMetas.toJade.author)
-  })
-  it('should return a well formatted date', function () {
-    var rightFormatMetas = parse.parsePostMetadatas(postRightFormat, fakeConfig)
-    assert.equal('07 Oct 2013', rightFormatMetas.toJade.date)
+  describe('#parseMetadatas()', function () {
+    var metas = parse.parseMetadatas(pageRightFormat)
 
-    fakeConfig.dateFormat = 'MMMM DD YYYY'
-    rightFormatMetas = parse.parsePostMetadatas(postRightFormat, fakeConfig)
-    assert.equal('October 07 2013', rightFormatMetas.toJade.date)
+    it('should return an Object', function () {
+      assert(metas instanceof Object)
+    })
+    it('should return the required properties for well formatted standard pages', function () {
+      assert(metas.filename)
+      assert(metas.layout)
+      assert(metas.slug)
+      assert(metas.toJade.title)
+      assert(metas.toJade.content)
+    })
+    it('should normalize the filename if no title is provided in metas', function () {
+      var metas = parse.parseMetadatas(pageNoTitle)
+      assert.equal('Page No Title',  metas.toJade.title)
+    })
+    it('should not contain line breaks at beginning or end of \`content\` property', function () {
+      assert.equal(false, /^[\n]+|[\n]+$/.test(metas.toJade.content))
+    })
+    it('should not throw an error if no content is provided', function () {
+      assert.doesNotThrow(function (){ parse.parseMetadatas(pageNoContent) })
+    })
+    it('should throw an error if slug is not valid', function () {
+      assert.throws(function (){ parse.parseMetadatas(pageWrongSlug) }, /slug/)
+      assert.throws(function (){ parse.parseMetadatas(pageNoSlug) }, /slug/)
+    })
   })
-  it('should throw an error if blog post is missing or has invalid date value', function () {
-    assert.throws(function () { parse.parsePostMetadatas(postWrongDate, fakeConfig) }, /date/)
-  })
-  it('should throw an error if blog post is missing title value', function () {
-    assert.throws(function () { parse.parsePostMetadatas(postNoTitle, fakeConfig) }, /title/)
-  })
-})
-
-describe('#parseMetadatas()', function () {
-  var metas = parse.parseMetadatas(pageRightFormat)
-
-  it('should return an Object', function () {
-    assert(metas instanceof Object)
-  })
-  it('should return the required properties for well formatted standard pages', function () {
-    assert(metas.filename)
-    assert(metas.layout)
-    assert(metas.slug)
-    assert(metas.toJade.title)
-    assert(metas.toJade.content)
-  })
-  it('should normalize the filename if no title is provided in metas', function () {
-    var metas = parse.parseMetadatas(pageNoTitle)
-    assert.equal('Page No Title',  metas.toJade.title)
-  })
-  it('should not contain line breaks at beginning or end of \`content\` property', function () {
-    assert.equal(false, /^[\n]+|[\n]+$/.test(metas.toJade.content))
-  })
-  it('should not throw an error if no content is provided', function () {
-    assert.doesNotThrow(function (){ parse.parseMetadatas(pageNoContent) })
-  })
-  it('should throw an error if slug is not valid', function () {
-    assert.throws(function (){ parse.parseMetadatas(pageWrongSlug) }, /slug/)
-    assert.throws(function (){ parse.parseMetadatas(pageNoSlug) }, /slug/)
-  })
-})
 })

@@ -20,50 +20,45 @@ a:hover
   color link-hover
 
 body
+  color text-color
   font-family 'Georgia'
   font-size 18px
   //background-color background-color
-  color text-color
-::selection
-  background rgba(93, 217, 190, 0.5)
-  color white
+  &::selection
+    background rgba(93, 217, 190, 0.5)
+    color white
 
-header
+.page-container
   width global-width
   center()
-  font-family 'Myriad Pro'
-  h1
-    float left
-  nav
-    float right
-    margin-top 2em
-    a
-      float right
-      display inline
 
-.container
-  clear both
-  width global-width
-  center()
-  line-height 1.8em
-  h3
+  header
     font-family 'Myriad Pro'
-  .posts
-    padding 0
-    margin-bottom 3em
-    li
-      padding 0.5em 0
-      a
-        color text-color
-      .post-date
-        color link-color
-        font-size 16px
-    :hover
-      color red
+    h1
+      float left
+    nav
+      float right
+      margin-top 2em
+    clearfix()
 
-footer
-  width global-width
-  center()
-  padding 0.5em 0
-  font-size 0.8em
-  border-top 1px dotted #ccc
+  .container
+    line-height 1.8em
+    h3
+      font-family 'Myriad Pro'
+    .posts-container
+      .posts
+        padding 0
+        li
+          padding 0.5em 0
+          a
+            color text-color
+          .post-date
+            color link-color
+            font-size 16px
+        :hover
+          color red
+
+  footer
+    padding 0.5em 0
+    font-size 0.8em
+    border-top 1px dotted #ccc

@@ -1,7 +1,9 @@
 extend layout
+
 block content
   p!= content
-  h3 Posts
-  ul.posts
-    each post in posts
-      li <a href="#{post.link}"><span class="post-date">#{post.date}</span> #{post.title}</a>
+  div.posts-container
+    h3 Posts
+    ul.posts
+      each post in posts
+        li <a href="#{post.link}"><span class="post-date">#{post.date}</span> #{post.title}</a>

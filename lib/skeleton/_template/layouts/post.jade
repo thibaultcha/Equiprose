@@ -4,7 +4,8 @@ block head
   link(rel='stylesheet', href='/assets/post.css')
 
 block content
-  h1 #{metas.title} - 
-    span.author= metas.author
-  span= metas.date
-  .post-content!= content
+  article.post-metas
+    h1 #{metas.title} -&nbsp;
+      span.author= metas.author
+    span= metas.date
+  article.post-content!= content

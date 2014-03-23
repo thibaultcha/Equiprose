@@ -18,4 +18,6 @@ toJade:
   owner:
     name: Your Name
   website:
-    title: My Website
+    title: Your Website
+  toJade:
+    equiprose: http://equiprose.org

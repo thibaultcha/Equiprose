@@ -2,6 +2,7 @@
 var program = require('commander')
 var colors  = require('colors')
 var path    = require('path')
+var watch   = require('node-watch')
 
 var parser  = require('../lib/parsing')
 var builder = require('../lib/building')
@@ -87,8 +88,14 @@ program
 
     console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
 
-    server.startServer(siteConfig, program.port || 8888, function (address) {
+    server.startServer(siteConfig, program.port || 8888, function (server, address) {
       console.log('✔'.green + ' Server running on ' + address.underline)
+
+      watch([siteConfig.paths.templateDir, siteConfig.paths.posts.input], function (file) {
+        console.log('Rebuilding because of file: ' + file)
+        buildFromArg(pathArg, function() {})
+      });
+
     })
   })
 })
@@ -99,7 +106,7 @@ program
 .action(function () {
   var type = program.rawArgs.slice(3)[0]
 
-  if ((type !== 'post') && (type !== 'page')) {
+  if (type !== 'post' && type !== 'page') {
     throw new Error('Invalid argument: ' + type + '\n  Usage: equiprose new <page|post> [path]')
   }
 

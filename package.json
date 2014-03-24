@@ -41,7 +41,8 @@
     "colors": "0.6.x",
     "yamljs": "0.1.x",
     "fs-extra": "0.8.x",
-    "pygmentize-bundled": "2.1.x"
+    "pygmentize-bundled": "2.1.x",
+    "node-watch": "^0.3.4"
   },
   "devDependencies": {
     "mocha": "1.17.x",

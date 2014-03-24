@@ -88,7 +88,7 @@ program
 
     console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
 
-    server.startServer(siteConfig, program.port || 8888, function (server, address) {
+    server.startServer(siteConfig, program.port || 8888, function (address) {
       console.log('✔'.green + ' Server running on ' + address.underline)
 
       watch([siteConfig.paths.templateDir, siteConfig.paths.posts.input], function (file) {

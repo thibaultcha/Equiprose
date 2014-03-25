@@ -97,9 +97,11 @@ describe('compile.js', function () {
   })
 
   describe('#compileMarkdownToFile()', function () {
-    this.slow(300)
+    this.slow(500)
+
     var mdFile = path.join(testFiles, 'valid-page.md')
     var outputBlog = path.join(outputDir, 'blog')
+
     var config = {
       paths: {
         templateDir: testFiles,
@@ -112,6 +114,7 @@ describe('compile.js', function () {
         owner: { name: 'Joe' }
       }
     }
+
     var fakePosts = [
       { toJade: { title: 'Hello World' } },
       { toJade: { title: 'It\' snowing today' } }
@@ -124,7 +127,8 @@ describe('compile.js', function () {
             assert.ifError(err)
             done()
           })
-        } else {
+        }
+        else {
           done()
         }
       })

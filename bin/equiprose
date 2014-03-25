@@ -4,11 +4,12 @@ var colors  = require('colors')
 var path    = require('path')
 var watch   = require('node-watch')
 
-var parser  = require('../lib/parsing')
 var builder = require('../lib/building')
-var server  = require('../lib/serve')
+var serve   = require('../lib/serve')
 var files   = require('../lib/files')
 var pjson   = require('../package.json')
+
+var cli = require('../lib')
 
 process.on('uncaughtException', function (err) {
   console.log('✘'.red + ' ' + err.message)
@@ -16,19 +17,8 @@ process.on('uncaughtException', function (err) {
 })
 
 /* Functions */
-function pathFromArg (arg) {
-  return arg ? path.resolve(arg) : '.'
-}
-
-function configFromArg (arg, callback) {
-  var path   = pathFromArg(arg)
-  var config = parser.parseConfig(path)
-
-  callback(config)
-}
-
 function buildFromArg (arg, callback) {
-  configFromArg(arg, function (siteConfig) {
+  cli.configFromArgument(arg, function (siteConfig) {
     console.log('Compiling website using config: ' + siteConfig.sitePath +'/config.yml')
     console.log('    pages: ' + siteConfig.paths.pages.input)
     console.log('    posts: ' + siteConfig.paths.posts.input)
@@ -59,7 +49,7 @@ program
   .command(commands['create'])
   .description('Create a new website at given path')
   .action(function () {
-    var sitePath = pathFromArg(program.rawArgs.slice(3)[0])
+    var sitePath = cli.pathFromArgument(program.rawArgs.slice(3)[0])
 
     builder.newWebsite(sitePath, function (err, path) {
       if (err) throw err
@@ -88,7 +78,7 @@ program
 
       console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
 
-      server.startServer(siteConfig, program.port || 8888, function (address) {
+      serve(siteConfig, program.port || 8888, function (address) {
         console.log('✔'.green + ' Server running on ' + address.underline)
 
         watch([siteConfig.paths.templateDir,
@@ -114,7 +104,7 @@ program
       throw new Error('Invalid argument: ' + type + '\n  Usage: equiprose new <page|post> [path]')
     }
 
-    configFromArg(program.rawArgs.slice(4)[0], function (siteConfig) {
+    cli.configFromArgument(program.rawArgs.slice(4)[0], function (siteConfig) {
       var readline = require('readline').createInterface({ input: process.stdin, output: process.stdout })
 
       switch (type) {

@@ -132,15 +132,15 @@ describe('parsing.js', function () {
       assert(postmetas instanceof Object)
     })
     it('should return the required properties for a well formatted blog post', function () {
-              // should have absolute path to post link
-              assert(postmetas.slug)
-              assert(postmetas.layout)
-              assert(postmetas.toJade.date)
-              assert(postmetas.toJade.author)
-              assert(postmetas.toJade.title)
-              assert(postmetas.toJade.link)
-              assert(postmetas.toJade.content)
-            })
+      // should have absolute path to post link
+      assert(postmetas.slug)
+      assert(postmetas.layout)
+      assert(postmetas.toJade.date)
+      assert(postmetas.toJade.author)
+      assert(postmetas.toJade.title)
+      assert(postmetas.toJade.link)
+      assert(postmetas.toJade.content)
+    })
     it.skip('should return owner name if no author is specified in metadatas', function () {
       var noAuthorMetas = parse.parsePostMetadatas(postNoAuthor, fakeConfig)
       assert.equal('Tests', noAuthorMetas.toJade.author)

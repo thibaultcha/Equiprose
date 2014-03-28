@@ -27,6 +27,13 @@ global-reset()
 center()
   margin 0 auto
 
+clearfix()
+  &:after
+    content ''
+    clear both
+    display block
+    visibility hidden
+
 border-radius(n)
   -webkit-border-radius n
   -moz-border-radius n

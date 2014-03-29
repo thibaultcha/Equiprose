@@ -4,7 +4,7 @@
     "name": "Thibault Charbonnier",
     "email": "thibaultcha@me.com"
   },
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "A static website and blog generator",
   "keywords": [
     "static",
@@ -21,7 +21,7 @@
   "config": {
     "blanket": {
       "pattern": "lib",
-      "data-cover-never": "node_modules"
+      "data-cover-never": ["node_modules", "lib/index.js"]
     }
   },
   "repository": {

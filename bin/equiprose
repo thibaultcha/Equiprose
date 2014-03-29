@@ -1,15 +1,7 @@
 #!/usr/bin/env node
 var program = require('commander')
-var colors  = require('colors')
-var path    = require('path')
-var watch   = require('node-watch')
-
-var builder = require('../lib/building')
-var serve   = require('../lib/serve')
-var files   = require('../lib/files')
 var pjson   = require('../package.json')
-
-var cli = require('../lib')
+var cli     = require('../lib')
 
 process.on('uncaughtException', function (err) {
   cli.logger.error(err.message)
@@ -28,127 +20,41 @@ var commands = {
 program
   .version(pjson.version)
 
+// TODO: Loop
 program
   .command(commands['create'])
   .description('Create a new website at given path')
-  .action(function () {
-    var sitePath = cli.pathFromArgument(program.rawArgs.slice(3)[0])
-
-    builder.newWebsite(sitePath, function (err, path) {
-      if (err) throw err
-      console.log('✔'.green + ' New website created at path: ' + path.underline)
-    })
-  })
+  .action(cli.create)
 
 program
   .command(commands['build'])
   .description('Compile a website to its buildDir')
-  .action(function () {
-    cli.buildFromArgument(program.rawArgs.slice(3)[0], function (err) {
-      if (err) throw err
-    })
-  })
+  .action(cli.build)
 
 program
   .command(commands['serve'])
   .description('Start a server on localhost:port')
-  .action(function () {
-    // we have to handle `$ equiprose serve ~/Desktop` and `$ equiprose serve -p 1234`
-    var pathArg = program.rawArgs.slice(3)[0] !== '-p' ? program.rawArgs.slice(3)[0] : '.'
-
-    cli.buildFromArgument(pathArg, function (err, siteConfig) {
-      if (err) throw err
-
-      cli.logger.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
-
-      serve(siteConfig, program.port || 8888, function (address) {
-        cli.logger.success('Server running on ' + address.underline)
-
-        watch([siteConfig.paths.templateDir,
-              siteConfig.paths.posts.input,
-              siteConfig.paths.pages.input,
-              siteConfig.paths.assets.input],
-          function (file) {
-            cli.logger.log('Rebuilding because of file: ' + file)
-            cli.buildFromArgument(pathArg)
-        })
-
-      })
-    })
-  })
+  .action(cli.serve)
 
 program
   .command(commands['new'])
   .description('Create a new post or page')
-  .action(function () {
-    var type = program.rawArgs.slice(3)[0]
-
-    if (type !== 'post' && type !== 'page') {
-      throw new Error('Invalid argument: ' + type + '\n  Usage: equiprose new <page|post> [path]')
-    }
-
-    cli.configFromArgument(program.rawArgs.slice(4)[0], function (siteConfig) {
-      var readline = require('readline').createInterface({ input: process.stdin, output: process.stdout })
-
-      switch (type) {
-        case 'post':
-          readline.question('Post title: ', function (title) {
-            readline.question('Post author: ', function (author) {
-              files.newPost(title, author, siteConfig.paths.posts.input, function (err, postPath) {
-                if (err) throw err
-                console.log('✔'.green + ' New post created at path: ' + postPath.underline)
-              })
-              readline.close()
-            })
-          })
-          break;
-        case 'page':
-          readline.question('Path to new page from \'' + siteConfig.paths.pages.input + '\': ', function (pagePath) {
-            pagePath = path.join(siteConfig.paths.pages.input, path.dirname(pagePath), path.basename(pagePath))
-            files.newPage(path.basename(pagePath), path.dirname(pagePath), function (err, pagePath) {
-              if (err) throw err
-              console.log('✔'.green + ' New page created at path: ' + pagePath.underline)
-            })
-            readline.close()
-          })
-          break;
-        default:
-          break;
-      }
-    })
-  })
+  .action(cli.file)
 
 program
   .command(commands['about'])
   .description('About Equiprose')
-  .action(function () {
-    //console.log(program.rawArgs)
-    console.log('')
-    console.log('\
-     _____            _ \n\
-     | ____|__ _ _   _(_)_ __  _ __ ___  ___  ___     \n\
-     |  _| / _` | | | | | \'_ \\| \'__/ _ \\/ __|/ _ \\ \n\
-     | |__| (_| | |_| | | |_) | | | (_) \\__ \\  __/  \n\
-     |_____\\__, |\\__,_|_| .__/|_|  \\___/|___/\\___|\n\
-     |_|       |_|   '.rainbow)
-    console.log('')
-    console.log('  A static website and blog generator in Node.js'.italic)
-    console.log('')
-    console.log('  version: ' + pjson.version)
-    console.log('   author: ' + pjson.author.name + ' <' + pjson.author.email + '>')
-    console.log('   GitHub: ' + pjson.repository.url)
-    console.log('')
-  })
+  .action(cli.about)
 
 program.option('-p, --port [port]', 'Specify the port on which to run the test server')
 
 program.on('--help', function () {
-  console.log('  Examples:')
-  console.log('')
-  console.log('    $ equiprose create ~/website')
-  console.log('    $ equiprose new post ~/website')
-  console.log('    $ equiprose serve ~/website -p 9000')
-  console.log('')
+  CLI.logger.log('  Examples:')
+  CLI.logger.log('')
+  CLI.logger.log('    $ equiprose create ~/website')
+  CLI.logger.log('    $ equiprose new post ~/website')
+  CLI.logger.log('    $ equiprose serve ~/website -p 9000')
+  CLI.logger.log('')
 })
 
 program.parse(process.argv)
@@ -158,6 +64,6 @@ if (program.rawArgs.length < 3) {
 }
 
 if (!commands.hasOwnProperty(process.argv[2])) {
-  console.log('  Invalid command: ' + process.argv[2])
+  CLI.logger.log('  Invalid command: ' + process.argv[2])
   program.help()
 }

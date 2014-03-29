@@ -5,11 +5,10 @@ var fse    = require('fs-extra')
 
 var cli = require('../lib')
 
-describe('cli.js', function () {
+describe('CLI', function () {
 
   describe('#success()', function () {
     it.skip('should contain a success checkmark in the first char', function () {
-      console.log(cli.log.success('Test'))
       assert.equal(cli.log.success('Test'), '✔ Test')
     })
   })
@@ -38,14 +37,16 @@ describe('cli.js', function () {
     })
   })
 
-  describe('#buildFromRawArgs()', function () {
+  describe('#buildFromPath()', function () {
+    this.slow(500)
     var sitePath = ''
 
     it('should build a website', function (done) {
-      cli.buildFromArgument('test/test-sites/no-build-dir', function (err, siteConfig) {
+      cli.buildFromPath('test/test-sites/no-build-dir', function (err, siteConfig) {
+        assert.ifError(err)
         sitePath = siteConfig.paths.buildDir
-      assert(fs.existsSync(sitePath), 'Website not compiled from argument')
-      done()
+        assert(fs.existsSync(sitePath), 'Website not compiled from argument')
+        done()
       })
     })
 

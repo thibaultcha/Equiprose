@@ -12,26 +12,9 @@ var pjson   = require('../package.json')
 var cli = require('../lib')
 
 process.on('uncaughtException', function (err) {
-  console.log('✘'.red + ' ' + err.message)
+  cli.logger.error(err.message)
   process.exit(1)
 })
-
-/* Functions */
-function buildFromArg (arg, callback) {
-  cli.configFromArgument(arg, function (siteConfig) {
-    console.log('Compiling website using config: ' + siteConfig.sitePath +'/config.yml')
-    console.log('    pages: ' + siteConfig.paths.pages.input)
-    console.log('    posts: ' + siteConfig.paths.posts.input)
-    console.log('   assets: ' + siteConfig.paths.assets.input)
-    console.log(' template: ' + siteConfig.paths.templateDir)
-
-    builder.buildSite(siteConfig, function (err, websitePath) {
-      if (err) return callback(err)
-      console.log('✔'.green + ' Compiled website at path: ' + websitePath.underline)
-      typeof callback === 'function' && callback(null, siteConfig)
-    })
-  })
-}
 
 /* commander.js */
 var commands = {
@@ -61,7 +44,7 @@ program
   .command(commands['build'])
   .description('Compile a website to its buildDir')
   .action(function () {
-    buildFromArg(program.rawArgs.slice(3)[0], function (err) {
+    cli.buildFromArgument(program.rawArgs.slice(3)[0], function (err) {
       if (err) throw err
     })
   })
@@ -73,21 +56,21 @@ program
     // we have to handle `$ equiprose serve ~/Desktop` and `$ equiprose serve -p 1234`
     var pathArg = program.rawArgs.slice(3)[0] !== '-p' ? program.rawArgs.slice(3)[0] : '.'
 
-    buildFromArg(pathArg, function (err, siteConfig) {
+    cli.buildFromArgument(pathArg, function (err, siteConfig) {
       if (err) throw err
 
-      console.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
+      cli.logger.log('Starting webserver for website at path: ' + siteConfig.paths.buildDir)
 
       serve(siteConfig, program.port || 8888, function (address) {
-        console.log('✔'.green + ' Server running on ' + address.underline)
+        cli.logger.success('Server running on ' + address.underline)
 
         watch([siteConfig.paths.templateDir,
               siteConfig.paths.posts.input,
               siteConfig.paths.pages.input,
               siteConfig.paths.assets.input],
           function (file) {
-            console.log('Rebuilding because of file: ' + file)
-            buildFromArg(pathArg)
+            cli.logger.log('Rebuilding because of file: ' + file)
+            cli.buildFromArgument(pathArg)
         })
 
       })
@@ -139,6 +122,7 @@ program
   .command(commands['about'])
   .description('About Equiprose')
   .action(function () {
+    //console.log(program.rawArgs)
     console.log('')
     console.log('\
      _____            _ \n\

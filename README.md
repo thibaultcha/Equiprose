@@ -69,6 +69,10 @@ Clone the sources and run `$ make dev` to install all dependencies.
 
 ## Changelog
 
+### 1.1.0 (31/03/2014)
+* Auto restart localhost server on Stylus, Jade or Markdown change.
+* Some refactoring
+
 ### 1.0.4 (16/02/2014)
 * Allow to ignore a post by prefixing it with an underscore `_`
 * Fix posts order

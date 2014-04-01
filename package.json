@@ -20,8 +20,8 @@
   },
   "config": {
     "blanket": {
-      "pattern": "lib",
-      "data-cover-never": ["node_modules", "lib/index.js"]
+      "data-cover-only": "lib",
+      "data-cover-never": ["node_modules", "index", "serve"]
     }
   },
   "repository": {

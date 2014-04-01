@@ -1,5 +1,4 @@
 BIN = ./node_modules/.bin
-BUILD = bin/
 REPORTER = spec
 
 install:

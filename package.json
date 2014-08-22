@@ -4,7 +4,7 @@
     "name": "Thibault Charbonnier",
     "email": "thibaultcha@me.com"
   },
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A static website and blog generator",
   "keywords": [
     "static",

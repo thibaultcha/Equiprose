@@ -10,26 +10,31 @@ process.on('uncaughtException', function (err) {
 
 var commands = [
   {
+    name: 'create',
     cmd: 'create [path]',
     desc: 'Create a new website at given path',
     func: cli.create
   },
   {
+    name: 'build',
     cmd: 'build [path]',
     desc: 'Compile a website to its buildDir',
     func: cli.build
   },
   {
+    name: 'serve',
     cmd: 'serve [path] [options]',
     desc: 'Start a server on localhost:port and watch changes',
     func: cli.serve
   },
   {
+    name: 'new',
     cmd: 'new <page|post> [path]',
     desc: 'Create a new post or page',
     func: cli.file
   },
   {
+    name: 'about',
     cmd: 'about',
     desc: 'About Equiprose',
     func: cli.about
@@ -63,8 +68,8 @@ if (program.rawArgs.length < 3) {
   program.help()
 }
 
-var filtered = commands.filter(function (cmd) {
-  return process.argv[2] === cmd.cmd
+var filtered = commands.filter(function (command) {
+  return process.argv[2] === command.name
 })
 
 if (filtered.length === 0) {

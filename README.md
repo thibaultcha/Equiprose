@@ -1,6 +1,6 @@
 # Equiprose
 
-![Build Status][travis-image]]
+![Build Status][travis-image]
 ![Coverage Status][coveralls-image] 
 ![npm version][npm-version-image]
 ![Downloads][npm-downloads-image]

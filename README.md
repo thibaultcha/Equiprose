@@ -1,6 +1,9 @@
 # Equiprose
 
-[![Build Status](https://api.travis-ci.org/thibaultCha/Equiprose.png)](https://travis-ci.org/thibaultCha/Equiprose) [![Coverage Status](https://coveralls.io/repos/thibaultCha/Equiprose/badge.png?branch=master)](https://coveralls.io/r/thibaultCha/Equiprose?branch=master) [![NPM version](https://badge.fury.io/js/equiprose.png)](http://badge.fury.io/js/equiprose)
+[![Build Status][travis-image]]
+[![Coverage Status][coveralls-image] 
+[![npm version][npm-version-image]
+![Downloads][npm-downloads-image]
 
 Equiprose is a static website and blog generator built with [Node.js](http://nodejs.org).
 
@@ -103,3 +106,13 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+[travis-image]: https://img.shields.io/travis/thibaultCha/Equiprose.svg?style=flat
+
+[coveralls-image]: https://img.shields.io/coveralls/thibaultCha/Equiprose/master.svg?style=flat
+
+[npm-version-image]: https://img.shields.io/npm/v/equiprose.svg?style=flat
+
+[npm-downloads-image]: https://img.shields.io/npm/dm/equiprose.svg?style=flat

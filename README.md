@@ -1,8 +1,8 @@
 # Equiprose
 
-[![Build Status][travis-image]]
-[![Coverage Status][coveralls-image] 
-[![npm version][npm-version-image]
+![Build Status][travis-image]]
+![Coverage Status][coveralls-image] 
+![npm version][npm-version-image]
 ![Downloads][npm-downloads-image]
 
 Equiprose is a static website and blog generator built with [Node.js](http://nodejs.org).
